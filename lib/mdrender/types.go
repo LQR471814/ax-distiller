@@ -1,25 +1,5 @@
 package mdrender
 
-type NodeFlag = uint8
-
-const (
-	FLAG_DECORABLE NodeFlag = 0b00000001
-	FLAG_LIST_ITEM          = 0b00000010
-)
-
-const (
-	NODE_FLAGS_HEADER          NodeFlag = 0
-	NODE_FLAGS_HORIZONTAL_RULE          = 0
-	NODE_FLAGS_LINE_BREAK               = 0
-	NODE_FLAGS_LINK                     = FLAG_DECORABLE | FLAG_LIST_ITEM
-	NODE_FLAGS_PLAIN_TEXT               = FLAG_DECORABLE | FLAG_LIST_ITEM
-	NODE_FLAGS_DECORATED_TEXT           = FLAG_DECORABLE | FLAG_LIST_ITEM
-	NODE_FLAGS_LIST                     = FLAG_LIST_ITEM
-	NODE_FLAGS_INLINE_CODE              = FLAG_DECORABLE | FLAG_LIST_ITEM
-	NODE_FLAGS_BLOCK_CODE               = 0
-	NODE_FLAGS_TABLE                    = 0
-)
-
 type NodeList = []Node
 
 type Node interface {
@@ -42,6 +22,10 @@ type Link struct {
 	// whatever is in the title of the Link.
 	Title NodeList
 	Image bool
+}
+
+type Paragraph struct {
+	Content NodeList
 }
 
 type PlainText struct {
@@ -96,3 +80,4 @@ func (List) node()           {}
 func (InlineCode) node()     {}
 func (BlockCode) node()      {}
 func (Table) node()          {}
+func (Paragraph) node()      {}

@@ -4,6 +4,7 @@ go 1.21.1
 
 require (
 	github.com/PuerkitoBio/purell v1.2.1
+	github.com/bitfield/script v0.22.0
 	github.com/chromedp/cdproto v0.0.0-20240102194822-c006b26f21c7
 	github.com/chromedp/chromedp v0.9.3
 	github.com/huandu/go-sqlbuilder v1.25.0
@@ -12,7 +13,6 @@ require (
 )
 
 require (
-	github.com/bitfield/script v0.22.0 // indirect
 	github.com/chromedp/sysutil v1.0.0 // indirect
 	github.com/gobwas/httphead v0.1.0 // indirect
 	github.com/gobwas/pool v0.2.1 // indirect

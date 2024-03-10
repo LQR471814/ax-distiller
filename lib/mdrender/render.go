@@ -3,29 +3,14 @@ package mdrender
 import (
 	"ax-distiller/lib/utils"
 	"fmt"
-	"log/slog"
+	"regexp"
 	"strings"
 )
 
-type RenderContext = uint8
-
-const (
-	ANY_CONTEXT RenderContext = iota
-	INLINE_CONTEXT
-	BLOCK_CONTEXT
-)
+var consecutiveSpaceRegex = regexp.MustCompile(`\s\s+`)
 
 type renderState struct {
-	listDepth     int
-	expectContext RenderContext
-}
-
-func isInline(node Node) bool {
-	switch node.(type) {
-	case PlainText, DecoratedText, Link, InlineCode:
-		return true
-	}
-	return false
+	listDepth int
 }
 
 func renderSingle(node Node, state renderState) string {
@@ -37,7 +22,7 @@ func renderSingle(node Node, state renderState) string {
 			panic("header order must be <= 6")
 		}
 
-		state.expectContext = INLINE_CONTEXT
+		// state.expectContext = INLINE_CONTEXT
 		content := render(typedNode.Content, state)
 		if content == "" {
 			return ""
@@ -53,7 +38,7 @@ func renderSingle(node Node, state renderState) string {
 			return ""
 		}
 
-		state.expectContext = INLINE_CONTEXT
+		// state.expectContext = INLINE_CONTEXT
 		inner := ""
 		switch typedNode.Title[0].(type) {
 		case Link:
@@ -199,38 +184,61 @@ func renderSingle(node Node, state renderState) string {
 	return text
 }
 
+func isInline(node Node) bool {
+	switch node.(type) {
+	case PlainText, DecoratedText, Link, InlineCode:
+		return true
+	}
+	return false
+}
+
 func render(nodes []Node, state renderState) string {
-	inlineContext := true
-	for _, child := range nodes {
-		if !isInline(child) {
-			inlineContext = false
-			break
-		}
-	}
-
-	if state.expectContext == INLINE_CONTEXT && !inlineContext {
-		slog.Warn("Expected inline context, got block context, skipping...")
-		return ""
-	}
-	if state.expectContext == BLOCK_CONTEXT && inlineContext {
-		slog.Warn("Expected block context, got inline context, skipping...")
-		return ""
-	}
-
 	text := ""
-	if inlineContext {
-		for _, child := range nodes {
-			text += renderSingle(child, state)
-		}
-		text = consecutiveSpaceRegex.ReplaceAllString(text, " ")
-	} else {
-		for _, child := range nodes {
-			text += renderSingle(child, state)
+
+	inlineContext := false
+	inlineText := ""
+	for _, n := range nodes {
+		// branching okay due to state machine logic
+		if inlineContext && !isInline(n) {
+			// inline context -> block context
+			inlineContext = false
+			inlineText = strings.Trim(
+				consecutiveSpaceRegex.ReplaceAllString(
+					inlineText, " ",
+				),
+				" \n\t",
+			)
+			if inlineText != "" {
+				text += inlineText + "\n\n"
+			}
+			inlineText = ""
+		} else if !inlineContext && isInline(n) {
+			// block context -> inline context
+			inlineContext = true
 			text += "\n\n"
+		.}
+
+		inner := renderSingle(n, state)
+		if !inlineContext {
+			text += strings.Trim(inner, " \n\t")
+			text += "\n\n"
+		} else {
+			inlineText += inner
 		}
-		text = strings.TrimSpace(text)
+	}
+	if inlineContext {
+		inlineText = strings.Trim(
+			consecutiveSpaceRegex.ReplaceAllString(
+				inlineText, " ",
+			),
+			" \n\t",
+		)
+		if inlineText != "" {
+			text += inlineText + "\n\n"
+		}
 	}
 
+	text = consecutiveSpaceRegex.ReplaceAllString(text, " ")
 	return text
 }
 

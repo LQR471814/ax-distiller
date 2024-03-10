@@ -40,7 +40,7 @@ func TestRender(t *testing.T) {
 				},
 				List{
 					Type: LIST_ORDERED,
-					Items: [][]Node{[]Node{
+					Items: [][]Node{{
 						DecoratedText{
 							Type: DECOR_UNDERLINE,
 							Content: []Node{Link{
@@ -53,13 +53,13 @@ func TestRender(t *testing.T) {
 						},
 						List{
 							Type: LIST_UNORDERED,
-							Items: [][]Node{[]Node{
+							Items: [][]Node{{
 								PlainText{
 									Content: "these are plain list items",
 								},
 								List{
 									Type: LIST_ORDERED,
-									Items: [][]Node{[]Node{
+									Items: [][]Node{{
 										PlainText{
 											Content: "Finally,",
 										},
@@ -83,65 +83,59 @@ func TestRender(t *testing.T) {
 					Content: "Next to text, cause why not.",
 				},
 				DecoratedText{
-					Content: Paragraph{
-						Elements: []ParagraphElement{
-							Link{
-								Title: DecoratedText{
-									Content: InlineCode{
-										Content: "wikipedia.org",
-									},
-									Type: DECOR_BOLD,
+					Content: []Node{
+						Link{
+							Title: []Node{DecoratedText{
+								Content: []Node{InlineCode{
+									Content: "wikipedia.org",
+								}},
+								Type: DECOR_BOLD,
+							}},
+							URL: "https://wikipedia.org",
+						},
+						LineBreak{},
+						Link{
+							Title: []Node{
+								InlineCode{
+									Content: "Painful",
 								},
-								URL: "https://wikipedia.org",
-							},
-							LineBreak{},
-							Link{
-								Title: Paragraph{
-									Elements: []ParagraphElement{
-										InlineCode{
-											Content: "Painful",
-										},
-										LineBreak{},
-										Link{
-											Title: DecoratedText{
-												Content: PlainText{"This is the only thing that should appear."},
-											},
-											URL:   "https://this.should.not.be.here",
-											Image: true,
-										},
-									},
+								LineBreak{},
+								Link{
+									Title: []Node{DecoratedText{
+										Content: []Node{PlainText{"This is the only thing that should appear."}},
+									}},
+									URL:   "https://this.should.not.be.here",
+									Image: true,
 								},
-								URL:   "https://imgs.xkcd.com/comics/standards.png",
-								Image: true,
 							},
+							URL:   "https://imgs.xkcd.com/comics/standards.png",
+							Image: true,
 						},
 					},
 				},
 				Table{
-					Rows: [][]CanBeDecorated{
+					Rows: [][][]Node{
 						{
-							PlainText{"header 1"},
-							PlainText{"header 2"},
-							PlainText{"header 3"},
+							{PlainText{"header 1"}},
+							{PlainText{"header 2"}},
+							{PlainText{"header 3"}},
 						},
 						{
-							Paragraph{
-								Elements: []ParagraphElement{
-									InlineCode{"wow i love coding"},
-									LineBreak{},
-									Link{
-										URL:   "https://github.com",
-										Title: PlainText{"Find the best codes here"},
-									},
+							{
+								InlineCode{"wow i love coding"},
+								LineBreak{},
+								Link{
+									URL:   "https://github.com",
+									Title: []Node{PlainText{"Find the best codes here"}},
 								},
 							},
-							PlainText{"body 2"},
-						},
-						{
-							PlainText{"body 4"},
-							PlainText{"body 4"},
-							PlainText{"body 4"},
-							PlainText{"body 4"},
+							{PlainText{"body 2"}},
+							{
+								PlainText{"body 4"},
+								PlainText{"body 4"},
+								PlainText{"body 4"},
+								PlainText{"body 4"},
+							},
 						},
 					},
 				},
