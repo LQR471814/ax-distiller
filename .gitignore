@@ -1,3 +1,6 @@
 data
 results
 .vscode
+
+cmd/gen-aria-types/gen-aria-types
+cmd/distill-test/distill-test
