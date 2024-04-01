@@ -222,8 +222,6 @@ func renderBlock(b Block) string {
 		}
 		return fmt.Sprintf("```%s\n%s```\n\n", el.Language, el.Text)
 	case Table:
-		fmt.Println(el.Rows)
-
 		maxColumnCount := 0
 		for _, row := range el.Rows {
 			if len(row.Cells) > maxColumnCount {

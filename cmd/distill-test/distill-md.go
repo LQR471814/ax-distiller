@@ -143,7 +143,7 @@ func collectTableItems(page axextract.Page, node axextract.AXNode, out *[]markdo
 				switch cell.Role {
 				case "rowheader", "columnheader", "cell", "gridcell":
 					inlineNodes := []markdown.Inline{}
-					collectInlineNodes(page, node, &inlineNodes)
+					collectInlineNodes(page, cell, &inlineNodes)
 					cells = append(cells, inlineNodes)
 				}
 			}
