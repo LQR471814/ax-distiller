@@ -1,7 +1,7 @@
 ## ax-distiller
 
 > distill text and various semantic information from websites, cutting out noise and styling with headless chrome and the accessibility tree.
-> essentially a glorified website -> markdown convertor for now.
+> essentially a glorified website -> markdown convertor for now. (see [wikipedia_sample.md](./wikipedia_sample.md) for a demo)
 
 ### usage
 

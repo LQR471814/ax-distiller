@@ -17,8 +17,9 @@ func main() {
 		// "https://www.npr.org/2024/03/29/1198909601/lost-animals-moles-rats-being-rediscovered",
 		// "https://pkg.go.dev/github.com/chromedp/chromedp#section-readme",
 		// "https://www.w3schools.com/tags/ref_colornames.asp",
-		"https://code.whatever.social/questions/53692326/convert-relative-to-absolute-urls-in-go",
+		// "https://code.whatever.social/questions/53692326/convert-relative-to-absolute-urls-in-go",
 		// "https://safereddit.com/r/golang/comments/181ebuq/anybody_who_has_used_chromedp_similar_libraries",
+		"https://github.com/LQR471814",
 	}
 
 	navigator, err := axextract.NewNavigator()
