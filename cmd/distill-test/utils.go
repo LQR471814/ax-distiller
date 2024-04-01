@@ -34,20 +34,6 @@ func fetchAxTree(link string) (axextract.AXNode, error) {
 	return page.Tree(), nil
 }
 
-func fetchAxPage(link string) (axextract.Page, error) {
-	u, err := url.Parse(link)
-	if err != nil {
-		return axextract.Page{}, err
-	}
-
-	navigator, err := axextract.NewNavigator()
-	if err != nil {
-		return axextract.Page{}, err
-	}
-
-	return navigator.Navigate(u)
-}
-
 func cachedAxTree(file string) (axextract.AXNode, error) {
 	buff, err := os.ReadFile(file)
 	if err != nil {

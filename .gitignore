@@ -4,3 +4,5 @@ results
 
 cmd/gen-aria-types/gen-aria-types
 cmd/distill-test/distill-test
+cmd/distill-test/dump_*
+cmd/distill-test/out_*

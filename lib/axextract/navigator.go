@@ -3,6 +3,7 @@ package axextract
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"net/url"
 	"os"
 	"strings"
@@ -61,13 +62,24 @@ func NewNavigator() (Navigator, error) {
 }
 
 type Page struct {
+	url    *url.URL
 	ctx    context.Context
 	cancel func()
 	tree   AXNode
 }
 
-func (p Page) GetDomInfo(nodeId uint64) (*cdp.Node, error) {
+func (p Page) URL() *url.URL {
+	return p.url
+}
+
+func (p Page) GetDomInfo(nodeId int64) (*cdp.Node, error) {
 	return dom.DescribeNode().
+		WithBackendNodeID(cdp.BackendNodeID(nodeId)).
+		Do(p.ctx)
+}
+
+func (p Page) GetHTML(nodeId int64) (string, error) {
+	return dom.GetOuterHTML().
 		WithBackendNodeID(cdp.BackendNodeID(nodeId)).
 		Do(p.ctx)
 }
@@ -100,11 +112,11 @@ func (p Page) debugDomNode(node AXNode) error {
 		Do(p.ctx)
 	if err != nil {
 		if strings.Contains(err.Error(), "node with given id found") {
-			fmt.Println("WARN", err.Error())
+			slog.Warn("Node not found", "id", node.DomNodeId)
 			return nil
 		}
 		if strings.Contains(err.Error(), "nodeId or backendNodeId must be specified") {
-			fmt.Println("WARN", err.Error())
+			slog.Warn("Unspecified backendNodeId", "id", node.DomNodeId)
 			return nil
 		}
 		return err
@@ -179,7 +191,7 @@ func (p Page) ShowDebugInfo() error {
 	return p.recurseDebug(p.tree)
 }
 
-func (n Navigator) Navigate(url *url.URL) (Page, error) {
+func (n Navigator) Navigate(u *url.URL) (Page, error) {
 	currentCtx, cancelCurrent := chromedp.NewContext(n.ctx)
 	withTimeout, cancelTimeout := context.WithTimeout(currentCtx, n.Timeout)
 
@@ -193,14 +205,12 @@ func (n Navigator) Navigate(url *url.URL) (Page, error) {
 
 	err := chromedp.Run(
 		withTimeout,
-		chromedp.Navigate(url.String()),
+		chromedp.Navigate(u.String()),
 		chromedp.ActionFunc(func(pageCtx context.Context) error {
 			err := accessibility.Enable().Do(pageCtx)
 			if err != nil {
 				return err
 			}
-
-			time.Sleep(time.Second)
 
 			axTree, err = getAccessibilityTree(pageCtx)
 			if err != nil {
@@ -217,6 +227,7 @@ func (n Navigator) Navigate(url *url.URL) (Page, error) {
 	}
 
 	return Page{
+		url:    u,
 		ctx:    ctx,
 		cancel: cancel,
 		tree:   axTree,

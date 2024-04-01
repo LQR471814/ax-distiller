@@ -94,7 +94,7 @@ func buildAXTree(mapping map[string]cdpNode, node cdpNode) []AXNode {
 		}
 	}
 
-	if node.Ignored {
+	if node.Ignored || role == "generic"  {
 		return children
 	}
 

@@ -2,53 +2,65 @@ package main
 
 import (
 	"ax-distiller/lib/axextract"
+	"ax-distiller/lib/markdown"
+	"fmt"
 	"log"
+	"net/url"
 	"os"
+	"sync"
 )
 
-func recurse(node axextract.AXNode, m map[string]struct{}) {
-	for _, c := range node.Role {
-		if c >= 65 && c <= 91 {
-			m[node.Role] = struct{}{}
-			break
-		}
-	}
-	for _, c := range node.Children {
-		recurse(c, m)
-		os.Stdout.Write([]byte(c.Name))
-	}
-}
-
-func handleTree() {
-	if len(os.Args) != 2 {
-		log.Fatalf("you must specify the file to import from")
-	}
-
-	ax, err := cachedAxTree(os.Args[1])
-	// ax, err := fetchAxTree("https://en.wikipedia.org/wiki/Quantum_mechanics")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	out := map[string]struct{}{}
-	recurse(ax, out)
-	for k := range out {
-		os.Stderr.Write([]byte(k + "\n"))
-	}
-}
-
-func debugPage() {
-	// page, err := fetchAxPage("https://en.wikipedia.org/wiki/Quantum_mechanics")
-	page, err := fetchAxPage("https://www.npr.org/2024/03/29/1198909601/lost-animals-moles-rats-being-rediscovered")
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = page.ShowDebugInfo()
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
 func main() {
-	debugPage()
+	urls := []string{
+		// "https://music.youtube.com/channel/UCWuBpAte4YHm_oELpzoM2qg",
+		"https://en.wikipedia.org/wiki/Quantum_mechanics",
+		// "https://www.npr.org/2024/03/29/1198909601/lost-animals-moles-rats-being-rediscovered",
+		// "https://pkg.go.dev/github.com/chromedp/chromedp#section-readme",
+		// "https://www.w3schools.com/tags/ref_colornames.asp",
+		// "https://code.whatever.social/questions/53692326/convert-relative-to-absolute-urls-in-go",
+	}
+
+	navigator, err := axextract.NewNavigator()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	wg := sync.WaitGroup{}
+	for _, u := range urls {
+		wg.Add(1)
+		go func(u string) {
+			parsed, err := url.Parse(u)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			page, err := navigator.Navigate(parsed)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			html := pageToHtml(page)
+			err = os.WriteFile(fmt.Sprintf("out_%s.html", parsed.Host), []byte(html), 0777)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			md := pageToMd(page)
+			mdout := markdown.Render(md)
+			err = os.WriteFile(fmt.Sprintf("out_%s.md", parsed.Host), []byte(mdout), 0777)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			pageDump := dumpPageAx(page)
+			err = os.WriteFile(fmt.Sprintf("dump_%s.txt", parsed.Host), []byte(pageDump), 0777)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			wg.Done()
+		}(u)
+	}
+
+	wg.Wait()
 }
