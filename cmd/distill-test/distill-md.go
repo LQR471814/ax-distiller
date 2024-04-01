@@ -3,6 +3,8 @@ package main
 import (
 	"ax-distiller/lib/axextract"
 	"ax-distiller/lib/markdown"
+	"bytes"
+	"io"
 	"log/slog"
 )
 
@@ -22,7 +24,17 @@ func getTextWithWhitespace(page axextract.Page, node axextract.AXNode) string {
 	return node.Name
 }
 
-func collectText(page axextract.Page, node axextract.AXNode, out *[]markdown.Inline) {
+func collectText(page axextract.Page, node axextract.AXNode, out io.Writer) {
+	if node.Role == "StaticText" {
+		out.Write([]byte(getTextWithWhitespace(page, node)))
+		return
+	}
+	for _, c := range node.Children {
+		collectText(page, c, out)
+	}
+}
+
+func collectTextNodes(page axextract.Page, node axextract.AXNode, out *[]markdown.Inline) {
 	if node.Role == "StaticText" {
 		*out = append(*out, markdown.Text{
 			Text: getTextWithWhitespace(page, node),
@@ -30,7 +42,7 @@ func collectText(page axextract.Page, node axextract.AXNode, out *[]markdown.Inl
 		return
 	}
 	for _, c := range node.Children {
-		collectText(page, c, out)
+		collectTextNodes(page, c, out)
 	}
 }
 
@@ -51,31 +63,31 @@ func parseInlineNode(page axextract.Page, node axextract.AXNode) markdown.Inline
 		return markdown.Code{Text: getTextWithWhitespace(page, node)}
 	case "deletion":
 		children := []markdown.Inline{}
-		collectText(page, node, &children)
+		collectTextNodes(page, node, &children)
 		return markdown.HtmlTag{Tag: "del", Children: children}
 	case "insertion":
 		children := []markdown.Inline{}
-		collectText(page, node, &children)
+		collectTextNodes(page, node, &children)
 		return markdown.HtmlTag{Tag: "ins", Children: children}
 	case "emphasis":
 		children := []markdown.Inline{}
-		collectText(page, node, &children)
+		collectTextNodes(page, node, &children)
 		return markdown.Italic{Children: children}
 	case "mark":
 		children := []markdown.Inline{}
-		collectText(page, node, &children)
+		collectTextNodes(page, node, &children)
 		return markdown.HtmlTag{Tag: "mark", Children: children}
 	case "subscript":
 		children := []markdown.Inline{}
-		collectText(page, node, &children)
+		collectTextNodes(page, node, &children)
 		return markdown.HtmlTag{Tag: "sub", Children: children}
 	case "superscript":
 		children := []markdown.Inline{}
-		collectText(page, node, &children)
+		collectTextNodes(page, node, &children)
 		return markdown.HtmlTag{Tag: "sup", Children: children}
 	case "time":
 		children := []markdown.Inline{}
-		collectText(page, node, &children)
+		collectTextNodes(page, node, &children)
 		return markdown.HtmlTag{Tag: "time", Children: children}
 	case "link":
 		info, err := page.GetDomInfo(node.DomNodeId)
@@ -85,7 +97,7 @@ func parseInlineNode(page axextract.Page, node axextract.AXNode) markdown.Inline
 		}
 		href, _ := info.Attribute("href")
 		children := []markdown.Inline{}
-		collectText(page, node, &children)
+		collectTextNodes(page, node, &children)
 		if href == "" {
 			return markdown.Fragment{Children: children}
 		}
@@ -227,6 +239,12 @@ func convertToMd(page axextract.Page, node axextract.AXNode, blocks *[]markdown.
 			*blocks = append(*blocks, markdown.Header{
 				Children: contents,
 				Order:    order,
+			})
+		case "Pre":
+			buff := bytes.NewBuffer(nil)
+			collectText(page, child, buff)
+			*blocks = append(*blocks, markdown.CodeBlock{
+				Text: buff.String(),
 			})
 		default:
 			convertToMd(page, child, blocks)
