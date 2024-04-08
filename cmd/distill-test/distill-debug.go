@@ -23,6 +23,6 @@ func debugAx(node axextract.AXNode, out io.Writer, depth int) {
 
 func dumpPageAx(page axextract.Page) string {
 	buff := bytes.NewBuffer(nil)
-	debugAx(page.Tree(), buff, 0)
+	debugAx(page.Tree, buff, 0)
 	return buff.String()
 }

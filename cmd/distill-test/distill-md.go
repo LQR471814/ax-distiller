@@ -220,19 +220,22 @@ func convertToMd(page axextract.Page, node axextract.AXNode, blocks *[]markdown.
 			})
 		case "heading":
 			order := 2
-			info, err := page.GetDomInfo(node.DomNodeId)
-			if err != nil {
-				slog.Warn(
-					"Could not get dom info of header",
-					"id", node.DomNodeId, "err", err.Error(),
-				)
-			}
-			if info != nil && len(info.NodeName) == 2 {
-				charCode := int(info.NodeName[1])
-				if charCode >= '1' && charCode <= '6' {
-					order = int(info.NodeName[1] - '0')
-				}
-			}
+
+			// this doesn't work for some reason??
+
+			// info, err := page.GetDomInfo(node.DomNodeId)
+			// if err != nil {
+			// 	slog.Warn(
+			// 		"Could not get dom info of header",
+			// 		"id", node.DomNodeId, "err", err.Error(),
+			// 	)
+			// }
+			// if info != nil && len(info.NodeName) == 2 {
+			// 	charCode := int(info.NodeName[1])
+			// 	if charCode >= '1' && charCode <= '6' {
+			// 		order = int(info.NodeName[1] - '0')
+			// 	}
+			// }
 
 			contents := []markdown.Inline{}
 			collectInlineNodes(page, child, &contents)
@@ -260,7 +263,7 @@ func convertToMd(page axextract.Page, node axextract.AXNode, blocks *[]markdown.
 }
 
 func pageToMd(page axextract.Page) []markdown.Block {
-	tree := page.Tree()
+	tree := page.Tree
 	blocks := []markdown.Block{}
 	convertToMd(page, tree, &blocks)
 	return blocks

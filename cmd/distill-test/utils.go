@@ -22,7 +22,7 @@ func fetchAxTree(link string) (axextract.AXNode, error) {
         return axextract.AXNode{}, err
     }
 
-	res, err := json.Marshal(page.Tree())
+	res, err := json.Marshal(page.Tree)
 	if err != nil {
 		return axextract.AXNode{}, err
 	}
@@ -31,7 +31,7 @@ func fetchAxTree(link string) (axextract.AXNode, error) {
 		return axextract.AXNode{}, err
 	}
 
-	return page.Tree(), nil
+	return page.Tree, nil
 }
 
 func cachedAxTree(file string) (axextract.AXNode, error) {

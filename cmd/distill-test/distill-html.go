@@ -73,7 +73,7 @@ func convertToHtml(page axextract.Page, node axextract.AXNode, out io.Writer) {
 }
 
 func pageToHtml(page axextract.Page) string {
-	tree := page.Tree()
+	tree := page.Tree
 	out := bytes.NewBuffer(nil)
 	convertToHtml(page, tree, out)
 	return fmt.Sprintf(template, out.String())

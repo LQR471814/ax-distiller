@@ -65,7 +65,8 @@ type Page struct {
 	url    *url.URL
 	ctx    context.Context
 	cancel func()
-	tree   AXNode
+
+	Tree   AXNode
 }
 
 func (p Page) URL() *url.URL {
@@ -82,10 +83,6 @@ func (p Page) GetHTML(nodeId int64) (string, error) {
 	return dom.GetOuterHTML().
 		WithBackendNodeID(cdp.BackendNodeID(nodeId)).
 		Do(p.ctx)
-}
-
-func (p Page) Tree() AXNode {
-	return p.tree
 }
 
 func (p Page) Close() {
@@ -188,7 +185,7 @@ func (p Page) ShowDebugInfo() error {
 	if err != nil {
 		return err
 	}
-	return p.recurseDebug(p.tree)
+	return p.recurseDebug(p.Tree)
 }
 
 func (n Navigator) Navigate(u *url.URL) (Page, error) {
@@ -230,6 +227,6 @@ func (n Navigator) Navigate(u *url.URL) (Page, error) {
 		url:    u,
 		ctx:    ctx,
 		cancel: cancel,
-		tree:   axTree,
+		Tree:   axTree,
 	}, nil
 }
