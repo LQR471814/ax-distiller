@@ -8,6 +8,7 @@
 
 > This is a demo of converting a somewhat involved website into an human/LLM-friendly markdown file by feeding a dump of the accessibility tree to an LLM. This allows you to retain layout and semantic context in the output file.
 
+- [original website](https://drawabox.com/lesson/0)
 - [markdown result](./examples/drawabox_(with_gemini_postprocessing).md)
 - [accessibility tree dump](./examples/drawabox_axtree_dump.xml)
 
@@ -29,6 +30,7 @@ For reference, this is prompt used:
 
 > This is a demo of converting a wikipedia article into a human/LLM-friendly markdown file through the use of a variety of heuristics. This is much faster than feeding an accessibility tree to an LLM but does not retain semantic or layout information.
 
+- [original website](https://en.wikipedia.org/wiki/Quantum_mechanics)
 - [markdown result](./examples/wikipedia_sample.md)
 
 ## usage
