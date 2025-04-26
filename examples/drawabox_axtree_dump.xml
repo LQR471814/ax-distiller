@@ -1,0 +1,828 @@
+<ROOT>
+  <RootWebArea name="Drawabox.com | Part One: The Basics | Lesson 0: Getting Started | Introduction" focusable="true" focused="true" url="https://drawabox.com/lesson/0">
+    <main>
+      <link name="CHECK OUT NMA" focusable="true" url="https://drawabox.com/nma">
+        <StaticText name="CHECK OUT NMA"></StaticText>
+      </link>
+      <StaticText name="    "></StaticText>
+      <link name="ABOUT OUR PARTNERSHIP" focusable="true" url="https://drawabox.com/announcement/NMA">
+        <StaticText name="ABOUT OUR PARTNERSHIP"></StaticText>
+      </link>
+      <StaticText name="    "></StaticText>
+      <link name="COLLAPSE THIS AD" focusable="true" url="javascript:CloseAnnouncement(&#39;NMA&#39;)">
+        <StaticText name="COLLAPSE THIS AD"></StaticText>
+      </link>
+      <sectionheader>
+        <link name="Drawabox" focusable="true" url="https://drawabox.com/">
+          <image name="Drawabox" url="https://d15v304a6xpq4b.cloudfront.net/assets/images/drawabox-logo.png"></image>
+        </link>
+        <navigation>
+          <list>
+            <listitem level="1">
+              <link name="Start working through the Drawabox curriculum" focusable="true" url="javascript:ShowDropdownNavLessons()"></link>
+            </listitem>
+            <listitem level="1">
+              <link name="Some articles on my thoughts on various topics related to drawing and the commercial art industry" focusable="true" url="javascript:ShowDropdownNavArticles()"></link>
+            </listitem>
+            <listitem level="1">
+              <link name="Sometimes it&#39;s easier to convey some ideas in comic form" focusable="true" url="https://drawabox.com/comic"></link>
+            </listitem>
+            <listitem level="1">
+              <link name="Got a question? Chances are, someone else has asked it" focusable="true" url="https://drawabox.com/faq"></link>
+            </listitem>
+            <listitem level="1">
+              <link name="Find out how you can help support this free resource" focusable="true" url="https://drawabox.com/giveback"></link>
+            </listitem>
+          </list>
+        </navigation>
+        <link name="Support Drawabox on Patreon" focusable="true" url="https://patreon.com/uncomfortable">
+          <image name="Support Drawabox on Patreon" url="https://d15v304a6xpq4b.cloudfront.net/assets/images/icon-patreon.png"></image>
+        </link>
+        <link name="Subscribe to our YouTube Channel" focusable="true" url="https://youtube.com/uncomfortable">
+          <image name="Subscribe to our YouTube Channel" url="https://d15v304a6xpq4b.cloudfront.net/assets/images/icon-youtube.png"></image>
+        </link>
+        <link name="Chat with us on Discord CHAT WITH US" focusable="true" url="https://discord.gg/drawabox">
+          <image name="Chat with us on Discord" url="https://d15v304a6xpq4b.cloudfront.net/assets/images/icon-discord.png"></image>
+          <StaticText name="CHAT WITH US"></StaticText>
+        </link>
+        <link name=" LOGIN" focusable="true" url="https://drawabox.com/login">
+          <StaticText name=""></StaticText>
+          <StaticText name="LOGIN"></StaticText>
+        </link>
+      </sectionheader>
+      <complementary>
+        <list>
+          <listitem level="1">
+            <heading name="Introduction" level="2">
+              <link name="Introduction" focusable="true" url="https://drawabox.com/lesson/0/1">
+                <StaticText name="Introduction"></StaticText>
+              </link>
+            </heading>
+            <list>
+              <listitem level="2">
+                <heading name="All things start at the beginning" level="3">
+                  <link name="All things start at the beginning" focusable="true" url="https://drawabox.com/lesson/0/1/summary">
+                    <StaticText name="All things start at the beginning"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="What is Drawabox?" level="3">
+                  <link name="What is Drawabox?" focusable="true" url="https://drawabox.com/lesson/0/1/whatis">
+                    <StaticText name="What is Drawabox?"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="What are the fundamentals?" level="3">
+                  <link name="What are the fundamentals?" focusable="true" url="https://drawabox.com/lesson/0/1/fundamentals">
+                    <StaticText name="What are the fundamentals?"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="How is Drawabox free?" level="3">
+                  <link name="How is Drawabox free?" focusable="true" url="https://drawabox.com/lesson/0/1/whyfree">
+                    <StaticText name="How is Drawabox free?"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+            </list>
+          </listitem>
+          <listitem level="1">
+            <heading name="Changing your Mindset" level="2">
+              <link name="Changing your Mindset" focusable="true" url="https://drawabox.com/lesson/0/2">
+                <StaticText name="Changing your Mindset"></StaticText>
+              </link>
+            </heading>
+            <list>
+              <listitem level="2">
+                <heading name="Play is not inherently fun" level="3">
+                  <link name="Play is not inherently fun" focusable="true" url="https://drawabox.com/lesson/0/2/summary">
+                    <StaticText name="Play is not inherently fun"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="The hardest thing you&#39;ll ever do" level="3">
+                  <link name="The hardest thing you&#39;ll ever do" focusable="true" url="https://drawabox.com/lesson/0/2/video">
+                    <StaticText name="The hardest thing you&#39;ll ever do"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="It&#39;s about balance" level="3">
+                  <link name="It&#39;s about balance" focusable="true" url="https://drawabox.com/lesson/0/2/balance">
+                    <StaticText name="It&#39;s about balance"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="Developing your ideas" level="3">
+                  <link name="Developing your ideas" focusable="true" url="https://drawabox.com/lesson/0/2/prokocourse">
+                    <StaticText name="Developing your ideas"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="Drawing prompts" level="3">
+                  <link name="Drawing prompts" focusable="true" url="https://drawabox.com/lesson/0/2/prompts">
+                    <StaticText name="Drawing prompts"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="Failure is a beginner&#39;s job" level="3">
+                  <link name="Failure is a beginner&#39;s job" focusable="true" url="https://drawabox.com/lesson/0/2/failure">
+                    <StaticText name="Failure is a beginner&#39;s job"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="I&#39;m not ready to draw that" level="3">
+                  <link name="I&#39;m not ready to draw that" focusable="true" url="https://drawabox.com/lesson/0/2/ready">
+                    <StaticText name="I&#39;m not ready to draw that"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="The control muscle" level="3">
+                  <link name="The control muscle" focusable="true" url="https://drawabox.com/lesson/0/2/control">
+                    <StaticText name="The control muscle"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="The 50% rule" level="3">
+                  <link name="The 50% rule" focusable="true" url="https://drawabox.com/lesson/0/2/50percent">
+                    <StaticText name="The 50% rule"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="50% rule FAQ" level="3">
+                  <link name="50% rule FAQ" focusable="true" url="https://drawabox.com/lesson/0/2/faq">
+                    <StaticText name="50% rule FAQ"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="Depression and learning art" level="3">
+                  <link name="Depression and learning art" focusable="true" url="https://drawabox.com/lesson/0/2/depression">
+                    <StaticText name="Depression and learning art"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="Other resources" level="3">
+                  <link name="Other resources" focusable="true" url="https://drawabox.com/lesson/0/2/otherresources">
+                    <StaticText name="Other resources"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+            </list>
+          </listitem>
+          <listitem level="1">
+            <heading name="Using this Course" level="2">
+              <link name="Using this Course" focusable="true" url="https://drawabox.com/lesson/0/3">
+                <StaticText name="Using this Course"></StaticText>
+              </link>
+            </heading>
+            <list>
+              <listitem level="2">
+                <heading name="How to use this course" level="3">
+                  <link name="How to use this course" focusable="true" url="https://drawabox.com/lesson/0/3/summary">
+                    <StaticText name="How to use this course"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="Getting the most out of Drawabox" level="3">
+                  <link name="Getting the most out of Drawabox" focusable="true" url="https://drawabox.com/lesson/0/3/gettingthemost">
+                    <StaticText name="Getting the most out of Drawabox"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="Community feedback vs. official critique" level="3">
+                  <link name="Community feedback vs. official critique" focusable="true" url="https://drawabox.com/lesson/0/3/gettingfeedback">
+                    <StaticText name="Community feedback vs. official critique"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="How do I sign up for official critique?" level="3">
+                  <link name="How do I sign up for official critique?" focusable="true" url="https://drawabox.com/lesson/0/3/officialcritiquesignup">
+                    <StaticText name="How do I sign up for official critique?"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="Warmups" level="3">
+                  <link name="Warmups" focusable="true" url="https://drawabox.com/lesson/0/3/warmups">
+                    <StaticText name="Warmups"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+            </list>
+          </listitem>
+          <listitem level="1">
+            <heading name="Required/Recommended Tools" level="2">
+              <link name="Required/Recommended Tools" focusable="true" url="https://drawabox.com/lesson/0/4">
+                <StaticText name="Required/Recommended Tools"></StaticText>
+              </link>
+            </heading>
+            <list>
+              <listitem level="2">
+                <heading name="The right tool for the job" level="3">
+                  <link name="The right tool for the job" focusable="true" url="https://drawabox.com/lesson/0/4/summary">
+                    <StaticText name="The right tool for the job"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="The tools we recommend and why" level="3">
+                  <link name="The tools we recommend and why" focusable="true" url="https://drawabox.com/lesson/0/4/video">
+                    <StaticText name="The tools we recommend and why"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="Why ink? Why not digital?" level="3">
+                  <link name="Why ink? Why not digital?" focusable="true" url="https://drawabox.com/lesson/0/4/why">
+                    <StaticText name="Why ink? Why not digital?"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="Pens - Fineliners, size 0.5" level="3">
+                  <link name="Pens - Fineliners, size 0.5" focusable="true" url="https://drawabox.com/lesson/0/4/pens">
+                    <StaticText name="Pens - Fineliners, size 0.5"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="Keep an eye on the nibs" level="3">
+                  <link name="Keep an eye on the nibs" focusable="true" url="https://drawabox.com/lesson/0/4/finelinertips">
+                    <StaticText name="Keep an eye on the nibs"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="Drawabox sells pens too!" level="3">
+                  <link name="Drawabox sells pens too!" focusable="true" url="https://drawabox.com/lesson/0/4/drawaboxpens">
+                    <StaticText name="Drawabox sells pens too!"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="What about other kinds of pencils, pens, etc?" level="3">
+                  <link name="What about other kinds of pencils, pens, etc?" focusable="true" url="https://drawabox.com/lesson/0/4/whatabout">
+                    <StaticText name="What about other kinds of pencils, pens, etc?"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="Paper" level="3">
+                  <link name="Paper" focusable="true" url="https://drawabox.com/lesson/0/4/paper">
+                    <StaticText name="Paper"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="Other tools" level="3">
+                  <link name="Other tools" focusable="true" url="https://drawabox.com/lesson/0/4/other">
+                    <StaticText name="Other tools"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+              <listitem level="2">
+                <heading name="Beginner&#39;s shopping list" level="3">
+                  <link name="Beginner&#39;s shopping list" focusable="true" url="https://drawabox.com/lesson/0/4/shoppinglist">
+                    <StaticText name="Beginner&#39;s shopping list"></StaticText>
+                  </link>
+                </heading>
+              </listitem>
+            </list>
+          </listitem>
+        </list>
+      </complementary>
+      <heading name="Lesson 0: Getting Started" level="1">
+        <StaticText name="Lesson 0: Getting Started"></StaticText>
+      </heading>
+      <heading name="Introduction" level="2">
+        <StaticText name="Introduction"></StaticText>
+      </heading>
+      <link name="" focusable="true" url="https://www.facebook.com/sharer/sharer.php?u=https://drawabox.com/lesson/0/1&amp;t=Drawabox.com%20|%20Part%20One:%20The%20Basics%20|%20Lesson%200:%20Getting%20Started%20|%20Introduction">
+        <StaticText name=""></StaticText>
+      </link>
+      <link name="" focusable="true" url="http://www.tumblr.com/share/link?url=https://drawabox.com/lesson/0/1&amp;name=Drawabox.com%20|%20Part%20One:%20The%20Basics%20|%20Lesson%200:%20Getting%20Started%20|%20Introduction&amp;tags=tutorial,art,drawing,drawabox">
+        <StaticText name=""></StaticText>
+      </link>
+      <link name="" focusable="true" url="https://twitter.com/intent/tweet?url=https://drawabox.com/lesson/0/1&amp;text=Drawabox.com%20|%20Part%20One:%20The%20Basics%20|%20Lesson%200:%20Getting%20Started%20|%20Introduction&amp;hashtags=tutorial,art,drawing,drawabox">
+        <StaticText name=""></StaticText>
+      </link>
+      <paragraph>
+        <StaticText name="Hate to read? No problem. "></StaticText>
+        <strong>
+          <StaticText name="We can read the text to you"></StaticText>
+        </strong>
+        <StaticText name="."></StaticText>
+      </paragraph>
+      <paragraph>
+        <StaticText name="This feature is available "></StaticText>
+        <strong>
+          <StaticText name="completely free"></StaticText>
+        </strong>
+        <StaticText name=". While we will be keeping an eye on how feasible it is to eat the costs associated, we hope to keep it that way."></StaticText>
+      </paragraph>
+      <paragraph>
+        <StaticText name="Just click &#34;Listen with Drawabox&#34;!"></StaticText>
+      </paragraph>
+      <heading name="All things start at the beginning" level="3">
+        <StaticText name="All things start at the beginning"></StaticText>
+      </heading>
+      <link name="" focusable="true" url="javascript:OpenAudioBookmark(&#39;summary&#39;)">
+        <StaticText name=""></StaticText>
+      </link>
+      <link name="" focusable="true" url="https://drawabox.com/lesson/0/1/summary">
+        <StaticText name=""></StaticText>
+      </link>
+      <paragraph>
+        <StaticText name="Lesson 0 contains 4 pages, and goes over everything you need to know about:"></StaticText>
+      </paragraph>
+      <list>
+        <listitem level="1">
+          <ListMarker name="◦ "></ListMarker>
+          <paragraph>
+            <StaticText name="what this course does and does not teach,"></StaticText>
+          </paragraph>
+        </listitem>
+        <listitem level="1">
+          <ListMarker name="◦ "></ListMarker>
+          <paragraph>
+            <StaticText name="how we recommend going through it so as to get the most out of it,"></StaticText>
+          </paragraph>
+        </listitem>
+        <listitem level="1">
+          <ListMarker name="◦ "></ListMarker>
+          <paragraph>
+            <StaticText name="and the various methods (cheap and free) that you can use to get feedback on your work."></StaticText>
+          </paragraph>
+        </listitem>
+      </list>
+      <paragraph>
+        <StaticText name="This page in particular focuses on what the course covers, so you can better understand whether Drawabox is a good choice for what you&#39;re looking to learn."></StaticText>
+      </paragraph>
+      <paragraph>
+        <strong>
+          <StaticText name="Read through the material and watch any videos as they come up"></StaticText>
+        </strong>
+        <StaticText name=" (like the one directly beneath this, with the greyed out thumbnail featuring a play icon on top). Only watching the videos or only doing the reading will cause you to miss information, and will make it less likely that you will fully absorb the information you encounter."></StaticText>
+      </paragraph>
+      <heading name="What is Drawabox?" level="3">
+        <StaticText name="What is Drawabox?"></StaticText>
+      </heading>
+      <link name="" focusable="true" url="javascript:OpenAudioBookmark(&#39;whatis&#39;)">
+        <StaticText name=""></StaticText>
+      </link>
+      <link name="" focusable="true" url="https://drawabox.com/lesson/0/1/whatis">
+        <StaticText name=""></StaticText>
+      </link>
+      <paragraph>
+        <StaticText name="Drawabox is, at its core, a community of people developing their drawing skills. Our members range from total beginners, to self-taught artists seeking more structured ways to practice, to established artists looking to sharpen their skills."></StaticText>
+      </paragraph>
+      <paragraph>
+        <StaticText name="This community revolves around the free lessons I&#39;ve written (and rewritten, and rewritten again), which were originally built upon the foundations of what I learned from "></StaticText>
+        <strong>
+          <link name="Peter Han" focusable="true" url="https://instagram.com/peterhanstyle">
+            <StaticText name="Peter Han"></StaticText>
+          </link>
+          <StaticText name="&#39;s Dynamic Sketching course"></StaticText>
+        </strong>
+        <StaticText name=" when I attended Concept Design Academy in 2013. Peter&#39;s own lessons build upon the work of his mentor, the late "></StaticText>
+        <link name="Norm Schureman" focusable="true" url="http://normanschureman.com/home.php">
+          <StaticText name="Norm Schureman"></StaticText>
+        </link>
+        <StaticText name="."></StaticText>
+      </paragraph>
+      <paragraph>
+        <StaticText name="Dynamic Sketching had an enormous impact on me, and while I&#39;ve chosen to narrow the focus of Drawabox to a very specific set of &#34;core&#34; fundamental concepts, I still believe Dynamic Sketching is an excellent course to take at "></StaticText>
+        <emphasis>
+          <StaticText name="some"></StaticText>
+        </emphasis>
+        <StaticText name=" point - specifically because where Drawabox will teach you to make your drawings feel solid and three dimensional, Dynamic Sketching will teach you to make them look "></StaticText>
+        <emphasis>
+          <StaticText name="really"></StaticText>
+        </emphasis>
+        <StaticText name=" cool."></StaticText>
+      </paragraph>
+      <paragraph>
+        <StaticText name="You can take "></StaticText>
+        <link name="Dynamic Sketching with Peter Han himself" focusable="true" url="https://drawabox.com/rec/han/dynamicsketching">
+          <StaticText name="Dynamic Sketching with Peter Han himself"></StaticText>
+        </link>
+        <StaticText name=" (although this is quite expensive, due to it including feedback from the instructor)."></StaticText>
+      </paragraph>
+      <paragraph>
+        <StaticText name="Another, more affordable option is the "></StaticText>
+        <link name="Dynamic Sketching video course with Charles Hu over on New Masters Academy" focusable="true" url="https://www.nma.art/courses/visual-development-dynamic-sketching/?ref=134">
+          <StaticText name="Dynamic Sketching video course with Charles Hu over on New Masters Academy"></StaticText>
+        </link>
+        <StaticText name=", where it&#39;s included in their monthly subscription. Since they&#39;re our sponsor, you can also get 25% off your first billing cycle with them, "></StaticText>
+        <strong>
+          <StaticText name="using our coupon code DRAWABOX"></StaticText>
+        </strong>
+        <StaticText name="."></StaticText>
+      </paragraph>
+      <paragraph>
+        <strong>
+          <StaticText name="Drawabox&#39;s goal is to provide beginners with a strong foundation, and to equip them with the things a lot of other courses and tutorials tend to take for granted"></StaticText>
+        </strong>
+        <StaticText name=". We achieve this by treating drawing less as an academic pursuit focusing on memorization, and more like an athletic one. While concepts are certainly explained, they are hammered in through active drills and repetition."></StaticText>
+      </paragraph>
+      <paragraph>
+        <StaticText name="Drawabox is a "></StaticText>
+        <strong>
+          <StaticText name="very rigorous course"></StaticText>
+        </strong>
+        <StaticText name=". Some students have completed it in as little as 5 months, while others have taken a year, or even two. What matters is that you give each exercise, and each drawing, as much time as it requires to be executed "></StaticText>
+        <strong>
+          <StaticText name="to the best of your current ability"></StaticText>
+        </strong>
+        <StaticText name=". Setting your own deadlines or expectations is "></StaticText>
+        <emphasis>
+          <StaticText name="highly"></StaticText>
+        </emphasis>
+        <StaticText name=" discouraged - it&#39;ll cause you to rush, and to progress more slowly in the long run. Plenty of students come here with the intent to achieve something specific in a certain amount of time - if that is a necessity for you, then this course may not be the best choice."></StaticText>
+      </paragraph>
+      <paragraph>
+        <StaticText name="It is not going to make you a professional on its own, but it will teach you "></StaticText>
+        <strong>
+          <StaticText name="how to practice"></StaticText>
+        </strong>
+        <StaticText name=", "></StaticText>
+        <strong>
+          <StaticText name="how to use the resources available to you on the internet"></StaticText>
+        </strong>
+        <StaticText name=", and "></StaticText>
+        <strong>
+          <StaticText name="equip you with the tools and skills you need to take advantage of them"></StaticText>
+        </strong>
+        <StaticText name=". Think of Drawabox as one big tutorial zone in a sandbox game; it&#39;ll take a while to get through it, but once you&#39;re done, you&#39;ll be ready to enter a world full of fun and interesting sources of instruction."></StaticText>
+      </paragraph>
+      <heading name="What are the fundamentals?" level="3">
+        <StaticText name="What are the fundamentals?"></StaticText>
+      </heading>
+      <link name="" focusable="true" url="javascript:OpenAudioBookmark(&#39;fundamentals&#39;)">
+        <StaticText name=""></StaticText>
+      </link>
+      <link name="" focusable="true" url="https://drawabox.com/lesson/0/1/fundamentals">
+        <StaticText name=""></StaticText>
+      </link>
+      <paragraph>
+        <StaticText name="The answer to this question depends on who you ask - but what we cover here focuses on a specific subset of what others might call out when listing the fundamentals of drawing."></StaticText>
+      </paragraph>
+      <paragraph>
+        <StaticText name="We call these the "></StaticText>
+        <strong>
+          <StaticText name="core fundamentals of drawing"></StaticText>
+        </strong>
+        <StaticText name=" - the things you&#39;ll need to apply and learn everything else more effectively. These core fundamentals focus in three areas:"></StaticText>
+      </paragraph>
+      <list>
+        <listitem level="1">
+          <ListMarker name="◦ "></ListMarker>
+          <paragraph>
+            <StaticText name="Confident and controlled "></StaticText>
+            <strong>
+              <StaticText name="MARK MAKING"></StaticText>
+            </strong>
+            <StaticText name=" - the ability to make the marks you intend to make, and to keep them smooth and hesitation-free."></StaticText>
+          </paragraph>
+        </listitem>
+        <listitem level="1">
+          <ListMarker name="◦ "></ListMarker>
+          <paragraph>
+            <StaticText name="Attentive and fastidious "></StaticText>
+            <strong>
+              <StaticText name="OBSERVATION"></StaticText>
+            </strong>
+          </paragraph>
+        </listitem>
+        <listitem level="1">
+          <ListMarker name="◦ "></ListMarker>
+          <paragraph>
+            <StaticText name="And the big focus of this course overall: "></StaticText>
+            <strong>
+              <StaticText name="SPATIAL REASONING"></StaticText>
+            </strong>
+            <StaticText name=" - the understanding deep in your brain that despite drawing on a flat page, the things you&#39;re producing exist in a real, three dimensional world. The page itself is merely a window looking out onto that world."></StaticText>
+          </paragraph>
+        </listitem>
+      </list>
+      <paragraph>
+        <StaticText name="These are not "></StaticText>
+        <emphasis>
+          <StaticText name="everything"></StaticText>
+        </emphasis>
+        <StaticText name=" there is to know, but they lay down a solid foundation upon which everything else can be built. For example, while we do not touch upon any lighting, rendering, or shading in this course, such concepts rely on understanding how different objects and surfaces might relate to a light source in the scene - which is what we develop by working on spatial reasoning."></StaticText>
+      </paragraph>
+      <paragraph>
+        <StaticText name="As mentioned in the video above, while Drawabox focuses on a limited set of core concepts, you are still encouraged to explore any others that may be of interest to you. Doing so alongside what you learn here will help you develop into a more well-rounded artist."></StaticText>
+      </paragraph>
+      <paragraph>
+        <StaticText name="Our sponsor, "></StaticText>
+        <strong>
+          <link name="New Masters Academy" focusable="true" url="https://drawabox.com/nma">
+            <StaticText name="New Masters Academy"></StaticText>
+          </link>
+        </strong>
+        <StaticText name=", has a ton of material that explore other fundamentals of drawing. For example:"></StaticText>
+      </paragraph>
+      <list>
+        <listitem level="1">
+          <ListMarker name="◦ "></ListMarker>
+          <paragraph>
+            <link name="Art Anatomy for Beginners with Steve Huston" focusable="true" url="https://drawabox.com/nma/artanatomybeginners">
+              <StaticText name="Art Anatomy for Beginners with Steve Huston"></StaticText>
+            </link>
+          </paragraph>
+        </listitem>
+        <listitem level="1">
+          <blockquote>
+            <paragraph>
+              <StaticText name="Steve Huston explores the human body in a manner that lines up exceptionally well with the focus on form and spatial reasoning we explore here, making this analytical approach to figure drawing an excellent complement to our lessons. I&#39;ve actually been on the hunt for years for an online course that follows the same methodology I learned from Kevin Chen years ago - and this fits the bill perfectly."></StaticText>
+            </paragraph>
+          </blockquote>
+        </listitem>
+        <listitem level="1">
+          <ListMarker name="◦ "></ListMarker>
+          <paragraph>
+            <link name="Drawing with FORCE with Michael Mattesi" focusable="true" url="https://drawabox.com/nma/drawingwithforce">
+              <StaticText name="Drawing with FORCE with Michael Mattesi"></StaticText>
+            </link>
+          </paragraph>
+        </listitem>
+        <listitem level="1">
+          <blockquote>
+            <paragraph>
+              <StaticText name="Figure drawing is a marriage of two core concepts - structure and gesture. In this course, Michael Mattesi explores his unique, physics-based methodology for drawing bodies that move naturally and believably through the space in which they exist."></StaticText>
+            </paragraph>
+          </blockquote>
+        </listitem>
+        <listitem level="1">
+          <ListMarker name="◦ "></ListMarker>
+          <paragraph>
+            <link name="Fundamentals of Observational Drawing with Iliya Mirochnik" focusable="true" url="https://drawabox.com/nma/fundamentalsofobservationaldrawing">
+              <StaticText name="Fundamentals of Observational Drawing with Iliya Mirochnik"></StaticText>
+            </link>
+          </paragraph>
+        </listitem>
+        <listitem level="1">
+          <blockquote>
+            <paragraph>
+              <StaticText name="In this course, Iliya teaches a variety of observational drawing tools and techniques, with a focus on the Russian Drawing Approach - a distinct methodology that has remained largely unaltered in over two centuries. This course also includes two lessons dedicated to teaching the fundamentals of light and shadow, which will help you understand the basics of shading."></StaticText>
+            </paragraph>
+          </blockquote>
+        </listitem>
+        <listitem level="1">
+          <ListMarker name="◦ "></ListMarker>
+          <paragraph>
+            <link name="Finding Your Voice as an Artist with Steve Huston and Bill Perkins" focusable="true" url="https://drawabox.com/nma/findingyourvoice">
+              <StaticText name="Finding Your Voice as an Artist with Steve Huston and Bill Perkins"></StaticText>
+            </link>
+          </paragraph>
+        </listitem>
+        <listitem level="1">
+          <blockquote>
+            <paragraph>
+              <StaticText name="This course by Steve Huston and Bill Perkins (of Little Mermaid and Aladdin fame) takes an analytical approach to breaking down the concepts of personal style, and helps students to find a guiding direction for their journey."></StaticText>
+            </paragraph>
+          </blockquote>
+        </listitem>
+      </list>
+      <paragraph>
+        <StaticText name="Sign up to New Masters Academy with the coupon code "></StaticText>
+        <strong>
+          <StaticText name="DRAWABOX"></StaticText>
+        </strong>
+        <StaticText name=" — you&#39;ll get a full "></StaticText>
+        <strong>
+          <StaticText name="25% off your first billing cycle"></StaticText>
+        </strong>
+        <StaticText name=" (applicable to the Library and Library+ plans)."></StaticText>
+      </paragraph>
+      <heading name="How is Drawabox free?" level="3">
+        <StaticText name="How is Drawabox free?"></StaticText>
+      </heading>
+      <link name="" focusable="true" url="javascript:OpenAudioBookmark(&#39;whyfree&#39;)">
+        <StaticText name=""></StaticText>
+      </link>
+      <link name="" focusable="true" url="https://drawabox.com/lesson/0/1/whyfree">
+        <StaticText name=""></StaticText>
+      </link>
+      <paragraph>
+        <StaticText name="Drawabox is a business, but I am a strong believer that we can provide free resources, and cheap access to feedback, while still compensating our team well for their work."></StaticText>
+      </paragraph>
+      <paragraph>
+        <StaticText name="We&#39;re able to do this while remaining viable as a business because of our credit-based pricing structure. Those who subscribe here through Patreon at any of the student tiers receive &#34;credits&#34; when they are charged, and those credits expire two months after their receipt. Those who can afford to allow some (and even all) of their credits to expire, allowing their contribution to go towards subsidizing the overall price for others, whereas those who have tighter budgets can maintain control by subscribing, cancelling, and re-subscribing as needed."></StaticText>
+      </paragraph>
+      <paragraph>
+        <StaticText name="As we continue to grow, we are working towards constantly improving the lessons, applying what we&#39;ve learned by explaining concepts in thousands of critiques to updates and rewrites of lesson content, and expanding more of the lesson critiques to our team of teaching assistants. In doing so, it will allow me to focus more on refining the material, and expanding what we&#39;re able to offer on the free side of things even further."></StaticText>
+      </paragraph>
+      <paragraph>
+        <StaticText name="Along with the critiques we offer, and our smaller supporter-tier patrons, Drawabox is funded by:"></StaticText>
+      </paragraph>
+      <list>
+        <listitem level="1">
+          <ListMarker name="◦ "></ListMarker>
+          <paragraph>
+            <StaticText name="Display advertisements on the website - although currently our generous sponsor, New Masters Academy, has purchased all of our advertising slots to provide you with a much cleaner, less distracting learning experience. Every student who signs up with "></StaticText>
+            <link name="NMA" focusable="true" url="https://drawabox.com/nma">
+              <StaticText name="NMA"></StaticText>
+            </link>
+            <StaticText name=" using our DRAWABOX coupon code both gets 25% off their first billing cycle "></StaticText>
+            <emphasis>
+              <StaticText name="and"></StaticText>
+            </emphasis>
+            <StaticText name=" helps support Drawabox."></StaticText>
+          </paragraph>
+        </listitem>
+        <listitem level="1">
+          <ListMarker name="◦ "></ListMarker>
+          <paragraph>
+            <link name="Importing and selling fineliner pens" focusable="true" url="https://drawabox.com/shop/pens?lesson0.1">
+              <StaticText name="Importing and selling fineliner pens"></StaticText>
+            </link>
+            <StaticText name=" - this is primarily to provide the community with access to good quality fineliners at a far cheaper price (though we&#39;re only able to offer them with free shipping in the continental United States, so they&#39;re not necessarily as good of a deal internationally)."></StaticText>
+          </paragraph>
+        </listitem>
+        <listitem level="1">
+          <ListMarker name="◦ "></ListMarker>
+          <paragraph>
+            <StaticText name="Affiliate link "></StaticText>
+            <link name="recommendations" focusable="true" url="https://drawabox.com/recommendations">
+              <StaticText name="recommendations"></StaticText>
+            </link>
+            <StaticText name=" through Amazon, where we earn a small commission for any sales that use our links"></StaticText>
+          </paragraph>
+        </listitem>
+      </list>
+      <paragraph>
+        <strong>
+          <StaticText name="If you&#39;re unable to support us through Patreon"></StaticText>
+        </strong>
+        <StaticText name=", consider shopping through our affiliate links, signing up for "></StaticText>
+        <link name="New Masters Academy" focusable="true" url="https://drawabox.com/nma">
+          <StaticText name="New Masters Academy"></StaticText>
+        </link>
+        <StaticText name=" using our DRAWABOX coupon code, or purchasing our pens when they are in stock."></StaticText>
+      </paragraph>
+      <paragraph>
+        <emphasis>
+          <StaticText name="On the next page, let&#39;s look at just how a lot of students tend to think about drawing, what they are and aren&#39;t ready for, and what keeps holding them back."></StaticText>
+        </emphasis>
+      </paragraph>
+      <link name="Changing your Mindset &gt;&gt;&gt;" focusable="true" url="https://drawabox.com/lesson/0/2">
+        <StaticText name="Changing your Mindset &gt;&gt;&gt;"></StaticText>
+      </link>
+      <StaticText name="We provide these ad slots through comicad.net so art-related projects can get access to lower cost advertising on our website"></StaticText>
+      <link name="Flabbergast!" focusable="true" url="https://www.comicad.net/rd/AoJcob6cpjhmCaQD8vwoIaHDsgPr6DRp-z@riQV86gvX5ThQ9F1uQR2xSCS3smuqAjhP2kNMB0eqoXH5wiBi-Y8Bhz3DmSp@quDZNZO4WDE=,aHR0cHM6Ly9mbGFiYmVyZ2FzdGNvbWljLmNvbQ==/">
+        <image name="Flabbergast!" url="https://www.comicad.net/uploads/a/MTMwMDE3MTgyMTk2Nzg=.jpg"></image>
+      </link>
+      <link name="Chained to Me" focusable="true" url="https://www.comicad.net/rd/nl89Vofm2p97nL2n7kmI2oE6Ktb@N2BMiPoCBbGVvBeLsZaXLUfvOZ57U2qRnpPbAjhP2kNMB0eqoXH5wiBi-Y8Bhz3DmSp@quDZNZO4WDE=,aHR0cHM6Ly93d3cud2l0Y2h5Zm9yZXN0LmNvbS9jdG0=/">
+        <image name="Chained to Me" url="https://www.comicad.net/uploads/a/MTI3MjE3MzY3Njk1ODg=.jpg"></image>
+      </link>
+      <link name="Spiral" focusable="true" url="https://www.comicad.net/rd/d0yFyHn68uCW2V34rhlz6Hx8kTxGCu0c2UoELEvR9hY-7iTbNHvix00no5m9rz@p3btxIF4-RQTU9XhiWDS@Zg==,aHR0cHM6Ly93d3cud2VidG9vbnMuY29tL2VuL2NoYWxsZW5nZS9zcGlyYWwvbGlzdD90aXRsZV9ubz01Mjc3MDc=/">
+        <image name="Spiral" url="https://www.comicad.net/uploads/a/NTk0MTYxODkzMzYyNA==.jpg"></image>
+      </link>
+      <link name="YOUR AD HERE $0.40 PER DAY" focusable="true" url="https://www.comicad.net/comic-profile/332/Drawabox/1759/">
+        <StaticText name="YOUR AD HERE $0.40"></StaticText>
+        <StaticText name=" PER DAY"></StaticText>
+      </link>
+      <StaticText name="The recommendation below is an advertisement. Most of the links here are part of Amazon&#39;s affiliate program (unless otherwise stated), which helps support this website. It&#39;s also more than that - it&#39;s a hand-picked recommendation of something we&#39;ve used ourselves, or know to be of impeccable quality. If you&#39;re interested, "></StaticText>
+      <link name="here is a full list" focusable="true" url="https://drawabox.com/recommendations">
+        <StaticText name="here is a full list"></StaticText>
+      </link>
+      <StaticText name="."></StaticText>
+      <link name="Wescott Grid Ruler" focusable="true" url="https://amzn.to/3KZMtFM">
+        <image name="Wescott Grid Ruler" url="https://d15v304a6xpq4b.cloudfront.net/lesson_images/ace83d1f.jpg"></image>
+      </link>
+      <link name="Wescott Grid Ruler " focusable="true" url="https://amzn.to/3KZMtFM">
+        <heading name="Wescott Grid Ruler " level="3">
+          <StaticText name="Wescott Grid Ruler "></StaticText>
+          <StaticText name=""></StaticText>
+        </heading>
+      </link>
+      <link name="" focusable="true" url="https://drawabox.com/recommendations/">
+        <StaticText name=""></StaticText>
+      </link>
+      <paragraph>
+        <StaticText name="Every now and then I&#39;ll get someone asking me about which ruler I use in my videos. It&#39;s this Wescott grid ruler that I picked up ages ago. While having a transparent grid is useful for figuring out spacing and perpendicularity, it ultimately not something that you can&#39;t achieve with any old ruler (or a piece of paper you&#39;ve folded into a hard edge). Might require a little more attention, a little more focus, but you don&#39;t need a fancy tool for this."></StaticText>
+      </paragraph>
+      <paragraph>
+        <StaticText name="But hey, if you want one, who am I to stop you?"></StaticText>
+      </paragraph>
+      <sectionfooter>
+        <list>
+          <listitem level="1">
+            <StaticText name="Site Map"></StaticText>
+          </listitem>
+          <listitem level="1">
+            <link name="Our Privacy Policy" focusable="true" url="https://drawabox.com/privacy">
+              <StaticText name="Our Privacy Policy"></StaticText>
+            </link>
+          </listitem>
+          <listitem level="1">
+            <link name="Our Drawing Lessons" focusable="true" url="https://drawabox.com/lessons">
+              <StaticText name="Our Drawing Lessons"></StaticText>
+            </link>
+          </listitem>
+          <listitem level="1">
+            <link name="Thoughts and Articles on Various Topics" focusable="true" url="https://drawabox.com/articles">
+              <StaticText name="Thoughts and Articles on Various Topics"></StaticText>
+            </link>
+          </listitem>
+          <listitem level="1">
+            <link name="Uncomfortable&#39;s Unsolicited Advice" focusable="true" url="https://drawabox.com/comic">
+              <StaticText name="Uncomfortable&#39;s Unsolicited Advice"></StaticText>
+            </link>
+          </listitem>
+          <listitem level="1">
+            <link name="Frequently Asked Questions" focusable="true" url="https://drawabox.com/FAQ">
+              <StaticText name="Frequently Asked Questions"></StaticText>
+            </link>
+          </listitem>
+          <listitem level="1">
+            <link name="About Drawabox" focusable="true" url="https://drawabox.com/about">
+              <StaticText name="About Drawabox"></StaticText>
+            </link>
+          </listitem>
+          <listitem level="1">
+            <link name="Recommended Books and Materials" focusable="true" url="https://drawabox.com/recommendations">
+              <StaticText name="Recommended Books and Materials"></StaticText>
+            </link>
+          </listitem>
+          <listitem level="1">
+            <link name="How to Help Support Drawabox" focusable="true" url="https://drawabox.com/giveback">
+              <StaticText name="How to Help Support Drawabox"></StaticText>
+            </link>
+          </listitem>
+        </list>
+        <list>
+          <listitem level="1">
+            <StaticText name="Drawabox is sponsored by"></StaticText>
+          </listitem>
+          <listitem level="1">
+            <link name="New Masters Academy" focusable="true" url="https://nma.art/learn">
+              <StaticText name="New Masters Academy"></StaticText>
+            </link>
+          </listitem>
+          <listitem level="1">
+            <StaticText name="You can get as much as 25% off your first"></StaticText>
+          </listitem>
+          <listitem level="1">
+            <StaticText name="billing cycle using the code "></StaticText>
+            <strong>
+              <StaticText name="DRAWABOX"></StaticText>
+            </strong>
+          </listitem>
+          <listitem level="1">
+            <StaticText name="applicable to Library and Library+ plans"></StaticText>
+          </listitem>
+        </list>
+        <list>
+          <listitem level="1">
+            <StaticText name="Social Media"></StaticText>
+          </listitem>
+          <listitem level="1">
+            <link name="Patreon" focusable="true" url="https://patreon.com/uncomfortable">
+              <StaticText name="Patreon"></StaticText>
+            </link>
+          </listitem>
+          <listitem level="1">
+            <link name="Discord Chat" focusable="true" url="https://discord.gg/FtSS4hhqSu">
+              <StaticText name="Discord Chat"></StaticText>
+            </link>
+          </listitem>
+          <listitem level="1">
+            <link name="YouTube" focusable="true" url="https://youtube.com/uncomfortable">
+              <StaticText name="YouTube"></StaticText>
+            </link>
+          </listitem>
+        </list>
+        <paragraph>
+          <StaticText name="© "></StaticText>
+          <link name="Drawabox Art Instruction Inc" focusable="true" url="https://drawabox.com/">
+            <StaticText name="Drawabox Art Instruction Inc"></StaticText>
+          </link>
+          <StaticText name=" 2015-2025. Any inquiries can be made to "></StaticText>
+          <link name="hello@drawabox.com" focusable="true" url="mailto:hello@drawabox.com">
+            <StaticText name="hello@drawabox.com"></StaticText>
+          </link>
+        </paragraph>
+      </sectionfooter>
+    </main>
+  </RootWebArea>
+</ROOT>

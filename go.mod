@@ -8,7 +8,7 @@ require (
 	github.com/chromedp/cdproto v0.0.0-20240102194822-c006b26f21c7
 	github.com/chromedp/chromedp v0.9.3
 	github.com/huandu/go-sqlbuilder v1.25.0
-	github.com/mailru/easyjson v0.7.7
+	github.com/mailru/easyjson v0.9.0
 	github.com/mattn/go-sqlite3 v1.14.19
 )
 

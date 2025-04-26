@@ -45,6 +45,7 @@ func NewNavigator() (Navigator, error) {
 			chromedp.Flag("blink-settings", "imagesEnabled=false"),
 			chromedp.Flag("disable-extensions", false),
 			chromedp.Flag("disable-remote-fonts", true),
+			chromedp.Flag("no-sandbox", true),
 		)...,
 	)
 	ctx, cancel := chromedp.NewContext(allocatorCtx)
@@ -66,7 +67,7 @@ type Page struct {
 	ctx    context.Context
 	cancel func()
 
-	Tree   AXNode
+	Tree AXNode
 }
 
 func (p Page) URL() *url.URL {

@@ -16,7 +16,7 @@ func main() {
 	if _, err := os.Stat("data/thorium-browser"); os.IsNotExist(err) {
 		log.Println("downloading thorium...")
 		_, err := script.
-			Get("https://github.com/Alex313031/thorium/releases/download/M117.0.5938.157/Thorium_Browser_117.0.5938.157_x64.AppImage").
+			Get("https://github.com/Alex313031/thorium/releases/download/M130.0.6723.174/Thorium_Browser_130.0.6723.174_AVX2.AppImage").
 			WriteFile("data/thorium-browser")
 		if err != nil {
 			log.Fatal(err)
@@ -30,7 +30,7 @@ func main() {
 	if _, err := os.Stat("data/ublock"); os.IsNotExist(err) {
 		log.Println("downloading ublock origin...")
 		ublockArchive, err := script.
-			Get("https://github.com/gorhill/uBlock/releases/download/1.54.0/uBlock0_1.54.0.chromium.zip").
+			Get("https://github.com/gorhill/uBlock/releases/download/1.63.2/uBlock0_1.63.2.chromium.zip").
 			Bytes()
 		if err != nil {
 			log.Fatal(err)
