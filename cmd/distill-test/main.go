@@ -1,7 +1,7 @@
 package main
 
 import (
-	"ax-distiller/lib/axextract"
+	"ax-distiller/lib/ax"
 	"ax-distiller/lib/markdown"
 	"fmt"
 	"log"
@@ -22,7 +22,7 @@ func main() {
 		"https://github.com/LQR471814",
 	}
 
-	navigator, err := axextract.NewNavigator()
+	navigator, err := ax.NewNavigator()
 	if err != nil {
 		log.Fatal(err)
 	}

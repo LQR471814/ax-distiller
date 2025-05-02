@@ -1,1 +1,1 @@
-go build && ./gen-aria-types > ../../lib/axextract/ariacategories.go
+go build && ./gen-aria-types > ../../lib/ax/ariacategories.go

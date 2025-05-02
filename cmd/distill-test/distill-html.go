@@ -1,7 +1,7 @@
 package main
 
 import (
-	"ax-distiller/lib/axextract"
+	"ax-distiller/lib/ax"
 	"bytes"
 	"fmt"
 	"io"
@@ -17,26 +17,26 @@ const template = `
 </html>
 `
 
-func convertToHtml(page axextract.Page, node axextract.AXNode, out io.Writer) {
-	category := axextract.RoleCategoryMap[node.Role]
+func convertToHtml(page ax.Page, node ax.AXNode, out io.Writer) {
+	category := ax.RoleCategoryMap[node.Role]
 	if len(category) > 0 {
 		switch category[0] {
-		case axextract.CATEGORY_STRUCTURE:
+		case ax.CATEGORY_STRUCTURE:
 			out.Write([]byte("<div>"))
 			defer out.Write([]byte("</div>"))
-		case axextract.CATEGORY_SECTIONHEAD:
+		case ax.CATEGORY_SECTIONHEAD:
 			out.Write([]byte("<h2 style=\"border: 1px solid aqua; margin: 0.5rem 0px\">"))
 			defer out.Write([]byte("</h2>"))
-		case axextract.CATEGORY_SECTION:
+		case ax.CATEGORY_SECTION:
 			out.Write([]byte("<div style=\"border: 1px solid blue; margin: 4px\">"))
 			defer out.Write([]byte("</div>"))
-		case axextract.CATEGORY_LANDMARK:
+		case ax.CATEGORY_LANDMARK:
 			out.Write([]byte("<div style=\"border: 1px solid green; margin: 4px\">"))
 			defer out.Write([]byte("</div>"))
-		case axextract.CATEGORY_WIDGET:
+		case ax.CATEGORY_WIDGET:
 			out.Write([]byte(fmt.Sprintf("<a href=\"/interact?id=%d\">", node.DomNodeId)))
 			defer out.Write([]byte("</a>"))
-		case axextract.CATEGORY_DOCUMENT:
+		case ax.CATEGORY_DOCUMENT:
 			out.Write([]byte("<div>"))
 			defer out.Write([]byte("</div>"))
 		}
@@ -72,7 +72,7 @@ func convertToHtml(page axextract.Page, node axextract.AXNode, out io.Writer) {
 	}
 }
 
-func pageToHtml(page axextract.Page) string {
+func pageToHtml(page ax.Page) string {
 	tree := page.Tree
 	out := bytes.NewBuffer(nil)
 	convertToHtml(page, tree, out)

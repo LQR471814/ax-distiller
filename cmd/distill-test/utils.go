@@ -1,49 +1,49 @@
 package main
 
 import (
-	"ax-distiller/lib/axextract"
+	"ax-distiller/lib/ax"
 	"encoding/json"
 	"net/url"
 	"os"
 )
 
-func fetchAxTree(link string) (axextract.AXNode, error) {
+func fetchAxTree(link string) (ax.AXNode, error) {
 	u, err := url.Parse(link)
 	if err != nil {
-		return axextract.AXNode{}, err
+		return ax.AXNode{}, err
 	}
 
-	navigator, err := axextract.NewNavigator()
+	navigator, err := ax.NewNavigator()
 	if err != nil {
-		return axextract.AXNode{}, err
+		return ax.AXNode{}, err
 	}
 	page, err := navigator.Navigate(u)
     if err != nil {
-        return axextract.AXNode{}, err
+        return ax.AXNode{}, err
     }
 
 	res, err := json.Marshal(page.Tree)
 	if err != nil {
-		return axextract.AXNode{}, err
+		return ax.AXNode{}, err
 	}
 	err = os.WriteFile("out.json", res, 0777)
 	if err != nil {
-		return axextract.AXNode{}, err
+		return ax.AXNode{}, err
 	}
 
 	return page.Tree, nil
 }
 
-func cachedAxTree(file string) (axextract.AXNode, error) {
+func cachedAxTree(file string) (ax.AXNode, error) {
 	buff, err := os.ReadFile(file)
 	if err != nil {
-		return axextract.AXNode{}, err
+		return ax.AXNode{}, err
 	}
 
-	ax := axextract.AXNode{}
+	ax := ax.AXNode{}
 	err = json.Unmarshal(buff, &ax)
 	if err != nil {
-		return axextract.AXNode{}, err
+		return ax.AXNode{}, err
 	}
 
 	return ax, nil

@@ -1,4 +1,4 @@
-package axextract
+package ax
 
 type Category = int
 

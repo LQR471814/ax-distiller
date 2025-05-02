@@ -1,13 +1,13 @@
 package main
 
-import "ax-distiller/lib/axextract"
+import "ax-distiller/lib/ax"
 
-func onlyTextContent(node axextract.AXNode) (axextract.AXNode, bool) {
+func onlyTextContent(node ax.AXNode) (ax.AXNode, bool) {
 	if node.Role == "paragraph" || node.Role == "heading" {
 		return node, true
 	}
 
-	var children []axextract.AXNode
+	var children []ax.AXNode
 	for _, c := range node.Children {
 		transformed, keep := onlyTextContent(c)
 		if keep {
@@ -23,8 +23,8 @@ func onlyTextContent(node axextract.AXNode) (axextract.AXNode, bool) {
 	return node, false
 }
 
-func noTextContent(node axextract.AXNode) axextract.AXNode {
-	var children []axextract.AXNode
+func noTextContent(node ax.AXNode) ax.AXNode {
+	var children []ax.AXNode
 	for _, c := range node.Children {
 		if c.Role == "paragraph" || c.Role == "heading" {
 			continue

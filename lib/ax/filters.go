@@ -1,4 +1,4 @@
-package axextract
+package ax
 
 import "strings"
 

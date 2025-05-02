@@ -1,7 +1,7 @@
 package main
 
 import (
-	"ax-distiller/lib/axextract"
+	"ax-distiller/lib/ax"
 	"encoding/xml"
 	"flag"
 	"fmt"
@@ -17,7 +17,7 @@ func main() {
 		log.Fatal("you must provide a url to dump as the first command line argument")
 	}
 
-	navigator, err := axextract.NewNavigator()
+	navigator, err := ax.NewNavigator()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func main() {
 	}
 
 	root := page.Tree
-	allWhitespace := axextract.FilterWhitespace(&root)
+	allWhitespace := ax.FilterWhitespace(&root)
 	if allWhitespace {
 		log.Println("there is nothing except whitespace in the resulting website, therefore there is no output")
 		return

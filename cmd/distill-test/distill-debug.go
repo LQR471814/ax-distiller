@@ -1,7 +1,7 @@
 package main
 
 import (
-	"ax-distiller/lib/axextract"
+	"ax-distiller/lib/ax"
 	"bytes"
 	"fmt"
 	"io"
@@ -9,7 +9,7 @@ import (
 
 const INDENT_SIZE = 2
 
-func debugAx(node axextract.AXNode, out io.Writer, depth int) {
+func debugAx(node ax.AXNode, out io.Writer, depth int) {
 	offset := make([]byte, INDENT_SIZE * depth)
 	for i := 0; i < INDENT_SIZE * depth; i++ {
 		offset[i] = ' '
@@ -21,7 +21,7 @@ func debugAx(node axextract.AXNode, out io.Writer, depth int) {
 	}
 }
 
-func dumpPageAx(page axextract.Page) string {
+func dumpPageAx(page ax.Page) string {
 	buff := bytes.NewBuffer(nil)
 	debugAx(page.Tree, buff, 0)
 	return buff.String()

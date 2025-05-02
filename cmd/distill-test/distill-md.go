@@ -1,14 +1,14 @@
 package main
 
 import (
-	"ax-distiller/lib/axextract"
+	"ax-distiller/lib/ax"
 	"ax-distiller/lib/markdown"
 	"bytes"
 	"io"
 	"log/slog"
 )
 
-func getTextWithWhitespace(page axextract.Page, node axextract.AXNode) string {
+func getTextWithWhitespace(page ax.Page, node ax.AXNode) string {
 	info, err := page.GetDomInfo(node.DomNodeId)
 	if err == nil {
 		return info.NodeValue
@@ -24,7 +24,7 @@ func getTextWithWhitespace(page axextract.Page, node axextract.AXNode) string {
 	return node.Name
 }
 
-func collectText(page axextract.Page, node axextract.AXNode, out io.Writer) {
+func collectText(page ax.Page, node ax.AXNode, out io.Writer) {
 	if node.Role == "StaticText" {
 		out.Write([]byte(getTextWithWhitespace(page, node)))
 		return
@@ -34,7 +34,7 @@ func collectText(page axextract.Page, node axextract.AXNode, out io.Writer) {
 	}
 }
 
-func collectTextNodes(page axextract.Page, node axextract.AXNode, out *[]markdown.Inline) {
+func collectTextNodes(page ax.Page, node ax.AXNode, out *[]markdown.Inline) {
 	if node.Role == "StaticText" {
 		*out = append(*out, markdown.Text{
 			Text: getTextWithWhitespace(page, node),
@@ -46,7 +46,7 @@ func collectTextNodes(page axextract.Page, node axextract.AXNode, out *[]markdow
 	}
 }
 
-func resolveHref(page axextract.Page, href string) string {
+func resolveHref(page ax.Page, href string) string {
 	u, err := page.URL().Parse(href)
 	if err != nil {
 		slog.Warn("Failed to resolve href", "href", href, "base", page.URL().String())
@@ -55,7 +55,7 @@ func resolveHref(page axextract.Page, href string) string {
 	return u.String()
 }
 
-func parseInlineNode(page axextract.Page, node axextract.AXNode) markdown.Inline {
+func parseInlineNode(page ax.Page, node ax.AXNode) markdown.Inline {
 	switch node.Role {
 	case "StaticText":
 		return markdown.Text{Text: getTextWithWhitespace(page, node)}
@@ -133,7 +133,7 @@ func parseInlineNode(page axextract.Page, node axextract.AXNode) markdown.Inline
 	return nil
 }
 
-func collectInlineNodes(page axextract.Page, node axextract.AXNode, out *[]markdown.Inline) {
+func collectInlineNodes(page ax.Page, node ax.AXNode, out *[]markdown.Inline) {
 	inline := parseInlineNode(page, node)
 	if inline != nil {
 		*out = append(*out, inline)
@@ -144,7 +144,7 @@ func collectInlineNodes(page axextract.Page, node axextract.AXNode, out *[]markd
 	}
 }
 
-func collectTableItems(page axextract.Page, node axextract.AXNode, out *[]markdown.TableRow) {
+func collectTableItems(page ax.Page, node ax.AXNode, out *[]markdown.TableRow) {
 	for _, c := range node.Children {
 		switch c.Role {
 		case "rowgroup":
@@ -166,7 +166,7 @@ func collectTableItems(page axextract.Page, node axextract.AXNode, out *[]markdo
 	}
 }
 
-func collectListItems(page axextract.Page, node axextract.AXNode, out *[]markdown.ListItem) {
+func collectListItems(page ax.Page, node ax.AXNode, out *[]markdown.ListItem) {
 	for _, c := range node.Children {
 		switch c.Role {
 		case "listitem":
@@ -187,7 +187,7 @@ func collectListItems(page axextract.Page, node axextract.AXNode, out *[]markdow
 	}
 }
 
-func convertToMd(page axextract.Page, node axextract.AXNode, blocks *[]markdown.Block) {
+func convertToMd(page ax.Page, node ax.AXNode, blocks *[]markdown.Block) {
 	accumulator := []markdown.Inline{}
 
 	for _, child := range node.Children {
@@ -262,7 +262,7 @@ func convertToMd(page axextract.Page, node axextract.AXNode, blocks *[]markdown.
 	}
 }
 
-func pageToMd(page axextract.Page) []markdown.Block {
+func pageToMd(page ax.Page) []markdown.Block {
 	tree := page.Tree
 	blocks := []markdown.Block{}
 	convertToMd(page, tree, &blocks)
