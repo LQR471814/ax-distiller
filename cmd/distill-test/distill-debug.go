@@ -9,7 +9,7 @@ import (
 
 const INDENT_SIZE = 2
 
-func debugAx(node ax.AXNode, out io.Writer, depth int) {
+func debugAx(node ax.Node, out io.Writer, depth int) {
 	offset := make([]byte, INDENT_SIZE * depth)
 	for i := 0; i < INDENT_SIZE * depth; i++ {
 		offset[i] = ' '

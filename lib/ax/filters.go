@@ -6,11 +6,11 @@ import "strings"
 //   - name empty or with only whitespace
 //   - description emtpy or with only whitespace
 //   - all children are also whitespace nodes
-func FilterWhitespace(node *AXNode) (isWhitespace bool) {
+func FilterWhitespace(node *Node) (isWhitespace bool) {
 	nameEmpty := strings.Trim(node.Name, " \t\n") == ""
 	descEmpty := strings.Trim(node.Description, " \t\n") == ""
 
-	var newChildren []AXNode
+	var newChildren []Node
 	for _, child := range node.Children {
 		isWhitespace := FilterWhitespace(&child)
 		if isWhitespace {

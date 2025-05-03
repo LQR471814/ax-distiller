@@ -2,12 +2,12 @@ package main
 
 import "ax-distiller/lib/ax"
 
-func onlyTextContent(node ax.AXNode) (ax.AXNode, bool) {
+func onlyTextContent(node ax.Node) (ax.Node, bool) {
 	if node.Role == "paragraph" || node.Role == "heading" {
 		return node, true
 	}
 
-	var children []ax.AXNode
+	var children []ax.Node
 	for _, c := range node.Children {
 		transformed, keep := onlyTextContent(c)
 		if keep {
@@ -23,8 +23,8 @@ func onlyTextContent(node ax.AXNode) (ax.AXNode, bool) {
 	return node, false
 }
 
-func noTextContent(node ax.AXNode) ax.AXNode {
-	var children []ax.AXNode
+func noTextContent(node ax.Node) ax.Node {
+	var children []ax.Node
 	for _, c := range node.Children {
 		if c.Role == "paragraph" || c.Role == "heading" {
 			continue

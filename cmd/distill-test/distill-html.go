@@ -17,7 +17,7 @@ const template = `
 </html>
 `
 
-func convertToHtml(page ax.Page, node ax.AXNode, out io.Writer) {
+func convertToHtml(page ax.Page, node ax.Node, out io.Writer) {
 	category := ax.RoleCategoryMap[node.Role]
 	if len(category) > 0 {
 		switch category[0] {

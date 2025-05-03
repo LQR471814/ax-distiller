@@ -36,21 +36,21 @@ type getNodesResult struct {
 	Nodes []cdpNode `json:"nodes"`
 }
 
-type AXNodeProp struct {
+type NodeProp struct {
 	Name  string
 	Value string
 }
 
-type AXNode struct {
+type Node struct {
 	Role        string
 	Name        string
 	Description string
-	Properties  []AXNodeProp
-	Children    []AXNode
+	Properties  []NodeProp
+	Children    []Node
 	DomNodeId   int64
 }
 
-func (n AXNode) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (n Node) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = n.Role
 	start.Attr = make([]xml.Attr, 0, len(n.Properties)+1)
 	if n.Name != "" {
@@ -82,16 +82,16 @@ const (
 	TREE_ROOT_ROLE = "ROOT"
 )
 
-func getAccessibilityTree(pageCtx context.Context) (AXNode, error) {
+func getAccessibilityTree(pageCtx context.Context) (Node, error) {
 	params := easyjson.RawMessage("{}")
 	result := &getNodesResult{}
 
 	err := cdp.Execute(pageCtx, accessibility.CommandGetFullAXTree, &params, result)
 	if err != nil {
-		return AXNode{}, err
+		return Node{}, err
 	}
 	if len(result.Nodes) == 0 {
-		return AXNode{}, fmt.Errorf("no result nodes returned")
+		return Node{}, fmt.Errorf("no result nodes returned")
 	}
 
 	mapping := map[string]cdpNode{}
@@ -102,7 +102,7 @@ func getAccessibilityTree(pageCtx context.Context) (AXNode, error) {
 	// implicitly given that nodes are defined in order
 	roots := buildAXTree(mapping, result.Nodes[0])
 
-	return AXNode{
+	return Node{
 		Role:      TREE_ROOT_ROLE,
 		Name:      "",
 		Children:  roots,
@@ -110,7 +110,7 @@ func getAccessibilityTree(pageCtx context.Context) (AXNode, error) {
 	}, nil
 }
 
-func buildAXTree(mapping map[string]cdpNode, node cdpNode) []AXNode {
+func buildAXTree(mapping map[string]cdpNode, node cdpNode) []Node {
 	var role string
 	if node.Role != nil {
 		role, _ = node.Role.Value.(string)
@@ -126,15 +126,15 @@ func buildAXTree(mapping map[string]cdpNode, node cdpNode) []AXNode {
 		desc, _ = node.Description.Value.(string)
 	}
 
-	props := make([]AXNodeProp, len(node.Properties))
+	props := make([]NodeProp, len(node.Properties))
 	for i, p := range node.Properties {
-		props[i] = AXNodeProp{
+		props[i] = NodeProp{
 			Name:  p.Name,
 			Value: fmt.Sprint(p.Value.Value),
 		}
 	}
 
-	children := make([]AXNode, 0, len(node.ChildIds))
+	children := make([]Node, 0, len(node.ChildIds))
 	for _, childId := range node.ChildIds {
 		child, ok := mapping[childId]
 		if !ok {
@@ -149,7 +149,7 @@ func buildAXTree(mapping map[string]cdpNode, node cdpNode) []AXNode {
 		return children
 	}
 
-	return []AXNode{{
+	return []Node{{
 		Role:        role,
 		Name:        name,
 		Description: desc,

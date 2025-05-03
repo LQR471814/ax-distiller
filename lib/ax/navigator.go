@@ -67,7 +67,7 @@ type Page struct {
 	ctx    context.Context
 	cancel func()
 
-	Tree AXNode
+	Tree Node
 }
 
 func (p Page) URL() *url.URL {
@@ -100,7 +100,7 @@ const script = `(e) => {
 	}
 }`
 
-func (p Page) debugDomNode(node AXNode) error {
+func (p Page) debugDomNode(node Node) error {
 	if node.DomNodeId < 0 {
 		return nil
 	}
@@ -163,7 +163,7 @@ func (p Page) debugDomNode(node AXNode) error {
 	return nil
 }
 
-func (p Page) recurseDebug(node AXNode) error {
+func (p Page) recurseDebug(node Node) error {
 	err := p.debugDomNode(node)
 	if err != nil {
 		return err
@@ -193,7 +193,7 @@ func (n Navigator) Navigate(u *url.URL) (Page, error) {
 	currentCtx, cancelCurrent := chromedp.NewContext(n.ctx)
 	withTimeout, cancelTimeout := context.WithTimeout(currentCtx, n.Timeout)
 
-	axTree := AXNode{}
+	axTree := Node{}
 	var ctx context.Context
 
 	cancel := func() {

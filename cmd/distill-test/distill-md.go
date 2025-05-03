@@ -8,7 +8,7 @@ import (
 	"log/slog"
 )
 
-func getTextWithWhitespace(page ax.Page, node ax.AXNode) string {
+func getTextWithWhitespace(page ax.Page, node ax.Node) string {
 	info, err := page.GetDomInfo(node.DomNodeId)
 	if err == nil {
 		return info.NodeValue
@@ -24,7 +24,7 @@ func getTextWithWhitespace(page ax.Page, node ax.AXNode) string {
 	return node.Name
 }
 
-func collectText(page ax.Page, node ax.AXNode, out io.Writer) {
+func collectText(page ax.Page, node ax.Node, out io.Writer) {
 	if node.Role == "StaticText" {
 		out.Write([]byte(getTextWithWhitespace(page, node)))
 		return
@@ -34,7 +34,7 @@ func collectText(page ax.Page, node ax.AXNode, out io.Writer) {
 	}
 }
 
-func collectTextNodes(page ax.Page, node ax.AXNode, out *[]markdown.Inline) {
+func collectTextNodes(page ax.Page, node ax.Node, out *[]markdown.Inline) {
 	if node.Role == "StaticText" {
 		*out = append(*out, markdown.Text{
 			Text: getTextWithWhitespace(page, node),
@@ -55,7 +55,7 @@ func resolveHref(page ax.Page, href string) string {
 	return u.String()
 }
 
-func parseInlineNode(page ax.Page, node ax.AXNode) markdown.Inline {
+func parseInlineNode(page ax.Page, node ax.Node) markdown.Inline {
 	switch node.Role {
 	case "StaticText":
 		return markdown.Text{Text: getTextWithWhitespace(page, node)}
@@ -133,7 +133,7 @@ func parseInlineNode(page ax.Page, node ax.AXNode) markdown.Inline {
 	return nil
 }
 
-func collectInlineNodes(page ax.Page, node ax.AXNode, out *[]markdown.Inline) {
+func collectInlineNodes(page ax.Page, node ax.Node, out *[]markdown.Inline) {
 	inline := parseInlineNode(page, node)
 	if inline != nil {
 		*out = append(*out, inline)
@@ -144,7 +144,7 @@ func collectInlineNodes(page ax.Page, node ax.AXNode, out *[]markdown.Inline) {
 	}
 }
 
-func collectTableItems(page ax.Page, node ax.AXNode, out *[]markdown.TableRow) {
+func collectTableItems(page ax.Page, node ax.Node, out *[]markdown.TableRow) {
 	for _, c := range node.Children {
 		switch c.Role {
 		case "rowgroup":
@@ -166,7 +166,7 @@ func collectTableItems(page ax.Page, node ax.AXNode, out *[]markdown.TableRow) {
 	}
 }
 
-func collectListItems(page ax.Page, node ax.AXNode, out *[]markdown.ListItem) {
+func collectListItems(page ax.Page, node ax.Node, out *[]markdown.ListItem) {
 	for _, c := range node.Children {
 		switch c.Role {
 		case "listitem":
@@ -187,7 +187,7 @@ func collectListItems(page ax.Page, node ax.AXNode, out *[]markdown.ListItem) {
 	}
 }
 
-func convertToMd(page ax.Page, node ax.AXNode, blocks *[]markdown.Block) {
+func convertToMd(page ax.Page, node ax.Node, blocks *[]markdown.Block) {
 	accumulator := []markdown.Inline{}
 
 	for _, child := range node.Children {

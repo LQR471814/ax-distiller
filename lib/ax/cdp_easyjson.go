@@ -484,7 +484,7 @@ func (v *cdpNode) UnmarshalJSON(data []byte) error {
 func (v *cdpNode) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonCc70a961DecodeAxDistillerLibax3(l, v)
 }
-func easyjsonCc70a961DecodeAxDistillerLibax4(in *jlexer.Lexer, out *AXNodeProp) {
+func easyjsonCc70a961DecodeAxDistillerLibax4(in *jlexer.Lexer, out *NodeProp) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -517,7 +517,7 @@ func easyjsonCc70a961DecodeAxDistillerLibax4(in *jlexer.Lexer, out *AXNodeProp) 
 		in.Consumed()
 	}
 }
-func easyjsonCc70a961EncodeAxDistillerLibax4(out *jwriter.Writer, in AXNodeProp) {
+func easyjsonCc70a961EncodeAxDistillerLibax4(out *jwriter.Writer, in NodeProp) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -535,29 +535,29 @@ func easyjsonCc70a961EncodeAxDistillerLibax4(out *jwriter.Writer, in AXNodeProp)
 }
 
 // MarshalJSON supports json.Marshaler interface
-func (v AXNodeProp) MarshalJSON() ([]byte, error) {
+func (v NodeProp) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
 	easyjsonCc70a961EncodeAxDistillerLibax4(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
-func (v AXNodeProp) MarshalEasyJSON(w *jwriter.Writer) {
+func (v NodeProp) MarshalEasyJSON(w *jwriter.Writer) {
 	easyjsonCc70a961EncodeAxDistillerLibax4(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
-func (v *AXNodeProp) UnmarshalJSON(data []byte) error {
+func (v *NodeProp) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
 	easyjsonCc70a961DecodeAxDistillerLibax4(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
-func (v *AXNodeProp) UnmarshalEasyJSON(l *jlexer.Lexer) {
+func (v *NodeProp) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonCc70a961DecodeAxDistillerLibax4(l, v)
 }
-func easyjsonCc70a961DecodeAxDistillerLibax5(in *jlexer.Lexer, out *AXNode) {
+func easyjsonCc70a961DecodeAxDistillerLibax5(in *jlexer.Lexer, out *Node) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -590,15 +590,15 @@ func easyjsonCc70a961DecodeAxDistillerLibax5(in *jlexer.Lexer, out *AXNode) {
 				in.Delim('[')
 				if out.Properties == nil {
 					if !in.IsDelim(']') {
-						out.Properties = make([]AXNodeProp, 0, 2)
+						out.Properties = make([]NodeProp, 0, 2)
 					} else {
-						out.Properties = []AXNodeProp{}
+						out.Properties = []NodeProp{}
 					}
 				} else {
 					out.Properties = (out.Properties)[:0]
 				}
 				for !in.IsDelim(']') {
-					var v10 AXNodeProp
+					var v10 NodeProp
 					(v10).UnmarshalEasyJSON(in)
 					out.Properties = append(out.Properties, v10)
 					in.WantComma()
@@ -613,15 +613,15 @@ func easyjsonCc70a961DecodeAxDistillerLibax5(in *jlexer.Lexer, out *AXNode) {
 				in.Delim('[')
 				if out.Children == nil {
 					if !in.IsDelim(']') {
-						out.Children = make([]AXNode, 0, 0)
+						out.Children = make([]Node, 0, 0)
 					} else {
-						out.Children = []AXNode{}
+						out.Children = []Node{}
 					}
 				} else {
 					out.Children = (out.Children)[:0]
 				}
 				for !in.IsDelim(']') {
-					var v11 AXNode
+					var v11 Node
 					(v11).UnmarshalEasyJSON(in)
 					out.Children = append(out.Children, v11)
 					in.WantComma()
@@ -640,7 +640,7 @@ func easyjsonCc70a961DecodeAxDistillerLibax5(in *jlexer.Lexer, out *AXNode) {
 		in.Consumed()
 	}
 }
-func easyjsonCc70a961EncodeAxDistillerLibax5(out *jwriter.Writer, in AXNode) {
+func easyjsonCc70a961EncodeAxDistillerLibax5(out *jwriter.Writer, in Node) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -700,25 +700,25 @@ func easyjsonCc70a961EncodeAxDistillerLibax5(out *jwriter.Writer, in AXNode) {
 }
 
 // MarshalJSON supports json.Marshaler interface
-func (v AXNode) MarshalJSON() ([]byte, error) {
+func (v Node) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
 	easyjsonCc70a961EncodeAxDistillerLibax5(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
-func (v AXNode) MarshalEasyJSON(w *jwriter.Writer) {
+func (v Node) MarshalEasyJSON(w *jwriter.Writer) {
 	easyjsonCc70a961EncodeAxDistillerLibax5(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
-func (v *AXNode) UnmarshalJSON(data []byte) error {
+func (v *Node) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
 	easyjsonCc70a961DecodeAxDistillerLibax5(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
-func (v *AXNode) UnmarshalEasyJSON(l *jlexer.Lexer) {
+func (v *Node) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonCc70a961DecodeAxDistillerLibax5(l, v)
 }
