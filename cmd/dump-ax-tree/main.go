@@ -2,6 +2,7 @@ package main
 
 import (
 	"ax-distiller/lib/ax"
+	"context"
 	"encoding/xml"
 	"flag"
 	"fmt"
@@ -17,7 +18,7 @@ func main() {
 		log.Fatal("you must provide a url to dump as the first command line argument")
 	}
 
-	navigator, err := ax.NewNavigator()
+	navigator, err := ax.NewNavigator(context.Background())
 	if err != nil {
 		log.Fatal(err)
 	}

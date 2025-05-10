@@ -3,6 +3,7 @@ package main
 import (
 	"ax-distiller/lib/ax"
 	"ax-distiller/lib/markdown"
+	"context"
 	"fmt"
 	"log"
 	"net/url"
@@ -22,7 +23,7 @@ func main() {
 		"https://github.com/LQR471814",
 	}
 
-	navigator, err := ax.NewNavigator()
+	navigator, err := ax.NewNavigator(context.Background())
 	if err != nil {
 		log.Fatal(err)
 	}
