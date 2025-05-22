@@ -2,6 +2,8 @@ package dnode
 
 import (
 	"encoding/binary"
+	"fmt"
+	"strings"
 
 	"github.com/zeebo/xxh3"
 )
@@ -21,19 +23,19 @@ func FullKey(parentKey, key uint64) uint64 {
 	return fullKey
 }
 
-type Tree struct {
+type DiffTree struct {
 	FromHash    map[uint64]*Node
 	FromFullKey map[uint64][]*Node
 }
 
-func NewTree(size int) Tree {
-	return Tree{
+func NewDiffTree(size int) DiffTree {
+	return DiffTree{
 		FromHash:    make(map[uint64]*Node, size),
 		FromFullKey: make(map[uint64][]*Node, size),
 	}
 }
 
-func (s Tree) Register(node *Node) (*Node, uint64) {
+func (s DiffTree) Register(node *Node) (*Node, uint64) {
 	key := node.FullKey
 
 	// resolve next sibling to cached item if it already exists
@@ -67,4 +69,37 @@ func (s Tree) Register(node *Node) (*Node, uint64) {
 	}
 
 	return existing, hash
+}
+
+func printNode(out *strings.Builder, debugMap map[uint64]string, node *Node, depth int) {
+	if node == nil {
+		return
+	}
+
+	text := debugMap[node.FullKey]
+	for range depth {
+		out.WriteString("  ")
+	}
+	out.WriteString(fmt.Sprintf("<%s>", text))
+	if node.FirstChild != nil {
+		out.WriteString("\n")
+	}
+
+	printNode(out, debugMap, node.FirstChild, depth+1)
+
+	if node.FirstChild != nil {
+		for range depth {
+			out.WriteString("  ")
+		}
+		out.WriteString(fmt.Sprintf("</%s>", text))
+	}
+	out.WriteString("\n")
+
+	printNode(out, debugMap, node.NextSibling, depth)
+}
+
+func Print(debugMap map[uint64]string, node *Node) string {
+	var builder strings.Builder
+	printNode(&builder, debugMap, node, 0)
+	return builder.String()
 }

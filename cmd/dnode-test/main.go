@@ -86,10 +86,14 @@ var file2 string
 
 func main() {
 	n1 := parse(file1)
-	// n2 := parse(file2)
+	n2 := parse(file2)
 
-	axtree := dnode.NewAXTree(n1, true)
+	dft := dnode.NewDiffTree(1024)
 
-	fmt.Println(axtree)
-	// fmt.Println(dnode.NewAXTree(n2, true).String())
+	debug := make(map[uint64]string, 512)
+	root1, _ := dft.Register(dnode.NewAXTree(n1, debug).Root)
+	root2, _ := dft.Register(dnode.NewAXTree(n2, debug).Root)
+
+	fmt.Println(dnode.Print(debug, root1))
+	fmt.Println(dnode.Print(debug, root2))
 }

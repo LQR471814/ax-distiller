@@ -3,7 +3,6 @@ package dnode
 import (
 	"ax-distiller/lib/chrome"
 	"fmt"
-	"strings"
 
 	"github.com/zeebo/xxh3"
 )
@@ -25,7 +24,7 @@ func (t AXTree) convertNode(n *chrome.AXNode, parentKey uint64) (dn *Node) {
 		FullKey: fullKey,
 	}
 	if t.DebugText != nil {
-		t.DebugText[fullKey] = "ax_node"
+		t.DebugText[fullKey] = "AX_NODE"
 	}
 	if n.NextSibling != nil {
 		dn.NextSibling = t.convertNode(n.NextSibling, fullKey)
@@ -76,45 +75,9 @@ func (t AXTree) convertNode(n *chrome.AXNode, parentKey uint64) (dn *Node) {
 	return
 }
 
-func (t AXTree) indent(out *strings.Builder, depth int) {
-	for range depth {
-		out.WriteString("  ")
-	}
-}
-
-func (t AXTree) marshal(out *strings.Builder, node *Node, depth int) {
-	if node == nil {
-		return
-	}
-
-	text := t.DebugText[node.FullKey]
-	t.indent(out, depth)
-	out.WriteString(fmt.Sprintf("<%s>", text))
-	if node.FirstChild != nil {
-		out.WriteString("\n")
-	}
-
-	t.marshal(out, node.FirstChild, depth+1)
-
-	if node.FirstChild != nil {
-		t.indent(out, depth)
-		out.WriteString(fmt.Sprintf("</%s>", text))
-	}
-	out.WriteString("\n")
-
-	t.marshal(out, node.NextSibling, depth)
-}
-
-func (t AXTree) String() string {
-	var builder strings.Builder
-	t.marshal(&builder, t.Root, 0)
-	return builder.String()
-}
-
-func NewAXTree(root *chrome.AXNode, debug bool) AXTree {
-	ax := AXTree{}
-	if debug {
-		ax.DebugText = make(map[uint64]string)
+func NewAXTree(root *chrome.AXNode, debugText map[uint64]string) AXTree {
+	ax := AXTree{
+		DebugText: debugText,
 	}
 	ax.Root = ax.convertNode(root, 0)
 	return ax
