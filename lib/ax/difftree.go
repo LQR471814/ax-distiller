@@ -44,9 +44,9 @@ func (s treeSet) Register(node genericNode) (hash uint64) {
 
 	key := node.Key()
 	buff := make([]byte, 8*3)
-	binary.BigEndian.AppendUint64(buff, key)
-	binary.BigEndian.AppendUint64(buff, nshash)
-	binary.BigEndian.AppendUint64(buff, fchash)
+	buff = binary.BigEndian.AppendUint64(buff, key)
+	buff = binary.BigEndian.AppendUint64(buff, nshash)
+	buff = binary.BigEndian.AppendUint64(buff, fchash)
 	hash = xxh3.Hash(buff)
 
 	tsnode := treeSetNode{

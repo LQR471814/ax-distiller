@@ -1,0 +1,10 @@
+<RootWebArea name="Find Cheap Flights Worldwide &amp; Book Your Ticket - Google Flights" focusable="true" url="https://www.google.com/travel/flights">
+  <search name="Flight">
+    <combobox name="Change ticket type. Round trip" live="polite" atomic="false" relevant="additions text" focusable="true" hasPopup="listbox" required="false" expanded="false" controls="i9" labelledby="&lt;nil&gt;"></combobox>
+    <button name="1 passenger, change number of passengers." invalid="false" focusable="true" hasPopup="dialog"></button>
+    <combobox name="Change seating class. Economy" live="polite" atomic="false" relevant="additions text" focusable="true" hasPopup="listbox" required="false" expanded="false" controls="i22" labelledby="&lt;nil&gt;"></combobox>
+    <combobox name="Where from?" invalid="false" focusable="true" editable="plaintext" settable="true" autocomplete="inline" hasPopup="menu" required="false" expanded="false">
+      <StaticText name="San Francisco" editable="plaintext"></StaticText>
+    </combobox>
+  </search>
+</RootWebArea>

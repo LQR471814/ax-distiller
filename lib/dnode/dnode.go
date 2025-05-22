@@ -13,10 +13,10 @@ type Node struct {
 	FirstChild  *Node
 }
 
-func FullKey(key, parentKey uint64) uint64 {
+func FullKey(parentKey, key uint64) uint64 {
 	buff := make([]byte, 8*2)
-	binary.BigEndian.AppendUint64(buff, parentKey)
-	binary.BigEndian.AppendUint64(buff, key)
+	buff = binary.BigEndian.AppendUint64(buff, parentKey)
+	buff = binary.BigEndian.AppendUint64(buff, key)
 	fullKey := xxh3.Hash(buff)
 	return fullKey
 }
@@ -54,9 +54,9 @@ func (s Tree) Register(node *Node) (*Node, uint64) {
 	node.FirstChild = fc
 
 	buff := make([]byte, 8*3)
-	binary.BigEndian.AppendUint64(buff, key)
-	binary.BigEndian.AppendUint64(buff, nshash)
-	binary.BigEndian.AppendUint64(buff, fchash)
+	buff = binary.BigEndian.AppendUint64(buff, key)
+	buff = binary.BigEndian.AppendUint64(buff, nshash)
+	buff = binary.BigEndian.AppendUint64(buff, fchash)
 	hash := xxh3.Hash(buff)
 
 	existing, exists := s.FromHash[hash]

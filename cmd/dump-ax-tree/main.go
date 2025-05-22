@@ -1,7 +1,6 @@
 package main
 
 import (
-	"ax-distiller/lib/ax"
 	"ax-distiller/lib/chrome"
 	"context"
 	"encoding/xml"
@@ -42,12 +41,15 @@ func main() {
 		fatalerr("parse url", err)
 	}
 
-	var tree chrome.AXNode
+	var tree *chrome.AXNode
 
 	err = chromedp.Run(
 		ctx,
 		accessibility.Enable(),
 		chromedp.Navigate(parsed.String()),
+		// chromedp.WaitVisible("input[value='San Francisco']", chromedp.BySearch),
+		// chromedp.Click("input[value='San Francisco']", chromedp.BySearch),
+		// chromedp.Sleep(5*time.Second),
 		chromedp.ActionFunc(func(pageCtx context.Context) error {
 			ax := chrome.AX{
 				PageCtx: pageCtx,
@@ -60,10 +62,9 @@ func main() {
 		fatalerr("run chromedp", err)
 	}
 
-	allWhitespace := ax.FilterWhitespace(&tree)
-	if allWhitespace {
-		slog.Warn("[main] filter whitespace", "err", fmt.Errorf("tree has no content"))
-		os.Exit(0)
+	tree = chrome.FilterWhitespace(tree)
+	if tree == nil {
+		fatalerr("empty tree", fmt.Errorf("tree is nil"))
 	}
 
 	serialized, err := xml.MarshalIndent(tree, "", "  ")
