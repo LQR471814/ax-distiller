@@ -2,12 +2,19 @@ package main
 
 import (
 	"ax-distiller/lib/ax"
+	"ax-distiller/lib/chrome"
 	"context"
 	"encoding/xml"
 	"flag"
 	"fmt"
 	"log"
+	"log/slog"
 	"net/url"
+	"os"
+	"os/signal"
+
+	"github.com/chromedp/cdproto/accessibility"
+	"github.com/chromedp/chromedp"
 )
 
 func main() {
@@ -15,35 +22,59 @@ func main() {
 	u := flag.Arg(0)
 
 	if u == "" {
-		log.Fatal("you must provide a url to dump as the first command line argument")
+		fatalerr(
+			"parse cli args",
+			fmt.Errorf("you must provide a url to dump as the first command line argument"),
+		)
 	}
 
-	navigator, err := ax.NewNavigator(context.Background())
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer cancel()
+
+	ctx, cancel, err := chrome.NewBrowser(ctx)
+	defer cancel()
 	if err != nil {
-		log.Fatal(err)
+		fatalerr("create new browser", err)
 	}
 
 	parsed, err := url.Parse(u)
 	if err != nil {
-		log.Fatal(err)
+		fatalerr("parse url", err)
 	}
 
-	page, err := navigator.Navigate(parsed)
+	var tree chrome.AXNode
+
+	err = chromedp.Run(
+		ctx,
+		accessibility.Enable(),
+		chromedp.Navigate(parsed.String()),
+		chromedp.ActionFunc(func(pageCtx context.Context) error {
+			ax := chrome.AX{
+				PageCtx: pageCtx,
+			}
+			tree, err = ax.FetchFullAXTree()
+			return err
+		}),
+	)
 	if err != nil {
-		log.Fatal(err)
+		fatalerr("run chromedp", err)
 	}
 
-	root := page.Tree
-	allWhitespace := ax.FilterWhitespace(&root)
+	allWhitespace := ax.FilterWhitespace(&tree)
 	if allWhitespace {
-		log.Println("there is nothing except whitespace in the resulting website, therefore there is no output")
-		return
+		slog.Warn("[main] filter whitespace", "err", fmt.Errorf("tree has no content"))
+		os.Exit(0)
 	}
 
-	serialized, err := xml.MarshalIndent(root, "", "  ")
+	serialized, err := xml.MarshalIndent(tree, "", "  ")
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	fmt.Println(string(serialized))
+}
+
+func fatalerr(message string, err error) {
+	slog.Error(fmt.Sprintf("[main] %s", message), "err", err)
+	os.Exit(1)
 }

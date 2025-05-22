@@ -26,14 +26,14 @@ func NewBrowser(ctx context.Context) (cdpCtx context.Context, cancel func(), err
 			chromedp.UserDataDir(dataTemp),
 			chromedp.Flag("load-extension", "./data/ublock"),
 			chromedp.Flag("headless", false),
-			chromedp.Flag("blink-settings", "imagesEnabled=false"),
 			chromedp.Flag("disable-extensions", false),
 			chromedp.Flag("disable-remote-fonts", true),
+			chromedp.Flag("disable-blink-features", "AutomationControlled"),
 			chromedp.Flag("no-sandbox", true),
 		)...,
 	)
 	cdpCtx, cancel = chromedp.NewContext(allocatorCtx)
 
-	err = chromedp.Run(ctx)
+	err = chromedp.Run(cdpCtx)
 	return
 }

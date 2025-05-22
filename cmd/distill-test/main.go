@@ -1,14 +1,19 @@
 package main
 
 import (
-	"ax-distiller/lib/ax"
+	"ax-distiller/lib/chrome"
 	"ax-distiller/lib/markdown"
 	"context"
 	"fmt"
 	"log"
+	"log/slog"
 	"net/url"
 	"os"
+	"os/signal"
 	"sync"
+
+	"github.com/chromedp/cdproto/accessibility"
+	"github.com/chromedp/chromedp"
 )
 
 func main() {
@@ -23,9 +28,13 @@ func main() {
 		"https://github.com/LQR471814",
 	}
 
-	navigator, err := ax.NewNavigator(context.Background())
+	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer cancel()
+
+	ctx, cancel, err := chrome.NewBrowser(ctx)
+	defer cancel()
 	if err != nil {
-		log.Fatal(err)
+		fatalerr("create new browser", err)
 	}
 
 	wg := sync.WaitGroup{}
@@ -37,17 +46,25 @@ func main() {
 				log.Fatal(err)
 			}
 
-			page, err := navigator.Navigate(parsed)
-			if err != nil {
-				log.Fatal(err)
-			}
+			var tree chrome.AXNode
 
-			root := page.Tree
+			err = chromedp.Run(
+				ctx,
+				accessibility.Enable(),
+				chromedp.Navigate(parsed.String()),
+				chromedp.ActionFunc(func(pageCtx context.Context) error {
+					ax := chrome.AX{
+						PageCtx: pageCtx,
+					}
+					tree, err = ax.FetchFullAXTree()
+					return err
+				}),
+			)
 
-			onlyTextTree, _ := onlyTextContent(root)
-			noTextTree := noTextContent(root)
+			onlyTextTree, _ := onlyTextContent(tree)
+			noTextTree := noTextContent(tree)
 
-			page.Tree = onlyTextTree
+			tree = onlyTextTree
 			md := pageToMd(page)
 			mdout := markdown.Render(md)
 			err = os.WriteFile(fmt.Sprintf("out_textonly_%s.md", parsed.Host), []byte(mdout), 0777)
@@ -81,4 +98,9 @@ func main() {
 	}
 
 	wg.Wait()
+}
+
+func fatalerr(message string, err error) {
+	slog.Error(fmt.Sprintf("[main] %s", message), "err", err)
+	os.Exit(1)
 }

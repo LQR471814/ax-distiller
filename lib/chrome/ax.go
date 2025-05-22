@@ -4,14 +4,15 @@ import (
 	"context"
 	"encoding/xml"
 	"fmt"
-	"log"
 	"log/slog"
+	"strconv"
+	"time"
 
 	"github.com/chromedp/cdproto/accessibility"
 	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/cdproto/dom"
 	"github.com/chromedp/chromedp"
-	"github.com/mailru/easyjson"
+	easyjson "github.com/mailru/easyjson"
 )
 
 type Prop struct {
@@ -20,11 +21,13 @@ type Prop struct {
 }
 
 type AXNode struct {
+	ID          uint64
 	Role        string
 	Name        string
 	Description string
 	Properties  []Prop
-	Children    []AXNode
+	FirstChild  *AXNode
+	NextSibling *AXNode
 	DomNodeId   int64
 }
 
@@ -47,149 +50,238 @@ func (n AXNode) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	if err != nil {
 		return err
 	}
-	for _, child := range n.Children {
+	child := n.FirstChild
+	for child != nil {
 		err := e.Encode(child)
 		if err != nil {
 			return err
 		}
+		child = child.NextSibling
 	}
 	return e.EncodeToken(xml.EndElement{Name: start.Name})
 }
 
-type AX struct {
-	PageCtx context.Context
-}
-
-func (p AX) FetchFullTree() (AXNode, error) {
-	params := easyjson.RawMessage("{}")
-	result := &getAXNodesResult{}
-
-	err := cdp.Execute(p.PageCtx, accessibility.CommandGetFullAXTree, &params, result)
+func mustParseNodeID(id string) uint64 {
+	var parsed int64
+	parsed, err := strconv.ParseInt(id, 10, 64)
 	if err != nil {
-		return AXNode{}, err
+		panic(err)
 	}
-	if len(result.Nodes) == 0 {
-		return AXNode{}, fmt.Errorf("no result nodes returned")
-	}
-
-	mapping := map[string]cdpAXNode{}
-	for _, node := range result.Nodes {
-		mapping[node.NodeID] = node
-	}
-
-	// implicitly given that nodes are defined in order
-	roots := buildAXTree(mapping, result.Nodes[0])
-
-	return AXNode{
-		Role:      "ROOT",
-		Name:      "",
-		Children:  roots,
-		DomNodeId: -1,
-	}, nil
+	return uint64(parsed)
 }
 
-func buildAXTree(mapping map[string]cdpAXNode, node cdpAXNode) []AXNode {
-	var role string
-	if node.Role != nil {
-		role, _ = node.Role.Value.(string)
-	}
+func (n *AXNode) metadataFromCDP(cn cdpAXNode) (err error) {
+	n.ID = mustParseNodeID(cn.NodeID)
 
-	var name string
-	if node.Name != nil {
-		name, _ = node.Name.Value.(string)
-	}
+	n.Name = cn.Name.Value.(string)
+	n.Role = cn.Role.Value.(string)
+	n.Description = cn.Description.Value.(string)
+	n.DomNodeId = cn.DomNodeId
 
-	var desc string
-	if node.Description != nil {
-		desc, _ = node.Description.Value.(string)
-	}
-
-	props := make([]Prop, len(node.Properties))
-	for i, p := range node.Properties {
-		props[i] = Prop{
+	n.Properties = make([]Prop, len(cn.Properties))
+	for i, p := range cn.Properties {
+		n.Properties[i] = Prop{
 			Name:  p.Name,
 			Value: fmt.Sprint(p.Value.Value),
 		}
 	}
+	return
+}
 
-	children := make([]AXNode, 0, len(node.ChildIds))
-	for _, childId := range node.ChildIds {
-		child, ok := mapping[childId]
-		if !ok {
-			log.Printf("buildAXTree: child id '%v' could not be found\n", childId)
+type AX struct {
+	PageCtx    context.Context
+	Nodes      map[uint64]*AXNode
+	staleNodes map[uint64]struct{}
+}
+
+func NewAX(pageCtx context.Context) AX {
+	return AX{
+		PageCtx:    pageCtx,
+		Nodes:      make(map[uint64]*AXNode),
+		staleNodes: make(map[uint64]struct{}),
+	}
+}
+
+func (ax AX) convertNodeList(allNodes map[string]cdpAXNode, nodeList []string) *AXNode {
+	var lastNode *AXNode
+	for i := len(nodeList) - 1; i >= 0; i-- {
+		cnode := allNodes[nodeList[i]]
+
+		if cnode.Ignored {
+			firstSubchild := ax.convertNodeList(allNodes, cnode.ChildIds)
+
+			cur := firstSubchild
+			for {
+				if cur.NextSibling == nil {
+					cur.NextSibling = lastNode
+					break
+				}
+				cur = cur.NextSibling
+			}
+
+			lastNode = firstSubchild
 			continue
 		}
-		subNodes := buildAXTree(mapping, child)
-		children = append(children, subNodes...)
-	}
 
-	if node.Ignored || role == "generic" {
-		return children
-	}
+		node := &AXNode{}
+		node.metadataFromCDP(cnode)
+		node.NextSibling = lastNode
+		node.FirstChild = ax.convertNodeList(allNodes, cnode.ChildIds)
+		ax.Nodes[node.ID] = node
 
-	return []AXNode{{
-		Role:        role,
-		Name:        name,
-		Description: desc,
-		Properties:  props,
-		Children:    children,
-		DomNodeId:   node.DomNodeId,
-	}}
+		lastNode = node
+	}
+	return lastNode
 }
 
-func (p AX) fetchSubtree(domNodeID int64) {
+func (ax AX) FetchFullAXTree() (root *AXNode, err error) {
+	params := easyjson.RawMessage("{}")
+	result := &getAXNodesResult{}
 
+	err = cdp.Execute(ax.PageCtx, accessibility.CommandGetFullAXTree, &params, result)
+	if err != nil {
+		return
+	}
+	if len(result.Nodes) == 0 {
+		err = fmt.Errorf("no result nodes returned")
+		return
+	}
+
+	ax.Nodes = make(map[uint64]*AXNode)
+	allNodes := make(map[string]cdpAXNode)
+	for _, node := range result.Nodes {
+		allNodes[node.NodeID] = node
+	}
+
+	// it is assumed that nodes are defined in order
+	root = ax.convertNodeList(allNodes, []string{result.Nodes[0].NodeID})
+	return
 }
 
-func (p AX) ListenChanges(handler func()) {
-	chromedp.ListenTarget(p.PageCtx, func(ev any) {
+func (ax AX) FetchSubtree(id string) (root *AXNode, err error) {
+	params := easyjson.RawMessage(fmt.Sprintf(`{"id":"%s"}`, id))
+	result := &getAXNodesResult{}
+
+	err = cdp.Execute(ax.PageCtx, accessibility.CommandGetChildAXNodes, &params, result)
+	if err != nil {
+		return
+	}
+	childList := result.Nodes
+
+	var lastNode *AXNode
+	for i := len(childList) - 1; i >= 0; i-- {
+		child := childList[i]
+		if child.Ignored {
+			var firstSubchild *AXNode
+			firstSubchild, err = ax.FetchSubtree(child.NodeID)
+			if err != nil {
+				return
+			}
+
+			cur := firstSubchild
+			for {
+				if cur.NextSibling == nil {
+					cur.NextSibling = lastNode
+					break
+				}
+				cur = cur.NextSibling
+			}
+
+			lastNode = firstSubchild
+			continue
+		}
+
+		node := &AXNode{}
+		node.metadataFromCDP(child)
+		node.NextSibling = lastNode
+		node.FirstChild = ax.FetchSubtree()
+		ax.Nodes[node.ID] = node
+
+		lastNode = node
+	}
+
+	return
+}
+
+func (ax AX) checkStale(id uint64) bool {
+	_, exists := ax.Nodes[id]
+	if !exists {
+		return true
+	}
+	_, isStale := ax.staleNodes[id]
+	return isStale
+}
+
+func (ax AX) refreshNode(id string) (err error) {
+	uid := mustParseNodeID(id)
+	if !ax.checkStale(uid) {
+		return nil
+	}
+}
+
+// ListenChanges fires an event whenever the subtree of an AX node changes. The
+// ID of the closest significant AX node ancestor (and all the ancestors of
+// that node) to the changed subtree is provided in onChange.
+func (ax AX) Listen() {
+	var timer *time.Timer
+
+	chromedp.ListenTarget(ax.PageCtx, func(ev any) {
 		// fmt.Printf("%T\n", ev)
 		switch typed := ev.(type) {
-		// case *accessibility.EventLoadComplete:
-		// 	slog.Info("[event] load complete", "id", typed.Root.NodeID)
-		// case *accessibility.EventNodesUpdated:
-		// 	roles := make([]string, len(typed.Nodes))
-		// 	for i, n := range typed.Nodes {
-		// 		roles[i] = n.Role.Value.String()
-		// 	}
-		// 	slog.Info("[event] nodes updated", "roles", roles)
+		case *accessibility.EventLoadComplete:
+			slog.Info("[event] load complete", "id", typed.Root.NodeID)
+		case *accessibility.EventNodesUpdated:
+			roles := make([]string, len(typed.Nodes))
+			for i, n := range typed.Nodes {
+				roles[i] = n.Role.Value.String()
+			}
+			slog.Info("[event] nodes updated", "roles", roles)
 
-		// case *dom.EventAttributeModified:
-		// 	slog.Info("[event] attribute modified", "id", typed.NodeID, "attr", typed.Name)
-		// case *dom.EventAttributeRemoved:
-		// 	slog.Info("[event] attribute removed", "id", typed.NodeID, "attr", typed.Name)
-		// case *dom.EventCharacterDataModified:
-		// 	slog.Info("[event] character data modified", "id", typed.NodeID, "data", typed.CharacterData)
+		case *dom.EventAttributeModified:
+			slog.Info("[event] attribute modified", "id", typed.NodeID, "attr", typed.Name)
+		case *dom.EventAttributeRemoved:
+			slog.Info("[event] attribute removed", "id", typed.NodeID, "attr", typed.Name)
+		case *dom.EventCharacterDataModified:
+			slog.Info("[event] character data modified", "id", typed.NodeID, "data", typed.CharacterData)
 		case *dom.EventChildNodeCountUpdated:
 			slog.Info("[event] DOM node count updated", "id", typed.NodeID, "count", typed.ChildNodeCount)
+
+			if timer != nil {
+				timer.Stop()
+			}
+			timer = time.NewTimer(time.Second)
 			go func() {
-				params := easyjson.RawMessage(fmt.Sprintf(`{"nodeId":%d,"fetchRelatives":false}`, typed.NodeID.Int64()))
+				<-timer.C
+
+				params := easyjson.RawMessage(fmt.Sprintf(`{"nodeId":%d}`, typed.NodeID.Int64()))
 				result := &getAXNodesResult{}
 
-				err := cdp.Execute(p.PageCtx, accessibility.CommandGetPartialAXTree, &params, result)
+				err := cdp.Execute(ax.PageCtx, accessibility.CommandGetAXNodeAndAncestors, &params, result)
 				if err != nil {
 					slog.Error("[nav] get partial ax tree", "err", err)
 					return
 				}
 
-				type node struct {
-					Name string
-					Role string
-				}
-				nodes := make([]node, len(result.Nodes))
-				for i, r := range result.Nodes {
-					if r.Name != nil {
-						nodes[i].Name = r.Name.Value.(string)
+				// ancestors is the list of ancestors following the closest significant AX node ancestor
+				var ancestors []accessibility.NodeID
+				for i, anc := range result.Nodes {
+					if anc.Ignored ||
+						anc.Role.Value.(string) == "generic" ||
+						anc.Role.Value.(string) == "none" {
+						continue
 					}
-					nodes[i].Role = r.Role.Value.(string)
+					ancestors = make([]accessibility.NodeID, 0, len(result.Nodes)-i)
+					for j := i; j < len(result.Nodes); j++ {
+						ancestors = append(ancestors, accessibility.NodeID(result.Nodes[i].NodeID))
+					}
+					break
 				}
-				slog.Info("[nav] got partial ax tree", "nodes", nodes)
 			}()
 
-			// case *dom.EventChildNodeInserted:
-			// 	slog.Info("[event] DOM node inserted", "parent_id", typed.ParentNodeID, "id", typed.Node.NodeID)
-			// case *dom.EventChildNodeRemoved:
-			// 	slog.Info("[event] DOM node removed", "parent_id", typed.ParentNodeID, "id", typed.NodeID)
+		case *dom.EventChildNodeInserted:
+			slog.Info("[event] DOM node inserted", "parent_id", typed.ParentNodeID, "id", typed.Node.NodeID)
+		case *dom.EventChildNodeRemoved:
+			slog.Info("[event] DOM node removed", "parent_id", typed.ParentNodeID, "id", typed.NodeID)
 		}
 	})
 }
