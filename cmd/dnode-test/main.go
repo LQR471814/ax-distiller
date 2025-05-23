@@ -4,7 +4,6 @@ import (
 	"ax-distiller/lib/chrome"
 	"ax-distiller/lib/dnode"
 	"encoding/xml"
-	"fmt"
 	"log"
 	"os"
 	"strings"
@@ -93,14 +92,14 @@ func main() {
 	dft := dnode.NewDiffTree(1024)
 
 	debug := make(map[uint64]string, 512)
-	root1, _ := dft.Register(dnode.NewAXTree(n1, debug).Root)
-	root2, _ := dft.Register(dnode.NewAXTree(n2, debug).Root)
+	dft.Register(dnode.NewAXTree(n1, debug).Root)
+	dft.Register(dnode.NewAXTree(n2, debug).Root)
 
 	data := dft.ToBytes(dft) //refractor later
 	err := os.WriteFile("buffer.bin", data, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(dnode.Print(debug, root1))
-	fmt.Println(dnode.Print(debug, root2))
+	// fmt.Println(dnode.Print(debug, root1))
+	// fmt.Println(dnode.Print(debug, root2))
 }

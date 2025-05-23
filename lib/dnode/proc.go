@@ -5,16 +5,15 @@ import (
 )
 
 func (s DiffTree) ToBytes(dt DiffTree) []byte {
+	buffer := make([]byte, 0, len(dt.FromHash)*8*3)
 
-	buffer := make([]byte, len(dt.FromHash))
-	l := len(dt.FromHash)
-	binary.BigEndian.AppendUint64(buffer, uint64(l))
+	buffer = binary.BigEndian.AppendUint64(buffer, uint64(len(dt.FromHash)))
 
 	for key, value := range dt.FromHash {
-		binary.BigEndian.AppendUint64(buffer, key)
+		buffer = binary.BigEndian.AppendUint64(buffer, key)
+
 		if value.FirstChild == nil {
 			binary.BigEndian.AppendUint64(buffer, 0)
-
 		} else {
 			binary.BigEndian.AppendUint64(buffer, value.FirstChild.FullKey)
 		}
