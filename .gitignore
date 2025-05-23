@@ -1,7 +1,7 @@
 data
 results
 .vscode
-
+backend/build
 cmd/gen-aria-types/gen-aria-types
 cmd/distill-test/distill-test
 cmd/distill-test/dump_*
