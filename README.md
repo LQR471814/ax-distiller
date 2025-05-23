@@ -50,3 +50,10 @@ go build && ./distill-test
 cat out_en.wikipedia.org.md
 ```
 
+## build backend
+
+```bash
+cd backend/build
+cmake ..
+make
+```
