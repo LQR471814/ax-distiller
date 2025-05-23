@@ -92,10 +92,10 @@ func main() {
 	dft := dnode.NewDiffTree(1024)
 
 	debug := make(map[uint64]string, 512)
-	dft.Register(dnode.NewAXTree(n1, debug).Root)
+	_, rootHash := dft.Register(dnode.NewAXTree(n1, debug).Root)
 	dft.Register(dnode.NewAXTree(n2, debug).Root)
 
-	data := dft.ToBytes(dft) //refractor later
+	data := dft.ToBytes(rootHash) //refractor later
 	err := os.WriteFile("buffer.bin", data, 0644)
 	if err != nil {
 		log.Fatal(err)
