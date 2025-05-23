@@ -1,6 +1,8 @@
 #include <iostream>
 #include <fstream> 
 #include <string>
+#include <cuco/static_map.cuh>
+
 using namespace std; 
 
 typedef struct Node {
@@ -9,7 +11,9 @@ typedef struct Node {
   uint64_t nextSibling;
 };
 
-
+typedef struct tree {
+  static
+}
 
 int main() {
   auto myFile = fopen("buffer.bin", "rb");

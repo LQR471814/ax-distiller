@@ -20,10 +20,15 @@ CPMAddPackage(
      "BUILD_EXAMPLES OFF"
 )
 
+#list(APPEND CUDA_NVCC_FLAGS --expt-extended-lambda)
 # Add executable with CUDA files
 add_executable(distiller
     input.cu
 )
 
+target_compile_options(distiller PRIVATE
+    $<$<COMPILE_LANGUAGE:CUDA>:--expt-extended-lambda>
+)
+
 # # Link CUDA runtime
-# target_link_libraries(distiller2 ${CUDA_LIBRARIES})
+target_link_libraries(distiller cuco)
