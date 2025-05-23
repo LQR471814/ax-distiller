@@ -5,6 +5,8 @@ import (
 	"ax-distiller/lib/dnode"
 	"encoding/xml"
 	"fmt"
+	"log"
+	"os"
 	"strings"
 
 	_ "embed"
@@ -94,6 +96,11 @@ func main() {
 	root1, _ := dft.Register(dnode.NewAXTree(n1, debug).Root)
 	root2, _ := dft.Register(dnode.NewAXTree(n2, debug).Root)
 
+	data := dft.ToBytes(dft) //refractor later
+	err := os.WriteFile("buffer.bin", data, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
 	fmt.Println(dnode.Print(debug, root1))
 	fmt.Println(dnode.Print(debug, root2))
 }
