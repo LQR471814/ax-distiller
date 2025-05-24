@@ -5,24 +5,25 @@ import (
 )
 
 func (s DiffTree) ToBytes(rootHash uint64) []byte {
-	buffer := make([]byte, 0, len(s.FromHash)*8*3 + 16)
+	buffer := make([]byte, 0, len(s.FromHash)*8*3+16)
 
-	buffer = binary.SmallEndian.AppendUint64(buffer, uint64(len(s.FromHash) ))
-	buffer = binary.SmallEndian.AppendUint64(buffer, rootHash)
+	buffer = binary.LittleEndian.AppendUint64(buffer, uint64(len(s.FromHash)))
+	buffer = binary.LittleEndian.AppendUint64(buffer, rootHash)
 
-	for key, value := range s.FromHash {
-		buffer = binary.SmallEndian.AppendUint64(buffer, key)
+	for hash, node := range s.FromHash {
+		buffer = binary.LittleEndian.AppendUint64(buffer, node.FullKey)
+		buffer = binary.LittleEndian.AppendUint64(buffer, hash)
 
-		if value.FirstChild == nil {
-			binary.SmallEndian.AppendUint64(buffer, 0)
+		if node.FirstChild == nil {
+			binary.LittleEndian.AppendUint64(buffer, 0)
 		} else {
-			binary.SmallEndian.AppendUint64(buffer, value.FirstChild.FullKey)
+			binary.LittleEndian.AppendUint64(buffer, node.FirstChild.FullKey)
 		}
 
-		if value.NextSibling == nil {
-			binary.SmallEndian.AppendUint64(buffer, 0)
+		if node.NextSibling == nil {
+			binary.LittleEndian.AppendUint64(buffer, 0)
 		} else {
-			binary.SmallEndian.AppendUint64(buffer, value.NextSibling.FullKey)
+			binary.LittleEndian.AppendUint64(buffer, node.NextSibling.FullKey)
 		}
 	}
 	return buffer

@@ -1,4 +1,9 @@
 cmake_minimum_required(VERSION 3.18)  # CUDA support requires 3.18+
+
+set(CMAKE_CUDA_HOST_COMPILER "/usr/bin/g++-10")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr")
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --extended-lambda")
+ 
 project(distiller LANGUAGES CXX CUDA)
 
 include(./CPM.cmake)
@@ -6,9 +11,11 @@ include(./CPM.cmake)
 # Find CUDA
 find_package(CUDA REQUIRED)
 
+
 # Set CUDA standard
 set(CMAKE_CUDA_STANDARD 17)
 set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+
 
 CPMAddPackage(
   NAME cuco
