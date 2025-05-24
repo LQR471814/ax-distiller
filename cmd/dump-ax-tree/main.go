@@ -47,9 +47,6 @@ func main() {
 		ctx,
 		accessibility.Enable(),
 		chromedp.Navigate(parsed.String()),
-		// chromedp.WaitVisible("input[value='San Francisco']", chromedp.BySearch),
-		// chromedp.Click("input[value='San Francisco']", chromedp.BySearch),
-		// chromedp.Sleep(5*time.Second),
 		chromedp.ActionFunc(func(pageCtx context.Context) error {
 			ax := chrome.AX{
 				PageCtx: pageCtx,
