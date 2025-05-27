@@ -8,6 +8,8 @@ import (
 	"github.com/zeebo/xxh3"
 )
 
+// Node represents a single data value whose key (not full key, but individual key)
+// is unique among its siblings, but not necessarily unique among the whole tree.
 type Node struct {
 	// FullKey must be the key computed with the FullKey(key, parentKey) function
 	FullKey     uint64
