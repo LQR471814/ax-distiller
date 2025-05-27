@@ -1,9 +1,9 @@
 package dnode
 
 import (
-	"encoding/binary"
 	"fmt"
 	"strings"
+	"unsafe"
 
 	"github.com/zeebo/xxh3"
 )
@@ -15,12 +15,12 @@ type Node struct {
 	FirstChild  *Node
 }
 
-func FullKey(parentKey, key uint64) uint64 {
-	buff := make([]byte, 8*2)
-	buff = binary.BigEndian.AppendUint64(buff, parentKey)
-	buff = binary.BigEndian.AppendUint64(buff, key)
-	fullKey := xxh3.Hash(buff)
-	return fullKey
+func CompositeHash(a, b uint64) uint64 {
+	combo := [2]uint64{a, b}
+	// "unsafe" cast of [2]uint64 -> []byte
+	bslice := unsafe.Slice((*byte)(unsafe.Pointer(&combo)), unsafe.Sizeof(combo))
+	hash := xxh3.Hash(bslice)
+	return hash
 }
 
 type DiffTree struct {
@@ -35,52 +35,54 @@ func NewDiffTree(size int) DiffTree {
 	}
 }
 
-func (s DiffTree) Register(node *Node) (*Node, uint64) {
-	key := node.FullKey
-
-	// resolve next sibling to cached item if it already exists
-	nshash := uint64(0)
-	ns := node.NextSibling
-	if ns != nil {
-		ns, nshash = s.Register(ns)
-	}
-
-	// resolve first child to cached item if it already exists
-	fchash := uint64(0)
-	fc := node.FirstChild
-	if fc != nil {
-		fc, fchash = s.Register(fc)
-	}
-
-	node.NextSibling = ns
-	node.FirstChild = fc
-
-	buff := make([]byte, 8*3)
-	buff = binary.BigEndian.AppendUint64(buff, key)
-	buff = binary.BigEndian.AppendUint64(buff, nshash)
-	buff = binary.BigEndian.AppendUint64(buff, fchash)
-	hash := xxh3.Hash(buff)
-
-	existing, exists := s.FromHash[hash]
-	if !exists {
-		s.FromHash[hash] = node
-		s.FromFullKey[key] = append(s.FromFullKey[key], node)
-		return node, hash
-	}
-
-	return existing, hash
-}
-
-func printNode(out *strings.Builder, debugMap map[uint64]string, node *Node, depth int) {
+func (s DiffTree) register(node *Node) (resolved *Node, hash, nshash uint64) {
 	if node == nil {
 		return
 	}
 
-	text := debugMap[node.FullKey]
+	if node.NextSibling != nil {
+		ns, nsownhash, nsnshash := s.register(node.NextSibling)
+		node.NextSibling = ns
+		nshash = CompositeHash(nsownhash, nsnshash)
+	}
+
+	if node.FirstChild != nil {
+		fc, fcownhash, fcnshash := s.register(node.FirstChild)
+		node.FirstChild = fc
+		// the node's hash should reflect the hashes of all its children
+		hash = CompositeHash(node.FullKey, CompositeHash(fcownhash, fcnshash))
+	} else {
+		hash = node.FullKey
+	}
+
+	existing, ok := s.FromHash[hash]
+	if ok {
+		fmt.Println("resolved", node.FullKey)
+		resolved = existing
+	} else {
+		resolved = node
+		s.FromHash[hash] = node
+		s.FromFullKey[node.FullKey] = append(s.FromFullKey[node.FullKey], node)
+	}
+
+	return
+}
+
+func (s DiffTree) Register(node *Node) (resolved *Node, hash uint64) {
+	resolved, hash, _ = s.register(node)
+	return
+}
+
+func printNode(out *strings.Builder, debugMap map[uint64]DebugEntry, node *Node, depth int) {
+	if node == nil {
+		return
+	}
+
+	entry := debugMap[node.FullKey]
 	for range depth {
 		out.WriteString("  ")
 	}
-	out.WriteString(fmt.Sprintf("<%s>", text))
+	out.WriteString(fmt.Sprintf("<%s>", entry.Name))
 	if node.FirstChild != nil {
 		out.WriteString("\n")
 	}
@@ -91,14 +93,14 @@ func printNode(out *strings.Builder, debugMap map[uint64]string, node *Node, dep
 		for range depth {
 			out.WriteString("  ")
 		}
-		out.WriteString(fmt.Sprintf("</%s>", text))
+		out.WriteString(fmt.Sprintf("</%s>", entry.Name))
 	}
 	out.WriteString("\n")
 
 	printNode(out, debugMap, node.NextSibling, depth)
 }
 
-func Print(debugMap map[uint64]string, node *Node) string {
+func Print(debugMap map[uint64]DebugEntry, node *Node) string {
 	var builder strings.Builder
 	printNode(&builder, debugMap, node, 0)
 	return builder.String()

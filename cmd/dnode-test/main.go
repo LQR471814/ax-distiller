@@ -4,6 +4,7 @@ import (
 	"ax-distiller/lib/chrome"
 	"ax-distiller/lib/dnode"
 	"encoding/xml"
+	"fmt"
 	"strings"
 
 	_ "embed"
@@ -89,10 +90,10 @@ func main() {
 
 	dft := dnode.NewDiffTree(1024)
 
-	debug := make(map[uint64]string, 512)
-	dft.Register(dnode.NewAXTree(n1, debug).Root)
-	dft.Register(dnode.NewAXTree(n2, debug).Root)
+	debug := make(map[uint64]dnode.DebugEntry, 512)
+	root1, _ := dft.Register(dnode.NewAXTree(n1, debug).Root)
+	root2, _ := dft.Register(dnode.NewAXTree(n2, debug).Root)
 
-	// fmt.Println(dnode.Print(debug, root1))
-	// fmt.Println(dnode.Print(debug, root2))
+	fmt.Println(dnode.Print(debug, root1))
+	fmt.Println(dnode.Print(debug, root2))
 }
