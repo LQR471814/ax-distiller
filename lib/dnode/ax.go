@@ -8,62 +8,21 @@ import (
 	"github.com/zeebo/xxh3"
 )
 
-type DebugEntry struct {
-	Name   string `json:"name"`
-	Parent uint64 `json:"parent"`
-}
-
-type AXTree struct {
-	DebugText map[uint64]DebugEntry
-	Root      *Node
-}
-
-func (t AXTree) axFullKey(childIdx uint64) uint64 {
-	combo := struct {
-		Type byte
-		Idx  uint64
-	}{Type: 0, Idx: childIdx}
-	buff := unsafe.Slice((*byte)(unsafe.Pointer(&combo)), unsafe.Sizeof(combo))
-	return xxh3.Hash(buff)
-}
-
-func (t AXTree) roleFullKey(role string) uint64 {
-	buff := append([]byte{1}, []byte(role)...)
-	return xxh3.Hash(buff)
-}
-
-func (t AXTree) attrFullKey(name string) uint64 {
-	buff := append([]byte{2}, []byte(name)...)
-	return xxh3.Hash(buff)
-}
-
-func (t AXTree) convertNode(n *chrome.AXNode, childIdx, parentKey uint64) (dn *Node) {
+func convertAXTree(km Keymap, n *chrome.AXNode, childIdx, parentKey uint64) (dn *Node) {
 	if n == nil {
 		return nil
 	}
 
-	fullKey := CompositeHash(parentKey, t.axFullKey(childIdx))
+	axFullKey := km.FullKey(parentKey, axKey{childIdx})
 	dn = &Node{
-		FullKey: fullKey,
-	}
-	if t.DebugText != nil {
-		t.DebugText[fullKey] = DebugEntry{
-			Name:   fmt.Sprintf("AX_NODE:%d", childIdx),
-			Parent: parentKey,
-		}
+		FullKey: axFullKey,
 	}
 	if n.NextSibling != nil {
-		dn.NextSibling = t.convertNode(n.NextSibling, childIdx+1, fullKey)
+		dn.NextSibling = convertAXTree(km, n.NextSibling, childIdx+1, axFullKey)
 	}
 
 	role := &Node{
-		FullKey: CompositeHash(fullKey, t.roleFullKey(n.Role)),
-	}
-	if t.DebugText != nil {
-		t.DebugText[role.FullKey] = DebugEntry{
-			Name:   fmt.Sprintf("role:%s", n.Role),
-			Parent: parentKey,
-		}
+		FullKey: km.FullKey(axFullKey, roleKey{n.Role}),
 	}
 	dn.FirstChild = role
 
@@ -73,14 +32,8 @@ func (t AXTree) convertNode(n *chrome.AXNode, childIdx, parentKey uint64) (dn *N
 	for i := len(n.Properties) - 1; i >= 0; i-- {
 		p := n.Properties[i]
 		dprop := &Node{
-			FullKey:     CompositeHash(fullKey, t.attrFullKey(p.Name)),
+			FullKey:     km.FullKey(axFullKey, attrKey{p.Name}),
 			NextSibling: nextAttr,
-		}
-		if t.DebugText != nil {
-			t.DebugText[dprop.FullKey] = DebugEntry{
-				Name:   fmt.Sprintf("attr:%s", p.Name),
-				Parent: parentKey,
-			}
 		}
 		if endProp == nil {
 			endProp = dprop
@@ -88,13 +41,7 @@ func (t AXTree) convertNode(n *chrome.AXNode, childIdx, parentKey uint64) (dn *N
 
 		if p.Value != "" {
 			dprop.FirstChild = &Node{
-				FullKey: CompositeHash(dprop.FullKey, xxh3.Hash([]byte(p.Value))),
-			}
-			if t.DebugText != nil {
-				t.DebugText[dprop.FirstChild.FullKey] = DebugEntry{
-					Name:   p.Value,
-					Parent: parentKey,
-				}
+				FullKey: km.FullKey(dprop.FullKey, valueKey{p.Value}),
 			}
 		}
 		nextAttr = dprop
@@ -105,15 +52,66 @@ func (t AXTree) convertNode(n *chrome.AXNode, childIdx, parentKey uint64) (dn *N
 		endProp = role
 	}
 	if n.FirstChild != nil {
-		endProp.NextSibling = t.convertNode(n.FirstChild, 0, fullKey)
+		endProp.NextSibling = convertAXTree(km, n.FirstChild, 0, axFullKey)
 	}
 	return
 }
 
-func NewAXTree(root *chrome.AXNode, debugText map[uint64]DebugEntry) AXTree {
-	ax := AXTree{
-		DebugText: debugText,
-	}
-	ax.Root = ax.convertNode(root, 0, 0)
-	return ax
+func ConvertAXTree(root *chrome.AXNode, km Keymap) *Node {
+	return convertAXTree(km, root, 0, 0)
+}
+
+type axKey struct {
+	childIdx uint64
+}
+
+func (k axKey) Key() uint64 {
+	combo := struct {
+		Type byte
+		Idx  uint64
+	}{Type: 0, Idx: k.childIdx}
+	buff := unsafe.Slice((*byte)(unsafe.Pointer(&combo)), unsafe.Sizeof(combo))
+	return xxh3.Hash(buff)
+}
+
+func (k axKey) String() string {
+	return fmt.Sprintf("AX_NODE:%d", k.childIdx)
+}
+
+type roleKey struct {
+	role string
+}
+
+func (k roleKey) Key() uint64 {
+	buff := append([]byte{1}, []byte(k.role)...)
+	return xxh3.Hash(buff)
+}
+
+func (k roleKey) String() string {
+	return fmt.Sprintf("role:%s", k.role)
+}
+
+type attrKey struct {
+	attr string
+}
+
+func (k attrKey) Key() uint64 {
+	buff := append([]byte{2}, []byte(k.attr)...)
+	return xxh3.Hash(buff)
+}
+
+func (k attrKey) String() string {
+	return fmt.Sprintf("attr:%s", k.attr)
+}
+
+type valueKey struct {
+	value string
+}
+
+func (k valueKey) Key() uint64 {
+	return xxh3.Hash([]byte(k.value))
+}
+
+func (k valueKey) String() string {
+	return k.value
 }

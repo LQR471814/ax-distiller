@@ -25,85 +25,81 @@ func CompositeHash(a, b uint64) uint64 {
 	return hash
 }
 
-type DiffTree struct {
-	FromHash    map[uint64]*Node
-	FromFullKey map[uint64][]*Node
+type HashedNode struct {
+	FullKey         uint64
+	NextSiblingHash uint64
+	FirstChildHash  uint64
 }
 
-func NewDiffTree(size int) DiffTree {
-	return DiffTree{
-		FromHash:    make(map[uint64]*Node, size),
-		FromFullKey: make(map[uint64][]*Node, size),
+type HashTree struct {
+	FromHash map[uint64]HashedNode
+	Root     uint64
+}
+
+func NewHashTree(node *Node, size int) HashTree {
+	tree := HashTree{
+		FromHash: make(map[uint64]HashedNode, size),
 	}
+	tree.Root, _ = tree.register(node)
+	return tree
 }
 
-func (s DiffTree) register(node *Node) (resolved *Node, hash, nshash uint64) {
+func (s HashTree) register(node *Node) (hash, nshash uint64) {
 	if node == nil {
 		return
 	}
 
-	if node.NextSibling != nil {
-		ns, nsownhash, nsnshash := s.register(node.NextSibling)
-		node.NextSibling = ns
-		nshash = CompositeHash(nsownhash, nsnshash)
+	hashedNode := HashedNode{
+		FullKey: node.FullKey,
 	}
 
+	if node.NextSibling != nil {
+		nsownhash, nsnshash := s.register(node.NextSibling)
+		hashedNode.NextSiblingHash = nsownhash
+		nshash = CompositeHash(nsownhash, nsnshash)
+	}
 	if node.FirstChild != nil {
-		fc, fcownhash, fcnshash := s.register(node.FirstChild)
-		node.FirstChild = fc
+		fcownhash, fcnshash := s.register(node.FirstChild)
+		hashedNode.FirstChildHash = fcownhash
 		// the node's hash should reflect the hashes of all its children
 		hash = CompositeHash(node.FullKey, CompositeHash(fcownhash, fcnshash))
 	} else {
 		hash = node.FullKey
 	}
 
-	existing, ok := s.FromHash[hash]
-	if ok {
-		fmt.Println("resolved", node.FullKey)
-		resolved = existing
-	} else {
-		resolved = node
-		s.FromHash[hash] = node
-		s.FromFullKey[node.FullKey] = append(s.FromFullKey[node.FullKey], node)
-	}
-
+	s.FromHash[hash] = hashedNode
 	return
 }
 
-func (s DiffTree) Register(node *Node) (resolved *Node, hash uint64) {
-	resolved, hash, _ = s.register(node)
-	return
-}
-
-func printNode(out *strings.Builder, debugMap map[uint64]DebugEntry, node *Node, depth int) {
+func printNode(out *strings.Builder, km Keymap, node *Node, depth int) {
 	if node == nil {
 		return
 	}
 
-	entry := debugMap[node.FullKey]
+	name, _ := km.StringOf(node.FullKey)
 	for range depth {
 		out.WriteString("  ")
 	}
-	out.WriteString(fmt.Sprintf("<%s>", entry.Name))
+	out.WriteString(fmt.Sprintf("<%s>", name))
 	if node.FirstChild != nil {
 		out.WriteString("\n")
 	}
 
-	printNode(out, debugMap, node.FirstChild, depth+1)
+	printNode(out, km, node.FirstChild, depth+1)
 
 	if node.FirstChild != nil {
 		for range depth {
 			out.WriteString("  ")
 		}
-		out.WriteString(fmt.Sprintf("</%s>", entry.Name))
+		out.WriteString(fmt.Sprintf("</%s>", name))
 	}
 	out.WriteString("\n")
 
-	printNode(out, debugMap, node.NextSibling, depth)
+	printNode(out, km, node.NextSibling, depth)
 }
 
-func Print(debugMap map[uint64]DebugEntry, node *Node) string {
+func Print(km Keymap, node *Node) string {
 	var builder strings.Builder
-	printNode(&builder, debugMap, node, 0)
+	printNode(&builder, km, node, 0)
 	return builder.String()
 }
