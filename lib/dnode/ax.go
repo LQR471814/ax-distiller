@@ -58,7 +58,7 @@ func convertAXTree(km Keymap, n *chrome.AXNode, childIdx, parentKey uint64) (dn 
 	return
 }
 
-func ConvertAXTree(root *chrome.AXNode, km Keymap) *Node {
+func FromAXTree(root *chrome.AXNode, km Keymap) *Node {
 	return convertAXTree(km, root, 0, 0)
 }
 
