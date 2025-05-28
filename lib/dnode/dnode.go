@@ -1,9 +1,10 @@
 package dnode
 
 import (
+	"bytes"
+	"encoding/binary"
 	"fmt"
 	"strings"
-	"unsafe"
 
 	"github.com/zeebo/xxh3"
 )
@@ -17,32 +18,30 @@ type Node struct {
 	FirstChild  *Node
 }
 
-func CompositeHash(a, b uint64) uint64 {
-	combo := [2]uint64{a, b}
-	// "unsafe" cast of [2]uint64 -> []byte
-	bslice := unsafe.Slice((*byte)(unsafe.Pointer(&combo)), unsafe.Sizeof(combo))
-	hash := xxh3.Hash(bslice)
-	return hash
-}
-
 type HashedNode struct {
-	FullKey         uint64
+	Original *Node
+	// NextSiblingHash that equals 0 means there is no next sibling.
 	NextSiblingHash uint64
-	FirstChildHash  uint64
+	// FirstChildHash that equals 0 means there is no first child.
+	FirstChildHash uint64
 }
 
 type HashTree struct {
-	FromHash map[uint64]HashedNode
-	Root     uint64
+	FromHash    map[uint64]HashedNode
+	FromFullKey map[uint64]HashedNode
+	Root        uint64
 }
 
 func NewHashTree(node *Node, size int) HashTree {
 	tree := HashTree{
-		FromHash: make(map[uint64]HashedNode, size),
+		FromHash:    make(map[uint64]HashedNode, size),
+		FromFullKey: make(map[uint64]HashedNode, size),
 	}
 	tree.Root, _ = tree.register(node)
 	return tree
 }
+
+var hsRegisterHash = bytes.NewBuffer(make([]byte, 8*2))
 
 func (s HashTree) register(node *Node) (hash, nshash uint64) {
 	if node == nil {
@@ -50,24 +49,37 @@ func (s HashTree) register(node *Node) (hash, nshash uint64) {
 	}
 
 	hashedNode := HashedNode{
-		FullKey: node.FullKey,
+		Original: node,
 	}
 
 	if node.NextSibling != nil {
 		nsownhash, nsnshash := s.register(node.NextSibling)
 		hashedNode.NextSiblingHash = nsownhash
-		nshash = CompositeHash(nsownhash, nsnshash)
+
+		hsRegisterHash.Truncate(0)
+		binary.Write(hsRegisterHash, binary.LittleEndian, nsownhash)
+		binary.Write(hsRegisterHash, binary.LittleEndian, nsnshash)
+		nshash = xxh3.Hash(hsRegisterHash.Bytes())
 	}
 	if node.FirstChild != nil {
 		fcownhash, fcnshash := s.register(node.FirstChild)
 		hashedNode.FirstChildHash = fcownhash
-		// the node's hash should reflect the hashes of all its children
-		hash = CompositeHash(node.FullKey, CompositeHash(fcownhash, fcnshash))
+
+		hsRegisterHash.Truncate(0)
+		binary.Write(hsRegisterHash, binary.LittleEndian, fcownhash)
+		binary.Write(hsRegisterHash, binary.LittleEndian, fcnshash)
+		childHash := xxh3.Hash(hsRegisterHash.Bytes())
+
+		hsRegisterHash.Truncate(0)
+		binary.Write(hsRegisterHash, binary.LittleEndian, node.FullKey)
+		binary.Write(hsRegisterHash, binary.LittleEndian, childHash)
+		hash = xxh3.Hash(hsRegisterHash.Bytes())
 	} else {
 		hash = node.FullKey
 	}
 
 	s.FromHash[hash] = hashedNode
+	s.FromFullKey[node.FullKey] = hashedNode
 	return
 }
 

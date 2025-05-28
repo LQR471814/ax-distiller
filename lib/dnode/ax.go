@@ -2,8 +2,9 @@ package dnode
 
 import (
 	"ax-distiller/lib/chrome"
+	"bytes"
+	"encoding/binary"
 	"fmt"
-	"unsafe"
 
 	"github.com/zeebo/xxh3"
 )
@@ -65,13 +66,13 @@ type axKey struct {
 	childIdx uint64
 }
 
+var axKeyHash = bytes.NewBuffer(make([]byte, 1+8))
+
 func (k axKey) Key() uint64 {
-	combo := struct {
-		Type byte
-		Idx  uint64
-	}{Type: 0, Idx: k.childIdx}
-	buff := unsafe.Slice((*byte)(unsafe.Pointer(&combo)), unsafe.Sizeof(combo))
-	return xxh3.Hash(buff)
+	axKeyHash.Truncate(0)
+	binary.Write(axKeyHash, binary.LittleEndian, byte(0))
+	binary.Write(axKeyHash, binary.LittleEndian, k.childIdx)
+	return xxh3.Hash(axKeyHash.Bytes())
 }
 
 func (k axKey) String() string {

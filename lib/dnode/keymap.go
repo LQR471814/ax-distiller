@@ -1,6 +1,12 @@
 package dnode
 
-import "fmt"
+import (
+	"bytes"
+	"encoding/binary"
+	"fmt"
+
+	"github.com/zeebo/xxh3"
+)
 
 type KeymapValue interface {
 	Key() uint64
@@ -16,8 +22,14 @@ type Keymap struct {
 	textmap map[uint64]keymapEntry
 }
 
+var keymapHash = bytes.NewBuffer(make([]byte, 8*2))
+
 func (km Keymap) FullKey(parentFullKey uint64, v KeymapValue) (fullkey uint64) {
-	fullkey = CompositeHash(parentFullKey, v.Key())
+	keymapHash.Truncate(0)
+	binary.Write(keymapHash, binary.LittleEndian, parentFullKey)
+	binary.Write(keymapHash, binary.LittleEndian, v.Key())
+	fullkey = xxh3.Hash(keymapHash.Bytes())
+
 	if km.textmap == nil {
 		return
 	}
