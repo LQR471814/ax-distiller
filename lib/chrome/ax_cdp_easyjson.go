@@ -134,8 +134,6 @@ func easyjson3e2afc4dDecodeAxDistillerLibChrome1(in *jlexer.Lexer, out *cdpAXVal
 			continue
 		}
 		switch key {
-		case "type":
-			out.Type = string(in.String())
 		case "value":
 			if m, ok := out.Value.(easyjson.Unmarshaler); ok {
 				m.UnmarshalEasyJSON(in)
@@ -159,13 +157,8 @@ func easyjson3e2afc4dEncodeAxDistillerLibChrome1(out *jwriter.Writer, in cdpAXVa
 	first := true
 	_ = first
 	{
-		const prefix string = ",\"type\":"
-		out.RawString(prefix[1:])
-		out.String(string(in.Type))
-	}
-	{
 		const prefix string = ",\"value\":"
-		out.RawString(prefix)
+		out.RawString(prefix[1:])
 		if m, ok := in.Value.(easyjson.Marshaler); ok {
 			m.MarshalEasyJSON(out)
 		} else if m, ok := in.Value.(json.Marshaler); ok {
@@ -222,15 +215,7 @@ func easyjson3e2afc4dDecodeAxDistillerLibChrome2(in *jlexer.Lexer, out *cdpAXNod
 		case "name":
 			out.Name = string(in.String())
 		case "value":
-			if in.IsNull() {
-				in.Skip()
-				out.Value = nil
-			} else {
-				if out.Value == nil {
-					out.Value = new(cdpAXValue)
-				}
-				(*out.Value).UnmarshalEasyJSON(in)
-			}
+			(out.Value).UnmarshalEasyJSON(in)
 		default:
 			in.SkipRecursive()
 		}
@@ -253,11 +238,7 @@ func easyjson3e2afc4dEncodeAxDistillerLibChrome2(out *jwriter.Writer, in cdpAXNo
 	{
 		const prefix string = ",\"value\":"
 		out.RawString(prefix)
-		if in.Value == nil {
-			out.RawString("null")
-		} else {
-			(*in.Value).MarshalEasyJSON(out)
-		}
+		(in.Value).MarshalEasyJSON(out)
 	}
 	out.RawByte('}')
 }
@@ -309,35 +290,11 @@ func easyjson3e2afc4dDecodeAxDistillerLibChrome3(in *jlexer.Lexer, out *cdpAXNod
 		case "ignored":
 			out.Ignored = bool(in.Bool())
 		case "role":
-			if in.IsNull() {
-				in.Skip()
-				out.Role = nil
-			} else {
-				if out.Role == nil {
-					out.Role = new(cdpAXValue)
-				}
-				(*out.Role).UnmarshalEasyJSON(in)
-			}
+			(out.Role).UnmarshalEasyJSON(in)
 		case "name":
-			if in.IsNull() {
-				in.Skip()
-				out.Name = nil
-			} else {
-				if out.Name == nil {
-					out.Name = new(cdpAXValue)
-				}
-				(*out.Name).UnmarshalEasyJSON(in)
-			}
+			(out.Name).UnmarshalEasyJSON(in)
 		case "description":
-			if in.IsNull() {
-				in.Skip()
-				out.Description = nil
-			} else {
-				if out.Description == nil {
-					out.Description = new(cdpAXValue)
-				}
-				(*out.Description).UnmarshalEasyJSON(in)
-			}
+			(out.Description).UnmarshalEasyJSON(in)
 		case "properties":
 			if in.IsNull() {
 				in.Skip()
@@ -410,20 +367,20 @@ func easyjson3e2afc4dEncodeAxDistillerLibChrome3(out *jwriter.Writer, in cdpAXNo
 		out.RawString(prefix)
 		out.Bool(bool(in.Ignored))
 	}
-	if in.Role != nil {
+	{
 		const prefix string = ",\"role\":"
 		out.RawString(prefix)
-		(*in.Role).MarshalEasyJSON(out)
+		(in.Role).MarshalEasyJSON(out)
 	}
-	if in.Name != nil {
+	{
 		const prefix string = ",\"name\":"
 		out.RawString(prefix)
-		(*in.Name).MarshalEasyJSON(out)
+		(in.Name).MarshalEasyJSON(out)
 	}
-	if in.Description != nil {
+	{
 		const prefix string = ",\"description\":"
 		out.RawString(prefix)
-		(*in.Description).MarshalEasyJSON(out)
+		(in.Description).MarshalEasyJSON(out)
 	}
 	if len(in.Properties) != 0 {
 		const prefix string = ",\"properties\":"

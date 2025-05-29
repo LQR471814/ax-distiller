@@ -1,0 +1,652 @@
+<RootWebArea name="Find Cheap Flights Worldwide &amp; Book Your Ticket - Google Flights" focusable="true" focused="true" url="https://www.google.com/travel/flights">
+  <banner>
+    <button name="Main menu" focusable="true" expanded="false">
+      <image></image>
+    </button>
+    <link name="Google" focusable="true" url="https://www.google.com/"></link>
+    <button name="Skip to main content" invalid="false" focusable="true">
+      <StaticText name="Skip to main content">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </button>
+    <button name="Accessibility feedback" invalid="false" focusable="true" hasPopup="dialog">
+      <StaticText name="Accessibility feedback">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </button>
+    <navigation>
+      <link name="Travel" invalid="false" focusable="true">
+        <image></image>
+        <StaticText name="Travel">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+      </link>
+      <link name="Explore" invalid="false" focusable="true">
+        <image></image>
+        <StaticText name="Explore">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+      </link>
+      <link name="Flights" invalid="false" focusable="true">
+        <image></image>
+        <StaticText name="Flights">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+      </link>
+      <link name="Hotels" invalid="false" focusable="true">
+        <image></image>
+        <StaticText name="Hotels">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+      </link>
+      <link name="Vacation rentals" invalid="false" focusable="true">
+        <image></image>
+        <StaticText name="Vacation rentals">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+      </link>
+    </navigation>
+    <button name="Change appearance" invalid="false" focusable="true" hasPopup="menu" expanded="false">
+      <image></image>
+    </button>
+    <button name="Google apps" focusable="true" expanded="false">
+      <image></image>
+    </button>
+    <link name="Sign in" focusable="true" url="https://accounts.google.com/ServiceLogin?service=searchandassistant&amp;passive=1209600&amp;continue=https://www.google.com/travel/flights&amp;followup=https://www.google.com/travel/flights&amp;ec=GAZAlQM">
+      <StaticText name="Sign in">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+  </banner>
+  <StaticText name="Flights">
+    <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+  </StaticText>
+  <search name="Flight">
+    <combobox name="Change ticket type. Round trip" live="polite" atomic="false" relevant="additions text" focusable="true" hasPopup="listbox" required="false" expanded="false" labelledby="&lt;nil&gt;"></combobox>
+    <button name="1 passenger, change number of passengers." invalid="false" focusable="true" hasPopup="dialog">
+      <image></image>
+      <StaticText name="1">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+      <image></image>
+    </button>
+    <combobox name="Change seating class. Economy" live="polite" atomic="false" relevant="additions text" focusable="true" hasPopup="listbox" required="false" expanded="false" labelledby="&lt;nil&gt;"></combobox>
+    <combobox name="Where from?" invalid="false" focusable="true" editable="plaintext" settable="true" autocomplete="inline" hasPopup="menu" required="false" expanded="false">
+      <StaticText name="San Francisco" editable="plaintext">
+        <InlineTextBox name="&lt;nil&gt;" editable="plaintext"></InlineTextBox>
+      </StaticText>
+    </combobox>
+    <image></image>
+    <button name="Swap origin and destination." disabled="true" invalid="false">
+      <image></image>
+    </button>
+    <combobox name="Where to? " invalid="false" focusable="true" editable="plaintext" settable="true" autocomplete="inline" hasPopup="menu" required="false" expanded="false"></combobox>
+    <image></image>
+    <image></image>
+    <textbox name="Departure" invalid="false" focusable="true" editable="plaintext" settable="true" multiline="false" readonly="false" required="false" describedby="i32"></textbox>
+    <textbox name="Return" invalid="false" focusable="true" editable="plaintext" settable="true" multiline="false" readonly="false" required="false" describedby="i32"></textbox>
+    <button name="Explore destinations" invalid="false" focusable="true">
+      <StaticText name="Explore">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </button>
+  </search>
+  <main>
+    <heading name="Find and book cheap flights worldwide and track prices" level="1">
+      <StaticText name="Find and book cheap flights worldwide and track prices">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </heading>
+    <heading name="Find cheap flights from San Francisco to anywhere" level="2">
+      <StaticText name="Find cheap flights from San Francisco to anywhere">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </heading>
+    <button name="More information on suggested flights." focusable="true" hasPopup="menu">
+      <image></image>
+    </button>
+    <list>
+      <listitem level="1">
+        <StaticText name="San Francisco">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+      </listitem>
+      <listitem level="1">
+        <button name="Oakland" invalid="false" focusable="true">
+          <StaticText name="Oakland">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+        </button>
+      </listitem>
+      <listitem level="1">
+        <button name="San Jose" invalid="false" focusable="true">
+          <StaticText name="San Jose">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+        </button>
+      </listitem>
+      <listitem level="1">
+        <button name="Sacramento" invalid="false" focusable="true">
+          <StaticText name="Sacramento">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+        </button>
+      </listitem>
+    </list>
+    <button name="Explore more destinations from San Francisco" focusable="true"></button>
+    <list>
+      <button name="Vancouver 71 US dollars Jun 23 — Jun 29 Nonstop·2 hr 25 min" focusable="true">
+        <StaticText name="Vancouver">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="$71">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="Jun 23 — Jun 29">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="Nonstop">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="·">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="2 hr 25 min">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+      </button>
+      <button name="Tokyo 584 US dollars Aug 17 — Aug 25 Nonstop·10 hr 40 min" focusable="true">
+        <StaticText name="Tokyo">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="$584">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="Aug 17 — Aug 25">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="Nonstop">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="·">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="10 hr 40 min">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+      </button>
+      <button name="Barcelona 405 US dollars Oct 16 — Oct 25 Nonstop·11 hr 35 min" focusable="true">
+        <StaticText name="Barcelona">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="$405">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="Oct 16 — Oct 25">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="Nonstop">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="·">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="11 hr 35 min">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+      </button>
+      <button name="Paris 489 US dollars Aug 7 — Aug 14 Nonstop·10 hr 50 min" focusable="true">
+        <StaticText name="Paris">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="$489">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="Aug 7 — Aug 14">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="Nonstop">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="·">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+        <StaticText name="10 hr 50 min">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+      </button>
+    </list>
+    <heading name="Useful tools to help you find the best flight deals" level="2">
+      <StaticText name="Useful tools to help you find the best flight deals">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </heading>
+    <button name="Find the cheapest days to fly The Date grid and Price graph make it easy to find the best flight deals" focusable="true">
+      <image></image>
+      <StaticText name="Find the cheapest days to fly">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+      <StaticText name="The Date grid and Price graph make it easy to find the best flight deals">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </button>
+    <button name="Know when to book with price insights Price history and trend data show you the best time to book your airline ticket to get the cheapest price for your flight" focusable="true">
+      <image></image>
+      <StaticText name="Know when to book with price insights">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+      <StaticText name="Price history and trend data show you the best time to book your airline ticket to get the cheapest price for your flight">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </button>
+    <button name="Track flight prices for a trip Not ready to book yet? Observe price changes for a route or flight and get notified when prices drop." focusable="true">
+      <image></image>
+      <StaticText name="Track flight prices for a trip">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+      <StaticText name="Not ready to book yet? Observe price changes for a route or flight and get notified when prices drop.">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </button>
+    <StaticText name="Insightful tools help you choose your trip dates">
+      <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+    </StaticText>
+    <StaticText name="If your travel plans are flexible, use the form above to start searching for a specific trip. Then, play around with the ">
+      <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+    </StaticText>
+    <StaticText name="Date grid">
+      <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+    </StaticText>
+    <StaticText name=" and ">
+      <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+    </StaticText>
+    <StaticText name="Price graph">
+      <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+    </StaticText>
+    <StaticText name=" options on the ">
+      <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+    </StaticText>
+    <StaticText name="Search">
+      <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+    </StaticText>
+    <StaticText name=" page to find the cheapest days to fly and book your tickets.">
+      <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+    </StaticText>
+    <heading name="Popular flight destinations from San Francisco" level="2">
+      <StaticText name="Popular flight destinations from San Francisco">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </heading>
+    <link name="City image for Washington Washington" focusable="true" url="https://www.google.com/travel/flights/flights-to-washington.html">
+      <image name="City image for Washington" url="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRNIyij6hGyeoNDv7q3EgqeQRZEK-oGSDPrrEU-tsKgM8EXPi_3N5S3R1QEKQg7RAPhUj5at-FmxT2OlUGdyFhgeqPok6ntBZJP20MjmHw"></image>
+      <StaticText name="Washington">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="City image for Chicago Chicago" focusable="true" url="https://www.google.com/travel/flights/flights-to-chicago.html">
+      <image name="City image for Chicago" url="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSEbkaNUzwDH9FM3-PewYxnCB3CbPXibkrSgyOk8qfGMoW8E5M_MeyOLSjaZt68Qs04ihcCPDR9G-LejxcW0S8QfQSpjOLmjuYx6MH7Mw"></image>
+      <StaticText name="Chicago">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="City image for New York New York" focusable="true" url="https://www.google.com/travel/flights/flights-to-new-york.html">
+      <image name="City image for New York" url="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQObphTn-RVziOMtVc8kgNvkG-RDhBZNBSgA0M14El2dsLToWLcsJK8f94xdvUR9nadEF36xpOeM7LOGPrDhTTQiggjgyIKNPNpsLWiuA"></image>
+      <StaticText name="New York">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="City image for Newark Newark" focusable="true" url="https://www.google.com/travel/flights/flights-to-newark.html">
+      <image name="City image for Newark" url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeBwJ6fPmK4ghE-AxS9Ud5UTIJAylzO-WjO9OWQOOccs4yWXKX_xlYLkgLFUqXZ9RyAKmClAYlPCg9jDww5cX7PGDvAGoa-FhziJ8o1w"></image>
+      <StaticText name="Newark">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="City image for Houston Houston" focusable="true" url="https://www.google.com/travel/flights/flights-to-houston.html">
+      <image name="City image for Houston" url="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRBcavABDgUjaeuYekSKmnBxIvQMgmVLU9sNU8DmHHUfxAxnVhm_EscbN1R_h2buzUAmUaBwRwCGIXVCvRR2hbmVOJ2SmMMOvEfrb8msQ"></image>
+      <StaticText name="Houston">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="City image for Orlando Orlando" focusable="true" url="https://www.google.com/travel/flights/flights-to-orlando.html">
+      <image name="City image for Orlando" url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnaYqeT9fF5T1K2dbFjEkQ6AbJrgmjMptoOtnOH2WSJwYzCILLejejCTHKMvEUol4rwmi08j0ZK2a7n6pRgoXN_NBgFeU_Cy3wo5Y9nw"></image>
+      <StaticText name="Orlando">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="City image for Denver Denver" focusable="true" url="https://www.google.com/travel/flights/flights-to-denver.html">
+      <image name="City image for Denver" url="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcT0f_FXstd7fWB6DMfKiI3kHou3FnEZUGs1sD7BCzU_cBGQSHEGuyAHWGonpb8uAJnOtQYCTA9a_-uW_Mh87nqFT76TwD-sYiY7AED_iQ"></image>
+      <StaticText name="Denver">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="City image for Boston Boston" focusable="true" url="https://www.google.com/travel/flights/flights-to-boston.html">
+      <image name="City image for Boston" url="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcSWnz5-Pd-PDyydtQ65d6CFCHIiG9rw3xFehp7Bybu_ZuWhzKj8G7uvvyBe6JbNFOBwMjb4BK016Xdzd5kkSL76EnMa8gieY8skeZojug"></image>
+      <StaticText name="Boston">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="City image for Singapore Singapore" focusable="true" url="https://www.google.com/travel/flights/flights-to-singapore.html">
+      <image name="City image for Singapore" url="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcROfsFS2I965tbzfeiUqduc7Y3OUURfh7vhbL9Td2fq2LW4zRh5B5Yw_GQCTbw1_U9NvQjLN9wUPidfowSaUi3clzKnPEuh3u-NfFd-2A"></image>
+      <StaticText name="Singapore">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="City image for Tokyo Tokyo" focusable="true" url="https://www.google.com/travel/flights/flights-to-tokyo.html">
+      <image name="City image for Tokyo" url="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTG3z2-3JxIutC57E_PicJntCByl9K6V3lufEa323YWGHZXpLRLDfakMFoqJrglBb7CL3oPE3jgi_PyaQfcBJLJbLdOXWOKeMfmbPF2TA"></image>
+      <StaticText name="Tokyo">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="City image for Tampa Tampa" focusable="true" url="https://www.google.com/travel/flights/flights-to-tampa.html">
+      <image name="City image for Tampa" url="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTlwEnOaZkTYLhgYWXXvlknTZhLJ3wqJP6xrvX8fULZMK6zMdzVyr7YtnWoOzfmKX-fypRsyCXI-nZTib8OPjYNYjwi4lBbdAo3BZAwCA"></image>
+      <StaticText name="Tampa">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="City image for Nashville Nashville" focusable="true" url="https://www.google.com/travel/flights/flights-to-nashville.html">
+      <image name="City image for Nashville" url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGuAMHrWCYkbTz3N1gH3YNDh5JzYWnny25MwPTC8qnywSQhgQjd_JhKGIKSVHslYaZ12C1lYtZ5QRZPgSsz9G_D4e3rJ-0V9fJqd6H6Q"></image>
+      <StaticText name="Nashville">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="City image for London London" focusable="true" url="https://www.google.com/travel/flights/flights-to-london.html">
+      <image name="City image for London" url="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSAExWJ5EPerubHT1mQuLT9oD-81_tk_XEi5TxkAPSrqq1lyn3hRhZ2B_fSLWsb1j1m56-mfrfKDiV5W8b7NEjgN8NS1DhS1ACUz657lFc"></image>
+      <StaticText name="London">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="City image for Frankfurt am Main Frankfurt am Main" focusable="true" url="https://www.google.com/travel/flights/flights-to-frankfurt-am-main.html">
+      <image name="City image for Frankfurt am Main" url="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcS4kLRB7aRACMIUIdJiZGMeS6GIsslU-RxMTf1vcWGxlGK_hoBBJO57MYXuPjqRhuOH7B-4XW6zSiUsHyrenw3KOaIS5xkZ8f2-OwlR-A"></image>
+      <StaticText name="Frankfurt am Main">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="City image for Fort Lauderdale Fort Lauderdale" focusable="true" url="https://www.google.com/travel/flights/flights-to-fort-lauderdale.html">
+      <image name="City image for Fort Lauderdale" url="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQ3AYqP1BtdrsrkR-Q82PnhtxlBw-kfYOltWyJnxLOith7TGJEEJ-0k9iCDcUDC-Ce8Py_BZSQD09z0b5O-1-WHLGM8O_MGK7gRgffbBg"></image>
+      <StaticText name="Fort Lauderdale">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="City image for Dallas Dallas" focusable="true" url="https://www.google.com/travel/flights/flights-to-dallas.html">
+      <image name="City image for Dallas" url="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5Mt97nhtWKu9SKo8G8WUVFYJ9hbKhakFT-D9sTEymTeaHqkfkQbP9pHaDcM_t7w4-8X6_X-iw0el0tjhOfxxSCRWxDIoYvU9d9V22zQ"></image>
+      <StaticText name="Dallas">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="City image for Los Angeles Los Angeles" focusable="true" url="https://www.google.com/travel/flights/flights-to-los-angeles.html">
+      <image name="City image for Los Angeles" url="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQMhH-5QLR4jl_J2o7PabGb4KFh84-Y6erZfvzPYPvg8mrgdHia6ApCCF5jQkXDOcg62zKbPH-tNvuzdEci0hsQfGSrPeRB7G6qEdjdLw"></image>
+      <StaticText name="Los Angeles">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="City image for Atlanta Atlanta" focusable="true" url="https://www.google.com/travel/flights/flights-to-atlanta.html">
+      <image name="City image for Atlanta" url="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcQGfKKlOIWrjbMf_vI8SFSqQPe6NWeTBVpOx9b6cCY8ENtGJqZKCO4oznNH8Ldb7YNyLzVDw_W6-mlttqci05ygZkRLAeKhM7l1dIJYug"></image>
+      <StaticText name="Atlanta">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="City image for Austin Austin" focusable="true" url="https://www.google.com/travel/flights/flights-to-austin.html">
+      <image name="City image for Austin" url="https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTzszcHfgL31mqy0PAP7sdkHVuqsAblZCVcnjqp-bv4XabWrw2lnRlYAaEdVpP2RFFU76sDLTQwCLEWR9Lqn5FgW1TLsjAj2chW3ChR8A"></image>
+      <StaticText name="Austin">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="City image for Miami Miami" focusable="true" url="https://www.google.com/travel/flights/flights-to-miami.html">
+      <image name="City image for Miami" url="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcSlfZ_wpyr0uT0ViSPZEiaKCvLqsPlQ47li7gTgWw1RxL0K8GZ6q0A2FAIYV3XERi7MPno9ycye7rbU9-JEFsLXxyGa8ttoaH-NXlue2A"></image>
+      <StaticText name="Miami">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <heading name="Frequently asked questions" level="2">
+      <StaticText name="Frequently asked questions">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </heading>
+    <StaticText name="How can I find last-minute flight deals?">
+      <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+    </StaticText>
+    <button name="Show answer How can I find last-minute flight deals?" invalid="false" focusable="true" expanded="false">
+      <image></image>
+    </button>
+    <StaticText name="How can I find cheap flights for a weekend getaway?">
+      <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+    </StaticText>
+    <button name="Show answer How can I find cheap flights for a weekend getaway?" invalid="false" focusable="true" expanded="false">
+      <image></image>
+    </button>
+    <StaticText name="How can I find flight deals if my travel plans are flexible?">
+      <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+    </StaticText>
+    <button name="Show answer How can I find flight deals if my travel plans are flexible?" invalid="false" focusable="true" expanded="false">
+      <image></image>
+    </button>
+    <StaticText name="How can I find cheap flights to anywhere?">
+      <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+    </StaticText>
+    <button name="Show answer How can I find cheap flights to anywhere?" invalid="false" focusable="true" expanded="false">
+      <image></image>
+    </button>
+    <StaticText name="How can I get flight alerts for my trip?">
+      <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+    </StaticText>
+    <button name="Show answer How can I get flight alerts for my trip?" invalid="false" focusable="true" expanded="false">
+      <image></image>
+    </button>
+    <StaticText name="Find cheap flights on popular routes">
+      <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+    </StaticText>
+    <link name="Flights from New York to London" focusable="true" url="https://www.google.com/travel/flights/flights-from-new-york-to-london.html">
+      <StaticText name="Flights from New York to London">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from New York to Paris" focusable="true" url="https://www.google.com/travel/flights/flights-from-new-york-to-paris.html">
+      <StaticText name="Flights from New York to Paris">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from London to Paris" focusable="true" url="https://www.google.com/travel/flights/flights-from-london-to-paris.html">
+      <StaticText name="Flights from London to Paris">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from New York to Rome" focusable="true" url="https://www.google.com/travel/flights/flights-from-new-york-to-rome.html">
+      <StaticText name="Flights from New York to Rome">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from Montreal to Paris" focusable="true" url="https://www.google.com/travel/flights/flights-from-montreal-to-paris.html">
+      <StaticText name="Flights from Montreal to Paris">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from London to Milan" focusable="true" url="https://www.google.com/travel/flights/flights-from-london-to-milan.html">
+      <StaticText name="Flights from London to Milan">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from Toronto to London" focusable="true" url="https://www.google.com/travel/flights/flights-from-toronto-to-london.html">
+      <StaticText name="Flights from Toronto to London">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from New York to Milan" focusable="true" url="https://www.google.com/travel/flights/flights-from-new-york-to-milan.html">
+      <StaticText name="Flights from New York to Milan">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from London to Dubai" focusable="true" url="https://www.google.com/travel/flights/flights-from-london-to-dubai.html">
+      <StaticText name="Flights from London to Dubai">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from London to Tokyo" focusable="true" url="https://www.google.com/travel/flights/flights-from-london-to-tokyo.html">
+      <StaticText name="Flights from London to Tokyo">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from Madrid to Rome" focusable="true" url="https://www.google.com/travel/flights/flights-from-madrid-to-rome.html">
+      <StaticText name="Flights from Madrid to Rome">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from London to Delhi" focusable="true" url="https://www.google.com/travel/flights/flights-from-london-to-delhi.html">
+      <StaticText name="Flights from London to Delhi">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from New York to Los Angeles" focusable="true" url="https://www.google.com/travel/flights/flights-from-new-york-to-los-angeles.html">
+      <StaticText name="Flights from New York to Los Angeles">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from Paris to Marrakech" focusable="true" url="https://www.google.com/travel/flights/flights-from-paris-to-marrakesh.html">
+      <StaticText name="Flights from Paris to Marrakech">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from Sao Paulo to London" focusable="true" url="https://www.google.com/travel/flights/flights-from-sao-paulo-to-london.html">
+      <StaticText name="Flights from Sao Paulo to London">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from London to Istanbul" focusable="true" url="https://www.google.com/travel/flights/flights-from-london-to-istanbul.html">
+      <StaticText name="Flights from London to Istanbul">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from Paris to Bangkok" focusable="true" url="https://www.google.com/travel/flights/flights-from-paris-to-bangkok.html">
+      <StaticText name="Flights from Paris to Bangkok">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from New York to Orlando" focusable="true" url="https://www.google.com/travel/flights/flights-from-new-york-to-orlando.html">
+      <StaticText name="Flights from New York to Orlando">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from London to Berlin" focusable="true" url="https://www.google.com/travel/flights/flights-from-london-to-berlin.html">
+      <StaticText name="Flights from London to Berlin">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from Chicago to Paris" focusable="true" url="https://www.google.com/travel/flights/flights-from-chicago-to-paris.html">
+      <StaticText name="Flights from Chicago to Paris">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Flights from Melbourne to London" focusable="true" url="https://www.google.com/travel/flights/flights-from-melbourne-to-london.html">
+      <StaticText name="Flights from Melbourne to London">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+  </main>
+  <contentinfo>
+    <button name="Language​·English (United States)" invalid="false" focusable="true">
+      <image></image>
+      <StaticText name="Language">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+      <StaticText name="​">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+      <StaticText name="·">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+      <StaticText name="English (United States)">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </button>
+    <button name="Location​·United States" invalid="false" focusable="true">
+      <image></image>
+      <StaticText name="Location">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+      <StaticText name="​">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+      <StaticText name="·">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+      <StaticText name="United States">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </button>
+    <button name="Currency​·USD" invalid="false" focusable="true">
+      <image></image>
+      <StaticText name="Currency">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+      <StaticText name="​">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+      <StaticText name="·">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+      <StaticText name="USD">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </button>
+    <paragraph>
+      <StaticText name="Current language and currency options applied: English (United States) - United States - USD">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </paragraph>
+    <paragraph>
+      <StaticText name="Displayed currencies may differ from the currencies used to purchase flights. ">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+      <link name="Learn more about currencies" focusable="true" url="https://www.google.com/googlefinance/disclaimer?hl=en-US&amp;gl=US">
+        <StaticText name="  "></StaticText>
+        <StaticText name="Learn more">
+          <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+        </StaticText>
+      </link>
+    </paragraph>
+    <link name="About Google Travel" focusable="true" url="https://about.google/?hl=en-US">
+      <StaticText name="About">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Privacy" focusable="true" url="https://policies.google.com/privacy?hl=en-US">
+      <StaticText name="Privacy">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Terms" focusable="true" url="https://policies.google.com/terms?hl=en-US">
+      <StaticText name="Terms">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Join user studies" focusable="true" url="https://google.qualtrics.com/jfe/form/SV_3NMIMtX0F2zkakR?reserved%3D1%26utm_source%3DFooter%2520link%26utm_medium%3Down_web%26%20utm_campaign%3DQ2%26productTag%3D0%26campaignDate%3DApril2020%26referral_code%3DUXbJ377133&amp;Q_Language=en-US">
+      <StaticText name="Join user studies">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Feedback" focusable="true" url="https://www.google.com/#0">
+      <StaticText name="Feedback">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <link name="Help Center" focusable="true" url="https://support.google.com/travel/?hl=en-US#topic=2475360">
+      <StaticText name="Help Center">
+        <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+      </StaticText>
+    </link>
+    <button name="International sites" invalid="false" focusable="true" expanded="false">
+      <image></image>
+    </button>
+    <button name="Explore flights" invalid="false" focusable="true" expanded="false">
+      <image></image>
+    </button>
+  </contentinfo>
+</RootWebArea>

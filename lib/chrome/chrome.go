@@ -2,11 +2,7 @@ package chrome
 
 import (
 	"context"
-	"encoding/json"
-	"log"
-	"log/slog"
 	"os"
-	"strings"
 
 	"github.com/chromedp/chromedp"
 )
@@ -22,11 +18,11 @@ func NewBrowser(ctx context.Context) (cdpCtx context.Context, cancel func(), err
 		return
 	}
 
-	allocatorCtx, _ := chromedp.NewExecAllocator(
+	allocatorCtx, cancel1 := chromedp.NewExecAllocator(
 		ctx,
 		append(chromedp.DefaultExecAllocatorOptions[:],
 			chromedp.Env("APPIMAGELAUNCHER_DISABLE=1"),
-			chromedp.ExecPath("./data/thorium-browser"),
+			chromedp.ExecPath("./data/chrome/chrome"),
 			chromedp.UserDataDir(dataTemp),
 			chromedp.Flag("load-extension", "./data/ublock"),
 			chromedp.Flag("headless", false),
@@ -36,24 +32,29 @@ func NewBrowser(ctx context.Context) (cdpCtx context.Context, cancel func(), err
 			chromedp.Flag("no-sandbox", true),
 		)...,
 	)
-	cdpCtx, cancel = chromedp.NewContext(
+	cdpCtx, cancel2 := chromedp.NewContext(
 		allocatorCtx,
-		chromedp.WithBrowserOption(
-			chromedp.WithBrowserDebugf(func(s string, a ...any) {
-				var parsed struct {
-					Method string `json:"method"`
-				}
-				err = json.Unmarshal([]byte(a[0].([]uint8)), &parsed)
-				if err != nil {
-					slog.Error("parse msg", "msg", s, "err", err)
-					return
-				}
-				if strings.Contains(strings.ToLower(parsed.Method), "accessibility") {
-					log.Printf(s, a...)
-				}
-			}),
-		),
+		// chromedp.WithBrowserOption(
+		// 	chromedp.WithBrowserDebugf(func(s string, a ...any) {
+		// 		var parsed struct {
+		// 			Method string `json:"method"`
+		// 		}
+		// 		err = json.Unmarshal([]byte(a[0].([]uint8)), &parsed)
+		// 		if err != nil {
+		// 			slog.Error("parse msg", "msg", s, "err", err)
+		// 			return
+		// 		}
+		// 		if strings.Contains(strings.ToLower(parsed.Method), "accessibility") {
+		// 			log.Printf(s, a...)
+		// 		}
+		// 	}),
+		// ),
 	)
+
+	cancel = func() {
+		cancel2()
+		cancel1()
+	}
 
 	err = chromedp.Run(cdpCtx)
 	return

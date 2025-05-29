@@ -14,15 +14,25 @@ import (
 func main() {
 	os.Mkdir("data", 0777)
 
-	if _, err := os.Stat("data/thorium-browser"); os.IsNotExist(err) {
-		log.Println("downloading thorium...")
+	if _, err := os.Stat("data/chrome"); os.IsNotExist(err) {
+		log.Println("downloading chrome...")
 		_, err := script.
-			Get("https://github.com/Alex313031/thorium/releases/download/M130.0.6723.174/Thorium_Browser_130.0.6723.174_AVX2.AppImage").
-			WriteFile("data/thorium-browser")
+			Get("https://github.com/ungoogled-software/ungoogled-chromium-portablelinux/releases/download/136.0.7103.113-1/ungoogled-chromium_136.0.7103.113-1_linux.tar.xz").
+			WriteFile("data/chrome.tar.xz")
 		if err != nil {
 			log.Fatal(err)
 		}
-		err = os.Chmod("data/thorium-browser", 0777)
+
+		err = os.MkdirAll("data/chrome", 0777)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		log.Println("extracting chrome...")
+		p := script.Exec("tar -xf data/chrome.tar.xz -C data/chrome --strip-components=1")
+		p.Wait()
+
+		err = os.Remove("data/chrome.tar.xz")
 		if err != nil {
 			log.Fatal(err)
 		}

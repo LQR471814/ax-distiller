@@ -1,0 +1,109 @@
+<RootWebArea name="Find Cheap Flights Worldwide &amp; Book Your Ticket - Google Flights" focusable="true" focused="true" url="https://www.google.com/travel/flights">
+  <search name="Flight">
+    <dialog name="Enter your origin" focusable="true" modal="true">
+      <combobox name="Where else?" invalid="false" focusable="true" focused="true" editable="plaintext" settable="true" autocomplete="both" hasPopup="menu" required="false" expanded="true" describedby="i24" owns="h0T7hb-7">
+        <StaticText name="San Francisco" editable="plaintext">
+          <InlineTextBox name="&lt;nil&gt;" editable="plaintext"></InlineTextBox>
+        </StaticText>
+      </combobox>
+      <image></image>
+      <button name="Origin, Select multiple airports" invalid="false" focusable="true">
+        <image></image>
+      </button>
+      <listbox multiselectable="true" orientation="vertical" required="false">
+        <option name="San Francisco, California" selected="true" describedby="c3 c4 ">
+          <image></image>
+          <StaticText name="San Francisco, California">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+          <StaticText name="  ">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+          <StaticText name="City in California">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+        </option>
+        <button name="Toggle nearby airports for San Francisco, California" invalid="false" focusable="true" expanded="true">
+          <image></image>
+        </button>
+        <option name="San Francisco International Airport (SFO)" selected="true" describedby="c6 c7">
+          <image></image>
+          <StaticText name="San Francisco International Airport">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+          <StaticText name="  ">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+          <StaticText name="SFO">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+          <StaticText name="11 mi to destination">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+        </option>
+        <option name="San Francisco Mountain, Arizona" selected="false" describedby="c9 c10 ">
+          <image></image>
+          <StaticText name="San Francisco Mountain, Arizona">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+          <StaticText name="  ">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+          <StaticText name="Mountain range in Arizona">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+        </option>
+        <button name="Toggle nearby airports for San Francisco Mountain, Arizona" invalid="false" focusable="true" expanded="false">
+          <image></image>
+        </button>
+        <option name="Don Edwards San Francisco Bay National Wildlife Refuge, California" selected="false" describedby="c21 c22 ">
+          <image></image>
+          <StaticText name="Don Edwards San Francisco Bay National Wildlife Refuge, California">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+          <StaticText name="  ">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+          <StaticText name="Wildlife refuge in California">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+        </option>
+        <button name="Toggle nearby airports for Don Edwards San Francisco Bay National Wildlife Refuge, California" invalid="false" focusable="true" expanded="false">
+          <image></image>
+        </button>
+        <option name="San Francisco de Macorís, Dominican Republic" selected="false" describedby="c33 c34 ">
+          <image></image>
+          <StaticText name="San Francisco de Macorís, Dominican Republic">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+          <StaticText name="  ">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+          <StaticText name="City in the Dominican Republic">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+        </option>
+        <button name="Toggle nearby airports for San Francisco de Macorís, Dominican Republic" invalid="false" focusable="true" expanded="false">
+          <image></image>
+        </button>
+        <option name="San Francisco, Argentina" selected="false" describedby="c39 c40 ">
+          <image></image>
+          <StaticText name="San Francisco, Argentina">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+          <StaticText name="  ">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+          <StaticText name="City in Argentina">
+            <InlineTextBox name="&lt;nil&gt;"></InlineTextBox>
+          </StaticText>
+        </option>
+        <button name="Toggle nearby airports for San Francisco, Argentina" invalid="false" focusable="true" expanded="false">
+          <image></image>
+        </button>
+      </listbox>
+    </dialog>
+  </search>
+</RootWebArea>

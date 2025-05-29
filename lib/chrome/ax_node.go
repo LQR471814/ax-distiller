@@ -64,13 +64,9 @@ func mustParseNodeID(id string) uint64 {
 func (n *AXNode) metadataFromCDP(cn cdpAXNode) (err error) {
 	n.ID = mustParseNodeID(cn.NodeID)
 
-	n.Role = cn.Role.Value.(string)
-	if cn.Name != nil {
-		n.Name = cn.Name.Value.(string)
-	}
-	if cn.Description != nil {
-		n.Description = cn.Description.Value.(string)
-	}
+	n.Role = fmt.Sprint(cn.Role.Value)
+	n.Name = fmt.Sprint(cn.Name.Value)
+	n.Description = fmt.Sprint(cn.Description.Value)
 	n.DomNodeId = cn.DomNodeId
 
 	n.Properties = make([]Prop, len(cn.Properties))

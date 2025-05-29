@@ -3,20 +3,17 @@ package main
 import (
 	"ax-distiller/lib/chrome"
 	"context"
+	"encoding/xml"
 	"fmt"
 	"log/slog"
 	"os"
 	"os/signal"
-	"reflect"
 	"time"
 
 	"github.com/chromedp/cdproto/accessibility"
 	"github.com/chromedp/cdproto/css"
-	"github.com/chromedp/cdproto/dom"
 	"github.com/chromedp/cdproto/log"
 	"github.com/chromedp/cdproto/network"
-	"github.com/chromedp/cdproto/page"
-	"github.com/chromedp/cdproto/runtime"
 	"github.com/chromedp/chromedp"
 )
 
@@ -30,50 +27,73 @@ func main() {
 		fatalerr("create new browser", err)
 	}
 
+	trees := []*chrome.AXNode{}
+
 	err = chromedp.Run(
 		ctx,
 		accessibility.Enable(),
 		network.Disable(),
-		page.Disable(),
 		css.Disable(),
 		log.Disable(),
-		dom.Disable(),
-		runtime.Disable(),
+		// dom.Disable(),
 		chromedp.Navigate("https://flights.google.com"),
 		chromedp.ActionFunc(func(pageCtx context.Context) error {
-			// ax := chrome.AX{
-			// 	PageCtx: pageCtx,
-			// }
-
-			// _, err = ax.FetchFullAXTree()
-			// if err != nil {
-			// 	fatalerr("fetch full ax tree", err)
-			// }
-
-			_, err = accessibility.QueryAXTree().WithRole("combobox").Do(pageCtx)
+			ax := chrome.AX{PageCtx: pageCtx}
+			t, err := ax.FetchFullAXTree()
 			if err != nil {
-				panic(err)
+				fatalerr("fetch full ax tree", err)
 			}
-
-			chromedp.ListenTarget(pageCtx, func(ev any) {
-				slog.Info(fmt.Sprintf("[event] %s", reflect.TypeOf(ev).String()))
-				switch typed := ev.(type) {
-				case *accessibility.EventLoadComplete:
-					slog.Info("[event] load complete", "id", typed.Root.NodeID)
-				case *accessibility.EventNodesUpdated:
-					roles := make([]string, len(typed.Nodes))
-					for i, n := range typed.Nodes {
-						roles[i] = n.Role.Value.String()
-					}
-					slog.Info("[event] nodes updated", "roles", roles)
-				}
-			})
+			trees = append(trees, t)
 			return nil
 		}),
-		chromedp.Sleep(20*time.Second),
+		chromedp.Click("input[aria-label='Where from?']"),
+		chromedp.Sleep(500*time.Millisecond),
+		chromedp.ActionFunc(func(pageCtx context.Context) error {
+			ax := chrome.AX{PageCtx: pageCtx}
+			t, err := ax.FetchFullAXTree()
+			if err != nil {
+				fatalerr("fetch full ax tree", err)
+			}
+			trees = append(trees, t)
+			return nil
+		}),
+		chromedp.Click("div[role=presentation]"),
+		chromedp.Click("input[aria-label='Where to? ']"),
+		chromedp.Sleep(500*time.Millisecond),
+		chromedp.ActionFunc(func(pageCtx context.Context) error {
+			ax := chrome.AX{PageCtx: pageCtx}
+			t, err := ax.FetchFullAXTree()
+			if err != nil {
+				fatalerr("fetch full ax tree", err)
+			}
+			trees = append(trees, t)
+			return nil
+		}),
+		chromedp.Click("div[role=presentation]"),
+		chromedp.Sleep(500*time.Millisecond),
+		chromedp.ActionFunc(func(pageCtx context.Context) error {
+			ax := chrome.AX{PageCtx: pageCtx}
+			t, err := ax.FetchFullAXTree()
+			if err != nil {
+				fatalerr("fetch full ax tree", err)
+			}
+			trees = append(trees, t)
+			return nil
+		}),
 	)
 	if err != nil {
 		fatalerr("run chromedp", err)
+	}
+
+	for i, t := range trees {
+		buff, err := xml.MarshalIndent(t, "", "  ")
+		if err != nil {
+			fatalerr("marshal", err)
+		}
+		err = os.WriteFile(fmt.Sprintf("%d.xml", i), buff, 0600)
+		if err != nil {
+			fatalerr("write", err)
+		}
 	}
 }
 
