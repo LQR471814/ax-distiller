@@ -94,6 +94,12 @@ func main() {
 
 	common := findCommon(km, ht2, ht1, ht2.Root)
 	fmt.Println(dnode.Print(km, common))
+
+	buff, err := xml.MarshalIndent(toAXTree(km, common), "", "  ")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(string(buff))
 }
 
 func findCommon(km dnode.Keymap, self, other dnode.HashTree, hash uint64) *dnode.Node {
@@ -127,6 +133,50 @@ func findCommon(km dnode.Keymap, self, other dnode.HashTree, hash uint64) *dnode
 	}
 	if node.FirstChildHash != 0 {
 		out.FirstChild = findCommon(km, self, other, node.FirstChildHash)
+	}
+
+	return out
+}
+
+// this assumes node is the AX_NODE container
+func toAXTree(km dnode.Keymap, node *dnode.Node) *chrome.AXNode {
+	out := &chrome.AXNode{}
+
+	var lastChild *chrome.AXNode
+
+	cur := node.FirstChild
+	for cur != nil {
+		text, ok := km.StringOf(cur.FullKey)
+		if !ok {
+			panic("unknown key")
+		}
+
+		if strings.HasPrefix(text, "role:") {
+			out.Role = text[5:]
+		} else if strings.HasPrefix(text, "attr:") {
+			value := ""
+			if cur.FirstChild != nil {
+				value, _ = km.StringOf(cur.FirstChild.FullKey)
+			}
+			out.Properties = append(out.Properties, chrome.Prop{
+				Name:  text[5:],
+				Value: value,
+			})
+		} else if strings.HasPrefix(text, "AX_NODE") {
+			child := toAXTree(km, cur)
+			if lastChild != nil {
+				lastChild.NextSibling = child
+			} else {
+				out.FirstChild = child
+			}
+			lastChild = child
+		}
+
+		cur = cur.NextSibling
+	}
+
+	if out.Role == "" {
+		out.Role = "UNKNOWN"
 	}
 
 	return out

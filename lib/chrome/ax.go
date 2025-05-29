@@ -144,7 +144,7 @@ func (ax AX) checkStale(id uint64) bool {
 // 	}
 // }
 
-// ListenChanges fires an event whenever the subtree of an AX node changes. The
+// Listen fires an event whenever the subtree of an AX node changes. The
 // ID of the closest significant AX node ancestor (and all the ancestors of
 // that node) to the changed subtree is provided in onChange.
 func (ax AX) Listen() {
