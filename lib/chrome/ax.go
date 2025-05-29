@@ -4,11 +4,9 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-	"time"
 
 	"github.com/chromedp/cdproto/accessibility"
 	"github.com/chromedp/cdproto/cdp"
-	"github.com/chromedp/cdproto/dom"
 	"github.com/chromedp/chromedp"
 	easyjson "github.com/mailru/easyjson"
 )
@@ -148,7 +146,7 @@ func (ax AX) checkStale(id uint64) bool {
 // ID of the closest significant AX node ancestor (and all the ancestors of
 // that node) to the changed subtree is provided in onChange.
 func (ax AX) Listen() {
-	var timer *time.Timer
+	// var timer *time.Timer
 
 	chromedp.ListenTarget(ax.PageCtx, func(ev any) {
 		// fmt.Printf("%T\n", ev)
@@ -162,51 +160,51 @@ func (ax AX) Listen() {
 			}
 			slog.Info("[event] nodes updated", "roles", roles)
 
-		case *dom.EventAttributeModified:
-			slog.Info("[event] attribute modified", "id", typed.NodeID, "attr", typed.Name)
-		case *dom.EventAttributeRemoved:
-			slog.Info("[event] attribute removed", "id", typed.NodeID, "attr", typed.Name)
-		case *dom.EventCharacterDataModified:
-			slog.Info("[event] character data modified", "id", typed.NodeID, "data", typed.CharacterData)
-		case *dom.EventChildNodeCountUpdated:
-			slog.Info("[event] DOM node count updated", "id", typed.NodeID, "count", typed.ChildNodeCount)
-
-			if timer != nil {
-				timer.Stop()
-			}
-			timer = time.NewTimer(time.Second)
-			go func() {
-				<-timer.C
-
-				params := easyjson.RawMessage(fmt.Sprintf(`{"nodeId":%d}`, typed.NodeID.Int64()))
-				result := &getAXNodesResult{}
-
-				err := cdp.Execute(ax.PageCtx, accessibility.CommandGetAXNodeAndAncestors, &params, result)
-				if err != nil {
-					slog.Error("[nav] get partial ax tree", "err", err)
-					return
-				}
-
-				// ancestors is the list of ancestors following the closest significant AX node ancestor
-				var ancestors []accessibility.NodeID
-				for i, anc := range result.Nodes {
-					if anc.Ignored ||
-						anc.Role.Value.(string) == "generic" ||
-						anc.Role.Value.(string) == "none" {
-						continue
-					}
-					ancestors = make([]accessibility.NodeID, 0, len(result.Nodes)-i)
-					for j := i; j < len(result.Nodes); j++ {
-						ancestors = append(ancestors, accessibility.NodeID(result.Nodes[i].NodeID))
-					}
-					break
-				}
-			}()
-
-		case *dom.EventChildNodeInserted:
-			slog.Info("[event] DOM node inserted", "parent_id", typed.ParentNodeID, "id", typed.Node.NodeID)
-		case *dom.EventChildNodeRemoved:
-			slog.Info("[event] DOM node removed", "parent_id", typed.ParentNodeID, "id", typed.NodeID)
+			// case *dom.EventAttributeModified:
+			// 	slog.Info("[event] attribute modified", "id", typed.NodeID, "attr", typed.Name)
+			// case *dom.EventAttributeRemoved:
+			// 	slog.Info("[event] attribute removed", "id", typed.NodeID, "attr", typed.Name)
+			// case *dom.EventCharacterDataModified:
+			// 	slog.Info("[event] character data modified", "id", typed.NodeID, "data", typed.CharacterData)
+			// case *dom.EventChildNodeCountUpdated:
+			// 	slog.Info("[event] DOM node count updated", "id", typed.NodeID, "count", typed.ChildNodeCount)
+			//
+			// 	if timer != nil {
+			// 		timer.Stop()
+			// 	}
+			// 	timer = time.NewTimer(time.Second)
+			// 	go func() {
+			// 		<-timer.C
+			//
+			// 		params := easyjson.RawMessage(fmt.Sprintf(`{"nodeId":%d}`, typed.NodeID.Int64()))
+			// 		result := &getAXNodesResult{}
+			//
+			// 		err := cdp.Execute(ax.PageCtx, accessibility.CommandGetAXNodeAndAncestors, &params, result)
+			// 		if err != nil {
+			// 			slog.Error("[nav] get partial ax tree", "err", err)
+			// 			return
+			// 		}
+			//
+			// 		// ancestors is the list of ancestors following the closest significant AX node ancestor
+			// 		var ancestors []accessibility.NodeID
+			// 		for i, anc := range result.Nodes {
+			// 			if anc.Ignored ||
+			// 				anc.Role.Value.(string) == "generic" ||
+			// 				anc.Role.Value.(string) == "none" {
+			// 				continue
+			// 			}
+			// 			ancestors = make([]accessibility.NodeID, 0, len(result.Nodes)-i)
+			// 			for j := i; j < len(result.Nodes); j++ {
+			// 				ancestors = append(ancestors, accessibility.NodeID(result.Nodes[i].NodeID))
+			// 			}
+			// 			break
+			// 		}
+			// 	}()
+			//
+			// case *dom.EventChildNodeInserted:
+			// 	slog.Info("[event] DOM node inserted", "parent_id", typed.ParentNodeID, "id", typed.Node.NodeID)
+			// case *dom.EventChildNodeRemoved:
+			// 	slog.Info("[event] DOM node removed", "parent_id", typed.ParentNodeID, "id", typed.NodeID)
 		}
 	})
 }

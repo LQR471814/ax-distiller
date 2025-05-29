@@ -2,7 +2,11 @@ package chrome
 
 import (
 	"context"
+	"encoding/json"
+	"log"
+	"log/slog"
 	"os"
+	"strings"
 
 	"github.com/chromedp/chromedp"
 )
@@ -32,7 +36,24 @@ func NewBrowser(ctx context.Context) (cdpCtx context.Context, cancel func(), err
 			chromedp.Flag("no-sandbox", true),
 		)...,
 	)
-	cdpCtx, cancel = chromedp.NewContext(allocatorCtx)
+	cdpCtx, cancel = chromedp.NewContext(
+		allocatorCtx,
+		chromedp.WithBrowserOption(
+			chromedp.WithBrowserDebugf(func(s string, a ...any) {
+				var parsed struct {
+					Method string `json:"method"`
+				}
+				err = json.Unmarshal([]byte(a[0].([]uint8)), &parsed)
+				if err != nil {
+					slog.Error("parse msg", "msg", s, "err", err)
+					return
+				}
+				if strings.Contains(strings.ToLower(parsed.Method), "accessibility") {
+					log.Printf(s, a...)
+				}
+			}),
+		),
+	)
 
 	err = chromedp.Run(cdpCtx)
 	return

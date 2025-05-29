@@ -1,7 +1,6 @@
 package main
 
 import (
-	"ax-distiller/lib/ax"
 	"ax-distiller/lib/chrome"
 	"context"
 	"flag"
@@ -11,7 +10,6 @@ import (
 	"net/url"
 	"os"
 	"os/signal"
-	"time"
 
 	"github.com/chromedp/cdproto/accessibility"
 	"github.com/chromedp/chromedp"
@@ -54,34 +52,18 @@ func fatalerr(message string, err error) {
 }
 
 func start(ctx context.Context, parsed *url.URL) {
-	sets := make(map[accessibility.NodeID]ax.NodeSet)
+	// sets := make(map[accessibility.NodeID]ax.NodeSet)
 
 	err := chromedp.Run(
 		ctx,
-		accessibility.Enable(),
 		chromedp.Navigate(parsed.String()),
+		accessibility.Enable(),
 		chromedp.ActionFunc(func(pageCtx context.Context) error {
 			ax := chrome.AX{
 				PageCtx: pageCtx,
 			}
 
-			ax.ListenChanges(time.Second, func(ancestors []accessibility.NodeID) {
-				for _, id := range ancestors {
-					existing, ok := sets[id]
-					if !ok {
-						continue
-					}
-
-					children, err := ax.FetchSubtree(id)
-					if err != nil {
-						slog.Error("[refresh] fetch subtree", "err", err)
-						return
-					}
-					existing.Add(children)
-
-					return
-				}
-			})
+			ax.Listen()
 			return nil
 		}),
 	)
