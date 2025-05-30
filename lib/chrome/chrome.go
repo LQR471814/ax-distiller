@@ -22,7 +22,7 @@ func NewBrowser(ctx context.Context) (cdpCtx context.Context, cancel func(), err
 		ctx,
 		append(chromedp.DefaultExecAllocatorOptions[:],
 			chromedp.Env("APPIMAGELAUNCHER_DISABLE=1"),
-			chromedp.ExecPath("./data/chrome/chrome"),
+			chromedp.ExecPath("./data/chrome"),
 			chromedp.UserDataDir(dataTemp),
 			chromedp.Flag("load-extension", "./data/ublock"),
 			chromedp.Flag("headless", false),

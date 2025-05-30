@@ -22,6 +22,10 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+		err = os.Chmod("data/chrome", 0777)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	if _, err := os.Stat("data/ublock"); os.IsNotExist(err) {
