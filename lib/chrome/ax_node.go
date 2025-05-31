@@ -4,16 +4,17 @@ import (
 	"encoding/xml"
 	"fmt"
 	"strconv"
+	"unique"
 )
 
 type Prop struct {
-	Name  string
+	Name  unique.Handle[string]
 	Value string
 }
 
 type AXNode struct {
 	ID          uint64
-	Role        string
+	Role        unique.Handle[string]
 	Name        string
 	Description string
 	Properties  []Prop
@@ -23,7 +24,7 @@ type AXNode struct {
 }
 
 func (n AXNode) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
-	start.Name.Local = n.Role
+	start.Name.Local = n.Role.Value()
 	start.Attr = make([]xml.Attr, 0, len(n.Properties)+1)
 	if n.Name != "" {
 		start.Attr = append(start.Attr, xml.Attr{Name: xml.Name{Local: "name"}, Value: n.Name})
@@ -33,7 +34,7 @@ func (n AXNode) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 			continue
 		}
 		start.Attr = append(start.Attr, xml.Attr{
-			Name:  xml.Name{Local: prop.Name},
+			Name:  xml.Name{Local: prop.Name.Value()},
 			Value: prop.Value,
 		})
 	}
@@ -64,7 +65,7 @@ func mustParseNodeID(id string) uint64 {
 func (n *AXNode) metadataFromCDP(cn cdpAXNode) (err error) {
 	n.ID = mustParseNodeID(cn.NodeID)
 
-	n.Role = fmt.Sprint(cn.Role.Value)
+	n.Role = unique.Make(fmt.Sprint(cn.Role.Value))
 	n.Name = fmt.Sprint(cn.Name.Value)
 	n.Description = fmt.Sprint(cn.Description.Value)
 	n.DomNodeId = cn.DomNodeId
@@ -72,7 +73,7 @@ func (n *AXNode) metadataFromCDP(cn cdpAXNode) (err error) {
 	n.Properties = make([]Prop, len(cn.Properties))
 	for i, p := range cn.Properties {
 		n.Properties[i] = Prop{
-			Name:  p.Name,
+			Name:  unique.Make(p.Name),
 			Value: fmt.Sprint(p.Value.Value),
 		}
 	}

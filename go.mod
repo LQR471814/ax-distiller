@@ -10,6 +10,7 @@ require (
 	github.com/bytedance/sonic v1.13.2
 	github.com/chromedp/cdproto v0.0.0-20250509201441-70372ae9ef75
 	github.com/chromedp/chromedp v0.13.6
+	github.com/davecgh/go-spew v1.1.1
 	github.com/huandu/go-sqlbuilder v1.25.0
 	github.com/lmittmann/tint v1.0.7
 	github.com/mailru/easyjson v0.9.0

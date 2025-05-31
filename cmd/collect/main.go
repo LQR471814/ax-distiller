@@ -27,10 +27,10 @@ func main() {
 
 	err = chromedp.Run(
 		tabctx,
-		accessibility.Enable(),
 		network.Disable(),
 		css.Disable(),
 		log.Disable(),
+		accessibility.Enable(),
 	)
 	if err != nil {
 		fatalerr("enable capabilities", err)
@@ -40,7 +40,12 @@ func main() {
 	if err != nil {
 		fatalerr("create treestore", err)
 	}
-	defer ts.Save()
+	defer func() {
+		err := ts.Save()
+		if err != nil {
+			fatalerr("save treestore", err)
+		}
+	}()
 
 	collector := NewCollector(tabctx, ts)
 	go collector.worker()

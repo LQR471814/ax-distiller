@@ -32,7 +32,7 @@ func (s TreeStore) Save() (err error) {
 
 func (s TreeStore) Add(currentUrl *url.URL, tree *chrome.AXNode) (err error) {
 	dn := dnode.FromAXTree(tree, s.keymap)
-	ht := dnode.NewHashTree(dn, 4096)
+	ht := dnode.NewHashTree(dn)
 
 	hostname := currentUrl.Hostname()
 	if hostname == "" {
@@ -54,7 +54,7 @@ func (s TreeStore) Add(currentUrl *url.URL, tree *chrome.AXNode) (err error) {
 	defer f.Close()
 
 	encoder := gob.NewEncoder(f)
-	err = encoder.Encode(dn)
+	err = encoder.Encode(ht)
 	return
 }
 
@@ -65,7 +65,7 @@ func NewTreeStore(dir string) (ts TreeStore, err error) {
 	}
 	ts = TreeStore{
 		dir:    dir,
-		keymap: dnode.NewKeymap(4096),
+		keymap: dnode.NewKeymap(),
 	}
 	return
 }

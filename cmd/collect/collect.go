@@ -5,7 +5,6 @@ import (
 	"context"
 	"log/slog"
 	"net/url"
-	"reflect"
 	"time"
 
 	"github.com/chromedp/cdproto/dom"
@@ -18,17 +17,28 @@ type Collector struct {
 }
 
 func (c Collector) worker() {
-	domupdate := make(chan struct{}, 16)
+	domUpdate := make(chan struct{}, 16)
+	// requestsUpdate := make(chan struct{}, 16)
+	// activeRequests := atomic.Int32{}
 
 	go func() {
 		chromedp.ListenTarget(c.tabctx, func(ev any) {
 			switch ev.(type) {
+			// case *network.EventRequestWillBeSent:
+			// 	go func() {
+			// 		activeRequests.Add(1)
+			// 		requestsUpdate <- struct{}{}
+			// 	}()
+			// case *network.EventResponseReceived:
+			// 	go func() {
+			// 		activeRequests.Add(-1)
+			// 		requestsUpdate <- struct{}{}
+			// 	}()
 			case *dom.EventDocumentUpdated,
 				*dom.EventChildNodeCountUpdated,
 				*dom.EventCharacterDataModified:
-				slog.Info("[collect] dom updated", "type", reflect.TypeOf(ev).String())
 				go func() {
-					domupdate <- struct{}{}
+					domUpdate <- struct{}{}
 				}()
 			}
 		})
@@ -39,13 +49,25 @@ func (c Collector) worker() {
 		select {
 		case <-c.tabctx.Done():
 			return
-		case <-domupdate:
+		case <-domUpdate:
 			timer.Reset(time.Second)
 		case <-timer.C:
+			// slog.Info("[collect] waiting for the network to settle...")
+			// if activeRequests.Load() > 1 {
+			// 	for {
+			// 		select {
+			// 		case <-c.tabctx.Done():
+			// 			return
+			// 		case <-requestsUpdate:
+			// 			if activeRequests.Load() <= 1 {
+			// 				break
+			// 			}
+			// 		}
+			// 	}
+			// }
+
 			go func() {
 				var currentURL string
-
-				slog.Info("[collect] begin fetch ax tree")
 
 				err := chromedp.Run(
 					c.tabctx,
@@ -72,6 +94,8 @@ func (c Collector) worker() {
 				if err != nil {
 					slog.Warn("[collect] fetch ax tree", "err", err)
 				}
+
+				slog.Info("[collect] fetched and stored ax tree")
 			}()
 		}
 	}

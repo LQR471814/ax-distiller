@@ -5,6 +5,8 @@ import (
 	"bytes"
 	"encoding/binary"
 	"fmt"
+	"strings"
+	"unique"
 
 	"github.com/zeebo/xxh3"
 )
@@ -58,8 +60,54 @@ func convertAXTree(km Keymap, n *chrome.AXNode, childIdx, parentKey uint64) (dn 
 	return
 }
 
+// FromAXTree converts an AX tree into a dnode tree.
 func FromAXTree(root *chrome.AXNode, km Keymap) *Node {
 	return convertAXTree(km, root, 0, 0)
+}
+
+// ToAXTree converts a dnode tree into an AX tree.
+// - This assumes node is the AX_NODE container
+func ToAXTree(km Keymap, node *Node) *chrome.AXNode {
+	out := &chrome.AXNode{}
+
+	var lastChild *chrome.AXNode
+
+	cur := node.FirstChild
+	for cur != nil {
+		text, ok := km.StringOf(cur.FullKey)
+		if !ok {
+			panic("unknown key")
+		}
+
+		if strings.HasPrefix(text, "role:") {
+			out.Role = unique.Make(text[5:])
+		} else if strings.HasPrefix(text, "attr:") {
+			value := ""
+			if cur.FirstChild != nil {
+				value, _ = km.StringOf(cur.FirstChild.FullKey)
+			}
+			out.Properties = append(out.Properties, chrome.Prop{
+				Name:  unique.Make(text[5:]),
+				Value: value,
+			})
+		} else if strings.HasPrefix(text, "AX_NODE") {
+			child := ToAXTree(km, cur)
+			if lastChild != nil {
+				lastChild.NextSibling = child
+			} else {
+				out.FirstChild = child
+			}
+			lastChild = child
+		}
+
+		cur = cur.NextSibling
+	}
+
+	if out.Role.Value() == "" {
+		out.Role = unique.Make("UNKNOWN")
+	}
+
+	return out
 }
 
 type axKey struct {
@@ -80,29 +128,29 @@ func (k axKey) String() string {
 }
 
 type roleKey struct {
-	role string
+	role unique.Handle[string]
 }
 
 func (k roleKey) Key() uint64 {
-	buff := append([]byte{1}, []byte(k.role)...)
+	buff := append([]byte{1}, []byte(k.role.Value())...)
 	return xxh3.Hash(buff)
 }
 
 func (k roleKey) String() string {
-	return fmt.Sprintf("role:%s", k.role)
+	return fmt.Sprintf("role:%s", k.role.Value())
 }
 
 type attrKey struct {
-	attr string
+	attr unique.Handle[string]
 }
 
 func (k attrKey) Key() uint64 {
-	buff := append([]byte{2}, []byte(k.attr)...)
+	buff := append([]byte{2}, []byte(k.attr.Value())...)
 	return xxh3.Hash(buff)
 }
 
 func (k attrKey) String() string {
-	return fmt.Sprintf("attr:%s", k.attr)
+	return fmt.Sprintf("attr:%s", k.attr.Value())
 }
 
 type valueKey struct {

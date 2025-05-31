@@ -6,6 +6,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"strings"
+	"unique"
 
 	_ "embed"
 )
@@ -19,7 +20,7 @@ type rawNode struct {
 
 func parseNode(decoder *xml.Decoder, start xml.StartElement) (*chrome.AXNode, error) {
 	node := &chrome.AXNode{
-		Role: start.Name.Local,
+		Role: unique.Make(start.Name.Local),
 	}
 
 	for _, attr := range start.Attr {
@@ -27,7 +28,7 @@ func parseNode(decoder *xml.Decoder, start xml.StartElement) (*chrome.AXNode, er
 			attr.Value = ""
 		}
 		node.Properties = append(node.Properties, chrome.Prop{
-			Name:  attr.Name.Local,
+			Name:  unique.Make(attr.Name.Local),
 			Value: attr.Value,
 		})
 	}
@@ -88,96 +89,16 @@ func main() {
 	n1 := parse(file1)
 	n2 := parse(file2)
 
-	km := dnode.NewKeymap(1024)
-	ht1 := dnode.NewHashTree(dnode.FromAXTree(n1, km), 1024)
-	ht2 := dnode.NewHashTree(dnode.FromAXTree(n2, km), 1024)
+	km := dnode.NewKeymap()
+	ht1 := dnode.NewHashTree(dnode.FromAXTree(n1, km))
+	ht2 := dnode.NewHashTree(dnode.FromAXTree(n2, km))
 
-	common := findCommon(km, ht2, ht1, ht2.Root)
+	common := dnode.FindCommon(km, ht2, ht1, ht2.Root)
 	fmt.Println(dnode.Print(km, common))
 
-	buff, err := xml.MarshalIndent(toAXTree(km, common), "", "  ")
+	buff, err := xml.MarshalIndent(dnode.ToAXTree(km, common), "", "  ")
 	if err != nil {
 		panic(err)
 	}
 	fmt.Println(string(buff))
-}
-
-func findCommon(km dnode.Keymap, self, other dnode.HashTree, hash uint64) *dnode.Node {
-	node, exists := self.FromHash[hash]
-	if !exists {
-		panic("self node's hash does not exist in self")
-	}
-
-	var commonNS *dnode.Node
-	if node.NextSiblingHash != 0 {
-		commonNS = findCommon(km, self, other, node.NextSiblingHash)
-	}
-
-	_, nodeAndSubtreeEqual := other.FromHash[hash]
-	if nodeAndSubtreeEqual {
-		return &dnode.Node{
-			FullKey:     node.Original.FullKey,
-			NextSibling: commonNS,
-			FirstChild:  node.Original.FirstChild,
-		}
-	}
-
-	_, nodeEqual := other.FromFullKey[node.Original.FullKey]
-	if !nodeEqual {
-		return commonNS
-	}
-
-	out := &dnode.Node{
-		FullKey:     node.Original.FullKey,
-		NextSibling: commonNS,
-	}
-	if node.FirstChildHash != 0 {
-		out.FirstChild = findCommon(km, self, other, node.FirstChildHash)
-	}
-
-	return out
-}
-
-// this assumes node is the AX_NODE container
-func toAXTree(km dnode.Keymap, node *dnode.Node) *chrome.AXNode {
-	out := &chrome.AXNode{}
-
-	var lastChild *chrome.AXNode
-
-	cur := node.FirstChild
-	for cur != nil {
-		text, ok := km.StringOf(cur.FullKey)
-		if !ok {
-			panic("unknown key")
-		}
-
-		if strings.HasPrefix(text, "role:") {
-			out.Role = text[5:]
-		} else if strings.HasPrefix(text, "attr:") {
-			value := ""
-			if cur.FirstChild != nil {
-				value, _ = km.StringOf(cur.FirstChild.FullKey)
-			}
-			out.Properties = append(out.Properties, chrome.Prop{
-				Name:  text[5:],
-				Value: value,
-			})
-		} else if strings.HasPrefix(text, "AX_NODE") {
-			child := toAXTree(km, cur)
-			if lastChild != nil {
-				lastChild.NextSibling = child
-			} else {
-				out.FirstChild = child
-			}
-			lastChild = child
-		}
-
-		cur = cur.NextSibling
-	}
-
-	if out.Role == "" {
-		out.Role = "UNKNOWN"
-	}
-
-	return out
 }

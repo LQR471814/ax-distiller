@@ -22,7 +22,7 @@ func FilterWhitespace(node *AXNode) *AXNode {
 	descEmpty := strings.Trim(node.Description, " \t\n") == ""
 	urlEmpty := true
 	for _, p := range node.Properties {
-		if p.Name == "url" && p.Value != "" {
+		if p.Name.Value() == "url" && p.Value != "" {
 			urlEmpty = false
 			break
 		}

@@ -14,12 +14,12 @@ type KeymapValue interface {
 }
 
 type keymapEntry struct {
-	text   string
-	parent uint64
+	Text   string
+	Parent uint64
 }
 
 type Keymap struct {
-	textmap map[uint64]keymapEntry
+	Textmap map[uint64]keymapEntry
 }
 
 var keymapHash = bytes.NewBuffer(make([]byte, 8*2))
@@ -30,19 +30,19 @@ func (km Keymap) FullKey(parentFullKey uint64, v KeymapValue) (fullkey uint64) {
 	binary.Write(keymapHash, binary.LittleEndian, v.Key())
 	fullkey = xxh3.Hash(keymapHash.Bytes())
 
-	if km.textmap == nil {
+	if km.Textmap == nil {
 		return
 	}
-	km.textmap[fullkey] = keymapEntry{
-		text:   v.String(),
-		parent: parentFullKey,
+	km.Textmap[fullkey] = keymapEntry{
+		Text:   v.String(),
+		Parent: parentFullKey,
 	}
 	return
 }
 
 func (km Keymap) StringOf(fullkey uint64) (string, bool) {
-	res, ok := km.textmap[fullkey]
-	return res.text, ok
+	res, ok := km.Textmap[fullkey]
+	return res.Text, ok
 }
 
 func (km Keymap) PathOf(fullkey uint64) string {
@@ -50,20 +50,16 @@ func (km Keymap) PathOf(fullkey uint64) string {
 	if fullkey == 0 {
 		return ""
 	}
-	res, ok := km.textmap[fullkey]
+	res, ok := km.Textmap[fullkey]
 	if !ok {
 		return ""
 	}
-	path := km.PathOf(res.parent)
-	return fmt.Sprintf("%s/%s", path, res.text)
+	path := km.PathOf(res.Parent)
+	return fmt.Sprintf("%s/%s", path, res.Text)
 }
 
-// NewKeymap creates a new keymap, if size < 0, then the keymap is considered disabled.
-func NewKeymap(size int) Keymap {
-	if size < 0 {
-		return Keymap{}
-	}
+func NewKeymap() Keymap {
 	return Keymap{
-		textmap: make(map[uint64]keymapEntry, size),
+		Textmap: make(map[uint64]keymapEntry),
 	}
 }

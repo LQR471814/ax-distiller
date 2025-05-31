@@ -32,10 +32,10 @@ type HashTree struct {
 	Root        uint64
 }
 
-func NewHashTree(node *Node, size int) HashTree {
+func NewHashTree(node *Node) HashTree {
 	tree := HashTree{
-		FromHash:    make(map[uint64]HashedNode, size),
-		FromFullKey: make(map[uint64]HashedNode, size),
+		FromHash:    make(map[uint64]HashedNode),
+		FromFullKey: make(map[uint64]HashedNode),
 	}
 	tree.Root, _ = tree.register(node)
 	return tree
