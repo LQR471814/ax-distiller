@@ -1,7 +1,7 @@
 package dnode
 
 import (
-	"ax-distiller/lib/chrome"
+	"ax-distiller/lib/chrome/ax"
 	"bytes"
 	"encoding/binary"
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"github.com/zeebo/xxh3"
 )
 
-func convertAXTree(km Keymap, n *chrome.AXNode, childIdx, parentKey uint64) (dn *Node) {
+func convertAXTree(km Keymap, n *ax.Node, childIdx, parentKey uint64) (dn *Node) {
 	if n == nil {
 		return nil
 	}
@@ -61,16 +61,16 @@ func convertAXTree(km Keymap, n *chrome.AXNode, childIdx, parentKey uint64) (dn 
 }
 
 // FromAXTree converts an AX tree into a dnode tree.
-func FromAXTree(root *chrome.AXNode, km Keymap) *Node {
+func FromAXTree(root *ax.Node, km Keymap) *Node {
 	return convertAXTree(km, root, 0, 0)
 }
 
 // ToAXTree converts a dnode tree into an AX tree.
 // - This assumes node is the AX_NODE container
-func ToAXTree(km Keymap, node *Node) *chrome.AXNode {
-	out := &chrome.AXNode{}
+func ToAXTree(km Keymap, node *Node) *ax.Node {
+	out := &ax.Node{}
 
-	var lastChild *chrome.AXNode
+	var lastChild *ax.Node
 
 	cur := node.FirstChild
 	for cur != nil {
@@ -86,7 +86,7 @@ func ToAXTree(km Keymap, node *Node) *chrome.AXNode {
 			if cur.FirstChild != nil {
 				value, _ = km.StringOf(cur.FirstChild.FullKey)
 			}
-			out.Properties = append(out.Properties, chrome.Prop{
+			out.Properties = append(out.Properties, ax.Prop{
 				Name:  unique.Make(text[5:]),
 				Value: value,
 			})
@@ -128,7 +128,7 @@ func (k axKey) String() string {
 }
 
 type roleKey struct {
-	role unique.Handle[string]
+	role ax.Role
 }
 
 func (k roleKey) Key() uint64 {
@@ -141,7 +141,7 @@ func (k roleKey) String() string {
 }
 
 type attrKey struct {
-	attr unique.Handle[string]
+	attr ax.Role
 }
 
 func (k attrKey) Key() uint64 {

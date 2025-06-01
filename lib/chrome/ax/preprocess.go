@@ -1,4 +1,4 @@
-package chrome
+package ax
 
 import (
 	"strings"
@@ -10,7 +10,7 @@ import (
 //   - all children are also whitespace nodes
 //
 // FilterWhitespace returns the next node with content
-func FilterWhitespace(node *AXNode) *AXNode {
+func FilterWhitespace(node *Node) *Node {
 	if node.FirstChild != nil {
 		node.FirstChild = FilterWhitespace(node.FirstChild)
 	}

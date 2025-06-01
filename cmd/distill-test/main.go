@@ -46,14 +46,14 @@ func main() {
 				log.Fatal(err)
 			}
 
-			var tree chrome.AXNode
+			var tree ax.Node
 
 			err = chromedp.Run(
 				ctx,
 				accessibility.Enable(),
 				chromedp.Navigate(parsed.String()),
 				chromedp.ActionFunc(func(pageCtx context.Context) error {
-					ax := chrome.AX{
+					ax := ax.API{
 						PageCtx: pageCtx,
 					}
 					tree, err = ax.FetchFullAXTree()

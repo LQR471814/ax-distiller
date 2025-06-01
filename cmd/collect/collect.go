@@ -1,8 +1,9 @@
 package main
 
 import (
-	"ax-distiller/lib/chrome"
+	"ax-distiller/lib/chrome/ax"
 	"context"
+	"fmt"
 	"log/slog"
 	"net/url"
 	"time"
@@ -14,6 +15,42 @@ import (
 type Collector struct {
 	tabctx context.Context
 	store  TreeStore
+}
+
+func (c Collector) handleDomChange() (err error) {
+	defer func() {
+		if err != nil {
+			err = fmt.Errorf("handle dom change: %w", err)
+		}
+	}()
+
+	var currentURL string
+	var tree *ax.Node
+
+	err = chromedp.Run(
+		c.tabctx,
+		chromedp.Evaluate(`window.location.href`, &currentURL),
+		chromedp.ActionFunc(func(ctx context.Context) (err error) {
+			ax := ax.API{PageCtx: ctx}
+			tree, err = ax.FetchFullTree()
+			return
+		}),
+	)
+	if err != nil {
+		return
+	}
+
+	parsed, err := url.Parse(currentURL)
+	if err != nil {
+		return
+	}
+	err = c.store.Add(parsed, tree)
+	if err != nil {
+		return
+	}
+
+	slog.Info("[collect] fetched and stored ax tree")
+	return
 }
 
 func (c Collector) worker() {
@@ -66,37 +103,7 @@ func (c Collector) worker() {
 			// 	}
 			// }
 
-			go func() {
-				var currentURL string
-
-				err := chromedp.Run(
-					c.tabctx,
-					chromedp.Evaluate(`window.location.href`, &currentURL),
-					chromedp.ActionFunc(func(ctx context.Context) (err error) {
-						ax := chrome.AX{PageCtx: ctx}
-						t, err := ax.FetchFullAXTree()
-						if err != nil {
-							return
-						}
-
-						parsed, err := url.Parse(currentURL)
-						if err != nil {
-							return
-						}
-
-						err = c.store.Add(parsed, t)
-						if err != nil {
-							return
-						}
-						return
-					}),
-				)
-				if err != nil {
-					slog.Warn("[collect] fetch ax tree", "err", err)
-				}
-
-				slog.Info("[collect] fetched and stored ax tree")
-			}()
+			go c.handleDomChange()
 		}
 	}
 }

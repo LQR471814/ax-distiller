@@ -1,7 +1,7 @@
 package main
 
 import (
-	"ax-distiller/lib/chrome"
+	"ax-distiller/lib/chrome/ax"
 	"ax-distiller/lib/dnode"
 	"encoding/xml"
 	"fmt"
@@ -18,8 +18,8 @@ type rawNode struct {
 	Content []byte     `xml:",innerxml"`
 }
 
-func parseNode(decoder *xml.Decoder, start xml.StartElement) (*chrome.AXNode, error) {
-	node := &chrome.AXNode{
+func parseNode(decoder *xml.Decoder, start xml.StartElement) (*ax.Node, error) {
+	node := &ax.Node{
 		Role: unique.Make(start.Name.Local),
 	}
 
@@ -27,13 +27,13 @@ func parseNode(decoder *xml.Decoder, start xml.StartElement) (*chrome.AXNode, er
 		if attr.Value == "<nil>" {
 			attr.Value = ""
 		}
-		node.Properties = append(node.Properties, chrome.Prop{
+		node.Properties = append(node.Properties, ax.Prop{
 			Name:  unique.Make(attr.Name.Local),
 			Value: attr.Value,
 		})
 	}
 
-	var lastChild *chrome.AXNode
+	var lastChild *ax.Node
 	for {
 		tok, err := decoder.Token()
 		if err != nil {
@@ -62,7 +62,7 @@ func parseNode(decoder *xml.Decoder, start xml.StartElement) (*chrome.AXNode, er
 	}
 }
 
-func parse(xmlData string) *chrome.AXNode {
+func parse(xmlData string) *ax.Node {
 	decoder := xml.NewDecoder(strings.NewReader(xmlData))
 	for {
 		tok, err := decoder.Token()

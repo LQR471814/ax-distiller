@@ -1,7 +1,7 @@
 package main
 
 import (
-	"ax-distiller/lib/chrome"
+	"ax-distiller/lib/chrome/ax"
 	"ax-distiller/lib/dnode"
 	"encoding/gob"
 	"net/url"
@@ -30,7 +30,7 @@ func (s TreeStore) Save() (err error) {
 	return
 }
 
-func (s TreeStore) Add(currentUrl *url.URL, tree *chrome.AXNode) (err error) {
+func (s TreeStore) Add(currentUrl *url.URL, tree *ax.Node) (err error) {
 	dn := dnode.FromAXTree(tree, s.keymap)
 	ht := dnode.NewHashTree(dn)
 

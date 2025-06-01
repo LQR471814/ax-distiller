@@ -1,4 +1,4 @@
-package chrome
+package ax
 
 import (
 	"encoding/xml"
@@ -8,22 +8,22 @@ import (
 )
 
 type Prop struct {
-	Name  unique.Handle[string]
+	Name  Role
 	Value string
 }
 
-type AXNode struct {
+type Node struct {
 	ID          uint64
-	Role        unique.Handle[string]
+	Role        Role
 	Name        string
 	Description string
 	Properties  []Prop
-	FirstChild  *AXNode
-	NextSibling *AXNode
+	FirstChild  *Node
+	NextSibling *Node
 	DomNodeId   int64
 }
 
-func (n AXNode) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
+func (n Node) MarshalXML(e *xml.Encoder, start xml.StartElement) error {
 	start.Name.Local = n.Role.Value()
 	start.Attr = make([]xml.Attr, 0, len(n.Properties)+1)
 	if n.Name != "" {
@@ -62,7 +62,7 @@ func mustParseNodeID(id string) uint64 {
 	return uint64(parsed)
 }
 
-func (n *AXNode) metadataFromCDP(cn cdpAXNode) (err error) {
+func (n *Node) metadataFromCDP(cn cdpAXNode) (err error) {
 	n.ID = mustParseNodeID(cn.NodeID)
 
 	n.Role = unique.Make(fmt.Sprint(cn.Role.Value))

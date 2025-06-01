@@ -2,6 +2,7 @@ package main
 
 import (
 	"ax-distiller/lib/chrome"
+	"ax-distiller/lib/chrome/ax"
 	"context"
 	"encoding/xml"
 	"flag"
@@ -41,17 +42,17 @@ func main() {
 		fatalerr("parse url", err)
 	}
 
-	var tree *chrome.AXNode
+	var tree *ax.Node
 
 	err = chromedp.Run(
 		ctx,
 		accessibility.Enable(),
 		chromedp.Navigate(parsed.String()),
 		chromedp.ActionFunc(func(pageCtx context.Context) error {
-			ax := chrome.AX{
+			ax := ax.API{
 				PageCtx: pageCtx,
 			}
-			tree, err = ax.FetchFullAXTree()
+			tree, err = ax.FetchFullTree()
 			return err
 		}),
 	)
@@ -59,7 +60,7 @@ func main() {
 		fatalerr("run chromedp", err)
 	}
 
-	tree = chrome.FilterWhitespace(tree)
+	tree = ax.FilterWhitespace(tree)
 	if tree == nil {
 		fatalerr("empty tree", fmt.Errorf("tree is nil"))
 	}

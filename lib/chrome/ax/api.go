@@ -1,4 +1,4 @@
-package chrome
+package ax
 
 import (
 	"context"
@@ -10,22 +10,22 @@ import (
 	easyjson "github.com/mailru/easyjson"
 )
 
-type AX struct {
+type API struct {
 	PageCtx    context.Context
-	Nodes      map[uint64]*AXNode
+	Nodes      map[uint64]*Node
 	staleNodes map[uint64]struct{}
 }
 
-func NewAX(pageCtx context.Context) AX {
-	return AX{
+func NewAPI(pageCtx context.Context) API {
+	return API{
 		PageCtx:    pageCtx,
-		Nodes:      make(map[uint64]*AXNode),
+		Nodes:      make(map[uint64]*Node),
 		staleNodes: make(map[uint64]struct{}),
 	}
 }
 
-func (ax AX) convertNodeList(allNodes map[string]cdpAXNode, nodeList []string) *AXNode {
-	var nextNode *AXNode
+func (ax API) convertNodeList(allNodes map[string]cdpAXNode, nodeList []string) *Node {
+	var nextNode *Node
 	for i := len(nodeList) - 1; i >= 0; i-- {
 		node := allNodes[nodeList[i]]
 
@@ -46,7 +46,7 @@ func (ax AX) convertNodeList(allNodes map[string]cdpAXNode, nodeList []string) *
 			continue
 		}
 
-		converted := &AXNode{}
+		converted := &Node{}
 		converted.metadataFromCDP(node)
 		converted.NextSibling = nextNode
 		converted.FirstChild = ax.convertNodeList(allNodes, node.ChildIds)
@@ -56,10 +56,10 @@ func (ax AX) convertNodeList(allNodes map[string]cdpAXNode, nodeList []string) *
 	return nextNode
 }
 
-func (ax AX) FetchFullAXTree() (root *AXNode, err error) {
+func (ax API) FetchFullTree() (root *Node, err error) {
 	params := easyjson.RawMessage("{}")
-	// 512 kB
-	resmsg := make(easyjson.RawMessage, 524288)
+	// 32 kB
+	resmsg := make(easyjson.RawMessage, 32000)
 
 	err = cdp.Execute(ax.PageCtx, accessibility.CommandGetFullAXTree, &params, &resmsg)
 	if err != nil {
@@ -77,7 +77,7 @@ func (ax AX) FetchFullAXTree() (root *AXNode, err error) {
 		return
 	}
 
-	ax.Nodes = make(map[uint64]*AXNode)
+	ax.Nodes = make(map[uint64]*Node)
 	allNodes := make(map[string]cdpAXNode)
 	for _, node := range result.Nodes {
 		allNodes[node.NodeID] = node
