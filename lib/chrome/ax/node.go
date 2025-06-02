@@ -7,6 +7,8 @@ import (
 	"unique"
 )
 
+type Role = unique.Handle[string]
+
 type Prop struct {
 	Name  Role
 	Value string

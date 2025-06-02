@@ -40,6 +40,11 @@ func (c Collector) handleDomChange() (err error) {
 		return
 	}
 
+	_, err = c.findActions(tree)
+	if err != nil {
+		return
+	}
+
 	parsed, err := url.Parse(currentURL)
 	if err != nil {
 		return
@@ -103,7 +108,12 @@ func (c Collector) worker() {
 			// 	}
 			// }
 
-			go c.handleDomChange()
+			go func() {
+				err := c.handleDomChange()
+				if err != nil {
+					slog.Error("[collect] handle dom change", "err", err)
+				}
+			}()
 		}
 	}
 }
