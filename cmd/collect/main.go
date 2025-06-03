@@ -28,8 +28,8 @@ func main() {
 	err = chromedp.Run(
 		tabctx,
 		network.Disable(),
-		css.Disable(),
 		log.Disable(),
+		css.Enable(),
 		accessibility.Enable(),
 	)
 	if err != nil {

@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/chromedp/cdproto/cdp"
+	"github.com/chromedp/cdproto/css"
 	"github.com/chromedp/cdproto/dom"
 	"github.com/chromedp/cdproto/runtime"
 	"github.com/chromedp/chromedp"
@@ -170,11 +171,44 @@ func (c Collector) findActions(tree *ax.Node) (actions []Action, err error) {
 	slog.Info("[collect] finding actions", "time", t2.Sub(t1).String())
 
 	t1 = time.Now()
+
+	// debugActions := make([]chromedp.Action, len(actions))
+	// for i, a := range actions {
+	// 	debugActions[i] = c.debugNodeAction(a.Node(), a.Color())
+	// }
+	// err = chromedp.Run(c.tabctx, debugActions...)
+
 	debugActions := make([]chromedp.Action, len(actions))
 	for i, a := range actions {
-		debugActions[i] = c.debugNodeAction(a.Node(), a.Color())
+		debugActions[i] = chromedp.ActionFunc(func(ctx context.Context) (err error) {
+			nodeIds, err := dom.PushNodesByBackendIDsToFrontend([]cdp.BackendNodeID{
+				cdp.BackendNodeID(a.Node().DomNodeId),
+			}).Do(ctx)
+			if err != nil {
+				return
+			}
+
+			var res css.GetMatchedStylesForNodeReturns
+			err = cdp.Execute(
+				ctx,
+				css.CommandGetMatchedStylesForNode,
+				&css.GetMatchedStylesForNodeParams{NodeID: nodeIds[0]},
+				&res,
+			)
+			if err != nil {
+				return
+			}
+			styles := make(CSSStyles)
+			styles.FromMatched(&res)
+			slog.Info(fmt.Sprintf("[collect] get styles\n%s", styles.String()))
+			return
+		})
 	}
 	err = chromedp.Run(c.tabctx, debugActions...)
+	if err != nil {
+		return
+	}
+
 	t2 = time.Now()
 
 	slog.Info("[collect] debugging took", "time", t2.Sub(t1).String())
