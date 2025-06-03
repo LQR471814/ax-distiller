@@ -8,13 +8,62 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/cdproto/dom"
 	"github.com/chromedp/chromedp"
 )
 
 type Collector struct {
-	tabctx context.Context
-	store  TreeStore
+	tabctx       context.Context
+	actionQueues map[uint64][]uint32
+	store        TreeStore
+}
+
+func (c Collector) fetchActionNodeIDs(actions []Action) (nodeIds []cdp.NodeID, err error) {
+	backendToFrontendID := make(map[uint64]cdp.NodeID)
+	actionBackendIDs := make([]cdp.BackendNodeID, len(actions))
+	for i, elem := range actions {
+		actionBackendIDs[i] = cdp.BackendNodeID(elem.Node().DomNodeId)
+	}
+	nodeIds, err = dom.PushNodesByBackendIDsToFrontend(actionBackendIDs).Do(c.tabctx)
+	if err != nil {
+		return
+	}
+	for i, elem := range nodeIds {
+		backendToFrontendID[uint64(actionBackendIDs[i])] = elem
+	}
+	return
+}
+
+func (c Collector) findAndTakeAction(currentURL *url.URL, tree *ax.Node, websiteHash uint64) (err error) {
+	var actions []Action
+	c.findActions(tree, &actions)
+
+	nodeIDs, err := c.fetchActionNodeIDs(actions)
+	if err != nil {
+		return
+	}
+
+	queue := c.actionQueues[websiteHash]
+	if len(queue) == 0 {
+		actionIDs := make([]uint32, len(actions))
+		for i := range actions {
+			actionIDs[i] = uint32(i)
+		}
+		c.actionQueues[websiteHash] = actionIDs
+		queue = actionIDs
+	}
+
+	actionIdx := queue[0]
+	rotated := make([]uint32, len(queue))
+	copy(rotated, queue[1:])
+	rotated[len(rotated)-1] = actionIdx
+	c.actionQueues[websiteHash] = rotated
+
+	err = chromedp.Run(c.tabctx, chromedp.ActionFunc(func(ctx context.Context) error {
+		return actions[actionIdx].Do(ctx, nodeIDs[actionIdx])
+	}))
+	return
 }
 
 func (c Collector) handleDomChange() (err error) {
@@ -40,19 +89,16 @@ func (c Collector) handleDomChange() (err error) {
 		return
 	}
 
-	_, err = c.findActions(tree)
-	if err != nil {
-		return
-	}
-
 	parsed, err := url.Parse(currentURL)
 	if err != nil {
 		return
 	}
-	err = c.store.Add(parsed, tree)
+
+	websiteHash, err := c.store.Add(parsed, tree)
 	if err != nil {
 		return
 	}
+	c.findAndTakeAction(parsed, tree, websiteHash)
 
 	slog.Info("[collect] fetched and stored ax tree")
 	return

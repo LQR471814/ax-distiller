@@ -30,7 +30,7 @@ func (s TreeStore) Save() (err error) {
 	return
 }
 
-func (s TreeStore) Add(currentUrl *url.URL, tree *ax.Node) (err error) {
+func (s TreeStore) Add(currentUrl *url.URL, tree *ax.Node) (hash uint64, err error) {
 	dn := dnode.FromAXTree(tree, s.keymap)
 	ht := dnode.NewHashTree(dn)
 
@@ -48,6 +48,7 @@ func (s TreeStore) Add(currentUrl *url.URL, tree *ax.Node) (err error) {
 		hostname,
 		strconv.FormatUint(ht.Root, 10),
 	))
+	hash = ht.Root
 	if err != nil {
 		return
 	}
