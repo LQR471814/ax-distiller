@@ -25,7 +25,10 @@ func (c Collector) fetchActionNodeIDs(actions []Action) (nodeIds []cdp.NodeID, e
 	for i, elem := range actions {
 		actionBackendIDs[i] = cdp.BackendNodeID(elem.Node().DomNodeId)
 	}
-	nodeIds, err = dom.PushNodesByBackendIDsToFrontend(actionBackendIDs).Do(c.tabctx)
+	err = chromedp.Run(c.tabctx, chromedp.ActionFunc(func(ctx context.Context) (err error) {
+		nodeIds, err = dom.PushNodesByBackendIDsToFrontend(actionBackendIDs).Do(ctx)
+		return
+	}))
 	if err != nil {
 		return
 	}
@@ -54,6 +57,8 @@ func (c Collector) findAndTakeAction(currentURL *url.URL, tree *ax.Node, website
 		queue = actionIDs
 	}
 
+	slog.Info("[collect] actions possible", "queue", queue)
+
 	actionIdx := queue[0]
 	rotated := make([]uint32, len(queue))
 	copy(rotated, queue[1:])
@@ -63,6 +68,9 @@ func (c Collector) findAndTakeAction(currentURL *url.URL, tree *ax.Node, website
 	err = chromedp.Run(c.tabctx, chromedp.ActionFunc(func(ctx context.Context) error {
 		return actions[actionIdx].Do(ctx, nodeIDs[actionIdx])
 	}))
+
+	slog.Info("[collect] action taken", "idx", actionIdx)
+
 	return
 }
 
@@ -98,7 +106,10 @@ func (c Collector) handleDomChange() (err error) {
 	if err != nil {
 		return
 	}
-	c.findAndTakeAction(parsed, tree, websiteHash)
+	err = c.findAndTakeAction(parsed, tree, websiteHash)
+	if err != nil {
+		return
+	}
 
 	slog.Info("[collect] fetched and stored ax tree")
 	return
@@ -166,7 +177,8 @@ func (c Collector) worker() {
 
 func NewCollector(tabctx context.Context, store TreeStore) Collector {
 	return Collector{
-		tabctx: tabctx,
-		store:  store,
+		tabctx:       tabctx,
+		store:        store,
+		actionQueues: make(map[uint64][]uint32),
 	}
 }

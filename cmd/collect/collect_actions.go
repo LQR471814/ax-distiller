@@ -47,8 +47,7 @@ func (a ClickAction) Do(ctx context.Context, nodeID cdp.NodeID) (err error) {
 		"[%s=%d]",
 		action_node_key,
 		a.Target.DomNodeId,
-	)).
-		Do(ctx)
+	)).Do(ctx)
 	return
 }
 
