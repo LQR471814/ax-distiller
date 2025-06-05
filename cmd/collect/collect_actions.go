@@ -4,13 +4,9 @@ import (
 	"ax-distiller/lib/chrome/ax"
 	"context"
 	"fmt"
-	"log/slog"
 	"math/rand"
-	"strings"
 
 	"github.com/chromedp/cdproto/cdp"
-	"github.com/chromedp/cdproto/dom"
-	"github.com/chromedp/cdproto/runtime"
 	"github.com/chromedp/chromedp"
 )
 
@@ -37,17 +33,7 @@ func (a ClickAction) Do(ctx context.Context, nodeID cdp.NodeID) (err error) {
 		}
 	}()
 
-	err = dom.SetAttributeValue(nodeID, action_node_key, fmt.Sprint(a.Target.DomNodeId)).
-		Do(ctx)
-	if err != nil {
-		return
-	}
-
-	err = chromedp.Click(fmt.Sprintf(
-		"[%s=%d]",
-		action_node_key,
-		a.Target.DomNodeId,
-	)).Do(ctx)
+	err = chromedp.Click([]cdp.NodeID{nodeID}, chromedp.ByNodeID).Do(ctx)
 	return
 }
 
@@ -94,48 +80,4 @@ func (c Collector) findActions(node *ax.Node, out *[]Action) {
 		c.findActions(child, out)
 		child = child.NextSibling
 	}
-}
-
-const debugNodeScript = `(e) => {
-	e.style.border = "1px solid %s"
-}`
-
-func (c Collector) debugNodeAction(node *ax.Node, color string) (action chromedp.Action) {
-	action = chromedp.ActionFunc(func(ctx context.Context) (err error) {
-		obj, err := dom.ResolveNode().
-			WithBackendNodeID(cdp.BackendNodeID(node.DomNodeId)).
-			Do(ctx)
-		if err != nil {
-			if strings.Contains(err.Error(), "node with given id found") {
-				slog.Warn("node not found", "id", node.DomNodeId)
-				err = nil
-				return
-			}
-			if strings.Contains(err.Error(), "nodeID or backendNodeId must be specified") {
-				slog.Warn("unspecified backendNodeId", "id", node.DomNodeId)
-				err = nil
-				return
-			}
-			return
-		}
-
-		_, jserr, err := runtime.CallFunctionOn(fmt.Sprintf(
-			debugNodeScript,
-			color,
-		)).
-			WithObjectID(obj.ObjectID).
-			WithArguments([]*runtime.CallArgument{
-				{ObjectID: obj.ObjectID},
-			}).
-			Do(ctx)
-		if err != nil {
-			return
-		}
-		if jserr != nil {
-			err = jserr
-			return
-		}
-		return
-	})
-	return
 }

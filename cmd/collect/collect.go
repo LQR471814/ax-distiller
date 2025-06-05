@@ -38,7 +38,7 @@ func (c Collector) fetchActionNodeIDs(actions []Action) (nodeIds []cdp.NodeID, e
 	return
 }
 
-func (c Collector) findAndTakeAction(currentURL *url.URL, tree *ax.Node, websiteHash uint64) (err error) {
+func (c Collector) findAndTakeAction(tree *ax.Node, websiteHash uint64) (err error) {
 	var actions []Action
 	c.findActions(tree, &actions)
 
@@ -57,7 +57,7 @@ func (c Collector) findAndTakeAction(currentURL *url.URL, tree *ax.Node, website
 		queue = actionIDs
 	}
 
-	slog.Info("[collect] actions possible", "queue", queue)
+	slog.Info("[collect] actions possible", "hash", websiteHash, "queue", queue)
 
 	actionIdx := queue[0]
 	rotated := make([]uint32, len(queue))
@@ -106,7 +106,7 @@ func (c Collector) handleDomChange() (err error) {
 	if err != nil {
 		return
 	}
-	err = c.findAndTakeAction(parsed, tree, websiteHash)
+	err = c.findAndTakeAction(tree, websiteHash)
 	if err != nil {
 		return
 	}
