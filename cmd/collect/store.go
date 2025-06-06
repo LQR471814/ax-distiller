@@ -1,10 +1,8 @@
 package main
 
 import (
-	"ax-distiller/lib/chrome/ax"
 	"ax-distiller/lib/dnode"
 	"encoding/gob"
-	"net/url"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -30,25 +28,24 @@ func (s TreeStore) Save() (err error) {
 	return
 }
 
-func (s TreeStore) Add(currentUrl *url.URL, tree *ax.Node) (hash uint64, err error) {
-	dn := dnode.FromAXTree(tree, s.keymap)
-	ht := dnode.NewHashTree(dn)
+func (s TreeStore) Keymap() dnode.Keymap {
+	return s.keymap
+}
 
-	hostname := currentUrl.Hostname()
-	if hostname == "" {
-		hostname = "unknown.host"
+func (s TreeStore) Add(domain string, ht dnode.HashTree) (err error) {
+	if domain == "" {
+		domain = "unknown.host"
 	}
 
-	err = os.MkdirAll(filepath.Join(s.dir, hostname), 0777)
+	err = os.MkdirAll(filepath.Join(s.dir, domain), 0777)
 	if err != nil {
 		return
 	}
 	f, err := os.Create(filepath.Join(
 		s.dir,
-		hostname,
+		domain,
 		strconv.FormatUint(ht.Root, 10),
 	))
-	hash = ht.Root
 	if err != nil {
 		return
 	}

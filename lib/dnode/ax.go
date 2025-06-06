@@ -11,7 +11,7 @@ import (
 	"github.com/zeebo/xxh3"
 )
 
-func convertAXTree(km Keymap, n *ax.Node, childIdx, parentKey uint64) (dn *Node) {
+func convertAXTree(km Keymap, axToDnode map[uint64]*Node, n *ax.Node, childIdx, parentKey uint64) (dn *Node) {
 	if n == nil {
 		return nil
 	}
@@ -20,8 +20,12 @@ func convertAXTree(km Keymap, n *ax.Node, childIdx, parentKey uint64) (dn *Node)
 	dn = &Node{
 		FullKey: axFullKey,
 	}
+	if axToDnode != nil {
+		axToDnode[n.ID] = dn
+	}
+
 	if n.NextSibling != nil {
-		dn.NextSibling = convertAXTree(km, n.NextSibling, childIdx+1, axFullKey)
+		dn.NextSibling = convertAXTree(km, axToDnode, n.NextSibling, childIdx+1, axFullKey)
 	}
 
 	role := &Node{
@@ -55,14 +59,14 @@ func convertAXTree(km Keymap, n *ax.Node, childIdx, parentKey uint64) (dn *Node)
 		endProp = role
 	}
 	if n.FirstChild != nil {
-		endProp.NextSibling = convertAXTree(km, n.FirstChild, 0, axFullKey)
+		endProp.NextSibling = convertAXTree(km, axToDnode, n.FirstChild, 0, axFullKey)
 	}
 	return
 }
 
 // FromAXTree converts an AX tree into a dnode tree.
-func FromAXTree(root *ax.Node, km Keymap) *Node {
-	return convertAXTree(km, root, 0, 0)
+func FromAXTree(root *ax.Node, km Keymap, axToDnode map[uint64]*Node) *Node {
+	return convertAXTree(km, axToDnode, root, 0, 0)
 }
 
 // ToAXTree converts a dnode tree into an AX tree.

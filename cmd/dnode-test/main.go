@@ -90,8 +90,10 @@ func main() {
 	n2 := parse(file2)
 
 	km := dnode.NewKeymap()
-	ht1 := dnode.NewHashTree(dnode.FromAXTree(n1, km))
-	ht2 := dnode.NewHashTree(dnode.FromAXTree(n2, km))
+	dn1 := dnode.FromAXTree(n1, km, nil)
+	dn2 := dnode.FromAXTree(n2, km, nil)
+	ht1 := dnode.NewHashTree(dn1)
+	ht2 := dnode.NewHashTree(dn2)
 
 	common := dnode.FindCommon(km, ht2, ht1, ht2.Root)
 	fmt.Println(dnode.Print(km, common))

@@ -19,6 +19,7 @@ type Node struct {
 }
 
 type HashedNode struct {
+	Hash     uint64
 	Original *Node
 	// NextSiblingHash that equals 0 means there is no next sibling.
 	NextSiblingHash uint64
@@ -78,6 +79,7 @@ func (s HashTree) register(node *Node) (hash, nshash uint64) {
 		hash = node.FullKey
 	}
 
+	hashedNode.Hash = hash
 	s.FromHash[hash] = hashedNode
 	s.FromFullKey[node.FullKey] = hashedNode
 	return

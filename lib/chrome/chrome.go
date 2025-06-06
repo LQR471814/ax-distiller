@@ -27,8 +27,17 @@ func NewBrowser(ctx context.Context) (cdpCtx context.Context, cancel func(), err
 			chromedp.Flag("load-extension", "./data/ublock"),
 			chromedp.Flag("headless", false),
 			chromedp.Flag("disable-extensions", false),
-			chromedp.Flag("disable-remote-fonts", true),
 			chromedp.Flag("disable-blink-features", "AutomationControlled"),
+			// improve performance
+			chromedp.Flag("disable-remote-fonts", true),
+			chromedp.Flag("disable-gpu", true),
+			chromedp.Flag("disable-background-networking", true),
+			chromedp.Flag("disable-dev-shm-usage", true),
+			chromedp.Flag("disable-sync", true),
+			chromedp.Flag("disable-translate", true),
+			chromedp.Flag("disable-default-apps", true),
+			chromedp.Flag("mute-audio", true),
+			chromedp.Flag("hide-scrollbars", true),
 			chromedp.Flag("no-sandbox", true),
 		)...,
 	)

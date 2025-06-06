@@ -2,76 +2,31 @@ package main
 
 import (
 	"ax-distiller/lib/chrome/ax"
+	"ax-distiller/lib/dnode"
 	"context"
 	"fmt"
 	"log/slog"
 	"net/url"
 	"time"
 
-	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/cdproto/dom"
 	"github.com/chromedp/chromedp"
 )
 
 type Collector struct {
-	tabctx       context.Context
-	actionQueues map[uint64][]uint32
-	store        TreeStore
+	tabctx context.Context
+	store  TreeStore
+
+	seenStyles   map[uint64]struct{}
+	seenSubtrees map[uint64]struct{}
 }
 
-func (c Collector) fetchActionNodeIDs(actions []Action) (nodeIds []cdp.NodeID, err error) {
-	backendToFrontendID := make(map[uint64]cdp.NodeID)
-	actionBackendIDs := make([]cdp.BackendNodeID, len(actions))
-	for i, elem := range actions {
-		actionBackendIDs[i] = cdp.BackendNodeID(elem.Node().DomNodeId)
-	}
-	err = chromedp.Run(c.tabctx, chromedp.ActionFunc(func(ctx context.Context) (err error) {
-		nodeIds, err = dom.PushNodesByBackendIDsToFrontend(actionBackendIDs).Do(ctx)
-		return
-	}))
-	if err != nil {
-		return
-	}
-	for i, elem := range nodeIds {
-		backendToFrontendID[uint64(actionBackendIDs[i])] = elem
-	}
-	return
-}
-
-func (c Collector) findAndTakeAction(tree *ax.Node, websiteHash uint64) (err error) {
-	var actions []Action
-	c.findActions(tree, &actions)
-
-	nodeIDs, err := c.fetchActionNodeIDs(actions)
-	if err != nil {
-		return
-	}
-
-	queue := c.actionQueues[websiteHash]
-	if len(queue) == 0 {
-		actionIDs := make([]uint32, len(actions))
-		for i := range actions {
-			actionIDs[i] = uint32(i)
-		}
-		c.actionQueues[websiteHash] = actionIDs
-		queue = actionIDs
-	}
-
-	slog.Info("[collect] actions possible", "hash", websiteHash, "queue", queue)
-
-	actionIdx := queue[0]
-	rotated := make([]uint32, len(queue))
-	copy(rotated, queue[1:])
-	rotated[len(rotated)-1] = actionIdx
-	c.actionQueues[websiteHash] = rotated
-
-	err = chromedp.Run(c.tabctx, chromedp.ActionFunc(func(ctx context.Context) error {
-		return actions[actionIdx].Do(ctx, nodeIDs[actionIdx])
-	}))
-
-	slog.Info("[collect] action taken", "idx", actionIdx)
-
-	return
+type WebsiteState struct {
+	Domain    string
+	AXTree    *ax.Node
+	AXToDNode map[uint64]*dnode.Node
+	DNodeTree *dnode.Node
+	HashTree  dnode.HashTree
 }
 
 func (c Collector) handleDomChange() (err error) {
@@ -82,14 +37,14 @@ func (c Collector) handleDomChange() (err error) {
 	}()
 
 	var currentURL string
-	var tree *ax.Node
+	var axTree *ax.Node
 
 	err = chromedp.Run(
 		c.tabctx,
 		chromedp.Evaluate(`window.location.href`, &currentURL),
 		chromedp.ActionFunc(func(ctx context.Context) (err error) {
 			ax := ax.API{PageCtx: ctx}
-			tree, err = ax.FetchFullTree()
+			axTree, err = ax.FetchFullTree()
 			return
 		}),
 	)
@@ -102,11 +57,23 @@ func (c Collector) handleDomChange() (err error) {
 		return
 	}
 
-	websiteHash, err := c.store.Add(parsed, tree)
+	axToDNode := make(map[uint64]*dnode.Node)
+	dnodeTree := dnode.FromAXTree(axTree, c.store.Keymap(), axToDNode)
+	hashTree := dnode.NewHashTree(dnodeTree)
+
+	state := WebsiteState{
+		Domain:    parsed.Hostname(),
+		AXTree:    axTree,
+		AXToDNode: axToDNode,
+		DNodeTree: dnodeTree,
+		HashTree:  hashTree,
+	}
+
+	err = c.store.Add(state.Domain, state.HashTree)
 	if err != nil {
 		return
 	}
-	err = c.findAndTakeAction(tree, websiteHash)
+	err = c.findAndTakeAction(state)
 	if err != nil {
 		return
 	}
@@ -179,6 +146,7 @@ func NewCollector(tabctx context.Context, store TreeStore) Collector {
 	return Collector{
 		tabctx:       tabctx,
 		store:        store,
-		actionQueues: make(map[uint64][]uint32),
+		seenStyles:   make(map[uint64]struct{}),
+		seenSubtrees: make(map[uint64]struct{}),
 	}
 }
