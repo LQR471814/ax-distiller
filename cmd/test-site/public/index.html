@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
+
+		<style>
+			#random-numbers {
+				border: 1px solid black;
+				margin-top: 1rem;
+				padding: 1rem;
+				max-width: 10rem;
+			}
+		</style>
+	</head>
+
+	<body>
+		<h2>Testing home page</h2>
+
+		<ul>
+			<li><a href="/">Refresh page</a></li>
+			<li><a href="/date.html">Date page</a></li>
+			<li><a href="/dead_end.html">Dead end page</a></li>
+		</ul>
+
+		<button>Useless button</button>
+		<button id="main">Random number!</button>
+		<div id="random-numbers"></div>
+	</body>
+
+	<script>
+		const mainButton = document.getElementById("main")
+		mainButton.onclick = () => {
+			const newDiv = $(`<div><span>Percent: </span>${Math.floor(Math.random() * 100)}</div>`)
+			$("#random-numbers").append(newDiv)
+		}
+	</script>
+</html>

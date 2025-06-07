@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
+	</head>
+
+	<body>
+		<h2>Today's date.</h2>
+
+		<ul>
+		</ul>
+
+		<a href="/">&lt; Back</a>
+	</body>
+
+	<script>
+		const li = (text) => $(`<li>${text}</li>`)
+
+		const now = new Date()
+
+		const year = now.getFullYear()
+		const month = now.getMonth()
+		const day = now.getDate()
+
+		$("ul").append(li(year))
+		$("ul").append(li(month))
+		$("ul").append(li(day))
+	</script>
+</html>
