@@ -2,22 +2,22 @@ package main
 
 import (
 	"ax-distiller/lib/chrome"
-	"ax-distiller/lib/chrome/ax"
 	"context"
 	"log/slog"
 	"os"
 	"os/signal"
-	"reflect"
 
-	"github.com/chromedp/cdproto/accessibility"
-	"github.com/chromedp/cdproto/css"
-	"github.com/chromedp/cdproto/dom"
-	"github.com/chromedp/cdproto/log"
-	"github.com/chromedp/cdproto/network"
-	"github.com/chromedp/chromedp"
+	"github.com/go-rod/rod"
+	"github.com/go-rod/rod/lib/proto"
+	"github.com/lmittmann/tint"
 )
 
 func main() {
+	logger := slog.New(tint.NewHandler(os.Stderr, &tint.Options{
+		Level: slog.LevelDebug,
+	}))
+	slog.SetDefault(logger)
+
 	err := start()
 	if err != nil {
 		slog.Error("[main] create new browser", "err", err)
@@ -29,52 +29,90 @@ func start() (err error) {
 	ctx, cancel := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer cancel()
 
-	tabctx, cancel, err := chrome.NewBrowser(ctx)
-	defer cancel()
-
-	err = chromedp.Run(
-		tabctx,
-		network.Disable(),
-		log.Disable(),
-		css.Disable(),
-		accessibility.Enable(),
-	)
+	browser, err := chrome.NewBrowser(ctx)
 	if err != nil {
 		return
 	}
 
-	// api := ax.API{
-	// 	PageCtx: tabctx,
-	// }
-	// api.Listen()
+	pool := rod.NewPagePool(3)
+	defer pool.Cleanup(func(p *rod.Page) { p.MustClose() })
 
-	chromedp.ListenTarget(tabctx, func(ev any) {
-		switch event := ev.(type) {
-		case *accessibility.EventLoadComplete:
-			go func() {
-				err := chromedp.Run(tabctx, chromedp.ActionFunc(func(ctx context.Context) (err error) {
-					api := ax.API{PageCtx: ctx}
-					return api.SubscribeFullTree(event.Root.NodeID.String())
-				}))
-				if err != nil {
-					slog.Error("[main] get full ax tree", "err", err)
-					return
-				}
-				slog.Info("[main] fetch full tree")
-			}()
-			slog.Info("[main] accessibility load complete")
-		case *accessibility.EventNodesUpdated:
-			slog.Info("[main] nodes updated", "nodes", event.Nodes)
-		case *dom.EventChildNodeCountUpdated:
-			slog.Info("[main] child node count updated", "node", event.NodeID)
-		case *dom.EventChildNodeInserted:
-			slog.Info("[main] child node inserted", "node", event.Node.NodeID, "parent", event.ParentNodeID)
-		default:
-			slog.Info("[main] event received", "event", reflect.TypeOf(ev).String())
+	getPage := func() (page *rod.Page, err error) {
+		page, err = pool.Get(func() (*rod.Page, error) {
+			return browser.MustIncognito().MustPage(), nil
+		})
+		if err != nil {
+			return
 		}
-	})
 
-	<-tabctx.Done()
+		err = chrome.CDPProcedure(nil, page, proto.NetworkDisable{})
+		if err != nil {
+			return
+		}
+		err = chrome.CDPProcedure(nil, page, proto.LogDisable{})
+		if err != nil {
+			return
+		}
+		err = chrome.CDPProcedure(nil, page, proto.DOMEnable{})
+		if err != nil {
+			return
+		}
+		err = chrome.CDPProcedure(nil, page, proto.CSSEnable{})
+		if err != nil {
+			return
+		}
+		err = chrome.CDPProcedure(nil, page, proto.AccessibilityEnable{})
+		if err != nil {
+			return
+		}
+		chrome.BlockGraphics(page)
+
+		return
+	}
+
+	page, err := getPage()
+	if err != nil {
+		return
+	}
+
+	nav := NewNavigator(page)
+	go nav.HandleEvents()
+
+	// go page.EachEvent(
+	// 	func(e *proto.AccessibilityNodesUpdated) {
+	// 		var filtered []*proto.AccessibilityAXNode
+	// 		for _, n := range e.Nodes {
+	// 			if n.Role.Value.String() == "RootWebArea" {
+	// 				continue
+	// 			}
+	// 			filtered = append(filtered, n)
+	// 		}
+	// 		if len(filtered) == 0 {
+	// 			return
+	// 		}
+	//
+	// 		type node struct {
+	// 			role       string
+	// 			backend_id int
+	// 		}
+	// 		nodes := make([]node, len(filtered))
+	// 		for i, n := range filtered {
+	// 			nodes[i] = node{
+	// 				role:       n.Role.Value.String(),
+	// 				backend_id: int(n.BackendDOMNodeID),
+	// 			}
+	// 		}
+	// 		slog.Info("[main] nodes updated", "nodes", nodes)
+	//
+	// 		for _, n := range filtered {
+	// 			subcSubtree(n.NodeID, page)
+	// 		}
+	// 	},
+	// )()
+
+	page.MustNavigate("http://localhost:8000")
+
+	<-ctx.Done()
 
 	return
 }

@@ -11,8 +11,9 @@ require (
 	github.com/chromedp/cdproto v0.0.0-20250509201441-70372ae9ef75
 	github.com/chromedp/chromedp v0.13.6
 	github.com/davecgh/go-spew v1.1.1
+	github.com/go-rod/rod v0.116.2
 	github.com/huandu/go-sqlbuilder v1.25.0
-	github.com/lmittmann/tint v1.0.7
+	github.com/lmittmann/tint v1.1.2
 	github.com/mailru/easyjson v0.9.0
 	github.com/mattn/go-sqlite3 v1.14.19
 	github.com/zeebo/xxh3 v1.0.2
@@ -32,9 +33,16 @@ require (
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
+	github.com/ysmood/fetchup v0.2.3 // indirect
+	github.com/ysmood/goob v0.4.0 // indirect
+	github.com/ysmood/got v0.40.0 // indirect
+	github.com/ysmood/gson v0.7.3 // indirect
+	github.com/ysmood/leakless v0.9.0 // indirect
 	golang.org/x/arch v0.0.0-20210923205945-b76863e36670 // indirect
 	golang.org/x/net v0.17.0 // indirect
 	golang.org/x/sys v0.29.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	mvdan.cc/sh/v3 v3.6.0 // indirect
 )
+
+replace github.com/go-rod/rod => ./rod

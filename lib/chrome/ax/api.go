@@ -10,6 +10,7 @@ import (
 	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/cdproto/dom"
 	"github.com/chromedp/chromedp"
+	"github.com/go-rod/rod"
 	easyjson "github.com/mailru/easyjson"
 )
 
@@ -81,7 +82,6 @@ func (ax API) SubscribeFullTree(rootID string) (err error) {
 	}
 
 	return
-
 }
 
 func (ax API) FetchFullTree() (root *Node, err error) {
@@ -127,23 +127,27 @@ AX changes:
 -
 */
 
-func (ax API) Listen() {
+func (ax API) Listen(page *rod.Page) {
 	// var timer *time.Timer
+
+	go page.EachEvent(
+		func(e *accessibility.EventLoadComplete) {
+			slog.Info("[event] accessibility.EventLoadComplete", "id", e.Root.NodeID)
+		},
+		func(e *accessibility.EventNodesUpdated) {
+			roles := make([]string, len(e.Nodes))
+			for i, n := range e.Nodes {
+				roles[i] = n.Role.Value.String()
+			}
+			slog.Info("[event] accessibility.EventNodesUpdated", "roles", roles)
+		},
+	)
 
 	chromedp.ListenTarget(ax.PageCtx, func(ev any) {
 		// fmt.Printf("%T\n", ev)
 		switch typed := ev.(type) {
-		case *accessibility.EventLoadComplete:
-			slog.Info("[event] accessibility.EventLoadComplete", "id", typed.Root.NodeID)
-		case *accessibility.EventNodesUpdated:
-			roles := make([]string, len(typed.Nodes))
-			for i, n := range typed.Nodes {
-				roles[i] = n.Role.Value.String()
-			}
-			slog.Info("[event] accessibility.EventNodesUpdated", "roles", roles)
 
 		case *dom.EventAttributeModified:
-			slog.Info("[event] dom.EventAttributeModified", "id", typed.NodeID, "attr", typed.Name)
 		case *dom.EventAttributeRemoved:
 			slog.Info("[event] dom.EventAttributeRemoved", "id", typed.NodeID, "attr", typed.Name)
 		case *dom.EventCharacterDataModified:
